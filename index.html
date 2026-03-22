@@ -1,1 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeCatch - الملاذ الأول لعشاق الأنمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C1973E; /* لونك الملكي */
+            --bg-dark: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --text-light: #ffffff;
+            --text-muted: #aaaaaa;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* شريط التنقل */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: rgba(15, 15, 15, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(193, 151, 62, 0.2);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(193, 151, 62, 0.5);
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* القسم الرئيسي (الواجهة) */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            background: radial-gradient(circle at center, rgba(193, 151, 62, 0.1) 0%, var(--bg-dark) 70%);
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .hero-content h1 span {
+            color: var(--primary);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* زر التحميل الناري */
+        .btn-download {
+            display: inline-block;
+            background-color: var(--primary);
+            color: #000;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(193, 151, 62, 0.6);
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-download:hover {
+            background-color: transparent;
+            color: var(--primary);
+            box-shadow: 0 0 40px rgba(193, 151, 62, 0.8);
+            transform: translateY(-3px);
+        }
+
+        /* قسم المميزات */
+        .features {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border-radius: 15px;
+            width: 300px;
+            border-bottom: 4px solid var(--primary);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .card p {
+            color: var(--text-muted);
+        }
+
+        /* الفوتر */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: #0a0a0a;
+            border-top: 1px solid rgba(193, 151, 62, 0.2);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* توافقية الجوال */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            header { flex-direction: column; gap: 10px; padding: 15px; }
+            .nav-links { display: flex; flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AnimeCatch</div>
+        <nav class="nav-links">
+            <a href="#">الرئيسية</a>
+            <a href="#features">المميزات</a>
+            <a href="#">سياسة الخصوصية</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>عالم الأنمي <span>بين يديك</span></h1>
+            <p>اكتشف، تابع، وتفاعل مع أضخم مجتمع عربي للأنمي. انضم الآن وابدأ بتسجيل مفضلتك ومشاركة رأيك مع آلاف الأوتاكو.</p>
+            <a href="#download-link-here" class="btn-download">🔥 تحميل التطبيق (APK)</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2>مزايا التطبيق</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>مجتمع متفاعل</h3>
+                <p>نظام تعليقات وإعجابات فوري يتيح لك النقاش حول حلقاتك وشخصياتك المفضلة بدون تأخير.</p>
+            </div>
+            <div class="card">
+                <h3>مكتبة ضخمة</h3>
+                <p>مدعوم بأقوى واجهات البيانات (API) لتوفير معلومات دقيقة وشاملة عن كل أنمي وشخصية.</p>
+            </div>
+            <div class="card">
+                <h3>ملف شخصي متكامل</h3>
+                <p>احفظ مفضلتك، تابع سجل مشاهداتك، وخصص ملفك الشخصي ليعكس ذوقك الخاص في عالم الأنمي.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 جميع الحقوق محفوظة لتطبيق <strong>AnimeCatch</strong>.</p>
+        <p>تطبيق غير رسمي، جميع بيانات الأنمي مجلوبة عبر واجهة <a href="https://jikan.moe/" target="_blank">Jikan API</a>.</p>
+    </footer>
+
+</body>
+</html>
