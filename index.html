@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #C1973E; /* لونك الملكي */
+            --primary: #C1973E;
             --primary-glow: rgba(193, 151, 62, 0.4);
             --bg-dark: #0a0a0a;
             --bg-card: #141414;
@@ -27,6 +27,7 @@
             color: var(--text-light);
             line-height: 1.6;
             overflow-x: hidden;
+            scroll-behavior: smooth; /* نعومة في التنقل */
         }
 
         /* 🌟 شريط التنقل (Navbar) الاحترافي */
@@ -36,7 +37,7 @@
             align-items: center;
             padding: 15px 5%;
             background-color: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(15px); /* تأثير الزجاج */
+            backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             position: fixed;
             width: 100%;
@@ -54,9 +55,9 @@
         }
 
         .brand img {
-            height: 45px; /* حجم اللوجو */
+            height: 45px;
             width: auto;
-            border-radius: 8px; /* إذا كان اللوجو مربع حاد */
+            border-radius: 8px;
         }
 
         .brand span {
@@ -92,11 +93,12 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover {
+        /* تأثير الـ Hover والـ Active (ScrollSpy) */
+        .nav-links a:hover, .nav-links a.active {
             color: var(--primary);
         }
 
-        .nav-links a:hover::after {
+        .nav-links a:hover::after, .nav-links a.active::after {
             width: 100%;
         }
 
@@ -114,6 +116,21 @@
         .hero-content {
             max-width: 800px;
             animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* تصميم رقم النسخة الأنيق */
+        .version-badge {
+            display: inline-block;
+            background-color: rgba(193, 151, 62, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(193, 151, 62, 0.3);
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(193, 151, 62, 0.1);
         }
 
         .hero-content h1 {
@@ -234,7 +251,7 @@
         footer strong { color: var(--primary); }
         footer a { color: var(--text-light); text-decoration: none; border-bottom: 1px dotted var(--primary); }
 
-        /* 📱 توافقية الهواتف (Responsive Design) */
+        /* 📱 توافقية الهواتف */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -253,7 +270,6 @@
             .features-title { font-size: 2.2rem; }
         }
 
-        /* حركة الدخول */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -263,23 +279,24 @@
 <body>
 
     <header>
-        <a href="#" class="brand">
+        <a href="#home" class="brand">
             <img src="logo.png" alt="AnimeCatch Logo">
             <span>AnimeCatch</span>
         </a>
         <nav class="nav-links">
-            <a href="#">الرئيسية</a>
-            <a href="#features">المميزات</a>
+            <a href="#home" class="scroll-link active">الرئيسية</a>
+            <a href="#features" class="scroll-link">المميزات</a>
             <a href="privacy.html">الخصوصية</a>
             <a href="disclaimer.html">إخلاء المسؤولية</a>
         </nav>
     </header>
 
-    <section class="hero">
+    <section id="home" class="hero">
         <div class="hero-content">
+            <div class="version-badge">Beta 1.0.1</div>
             <h1>عالم الأنمي <span>الاحترافي</span></h1>
             <p>التطبيق العربي الأقوى لمتابعة، تنظيم، والتفاعل مع عالم الأنمي. صُمم بأحدث التقنيات ليوفر لك تجربة مشاهدة ونقاش لا مثيل لها.</p>
-            <a href="#download" class="btn-download">📥 تحميل الـ APK الآن</a>
+            <a href="#download" class="btn-download">تحميل الـ APK الآن</a>
         </div>
     </section>
 
@@ -288,33 +305,33 @@
         
         <div class="cards-grid">
             <div class="card">
-                <h3>📺 تعدد مصادر المشاهدة</h3>
+                <h3>تعدد مصادر المشاهدة</h3>
                 <p>نوفر لك قائمة واسعة من سيرفرات وروابط المشاهدة الخارجية المتجددة لضمان استمرار متعتك بأعلى جودة وبدون انقطاع.</p>
             </div>
             
             <div class="card">
-                <h3>🔒 أقوى تشفير عربي</h3>
-                <p>نظام حماية صارم يستخدم أحدث خوارزميات التشفير (V11) لضمان أمان اتصالاتك وحماية بياناتك من أي تطفل خارجي.</p>
+                <h3>أقوى تشفير عربي</h3>
+                <p>نظام حماية صارم يستخدم أحدث خوارزميات التشفير (V12) لضمان أمان اتصالاتك وحماية بياناتك من أي تطفل خارجي.</p>
             </div>
             
             <div class="card">
-                <h3>🗄️ بنية تحتية معزولة</h3>
-                <p>فصل كامل واحترافي للمعلومات الحساسة (مثل حسابات Appwrite) في قواعد بيانات مستقلة تماماً عن خوادم التفاعل والتعليقات.</p>
+                <h3>بنية تحتية معزولة</h3>
+                <p>فصل كامل واحترافي للمعلومات الحساسة في قواعد بيانات مستقلة تماماً عن خوادم التفاعل والتعليقات لضمان الخصوصية التامة.</p>
             </div>
 
             <div class="card">
-                <h3>💬 مجتمع تفاعلي حي</h3>
+                <h3>مجتمع تفاعلي حي</h3>
                 <p>نظام تعليقات لحظي، إعجابات، وردود يتيح لك النقاش ومشاركة نظرياتك حول الحلقات والشخصيات مع آلاف الأوتاكو فوراً.</p>
             </div>
 
             <div class="card">
-                <h3>📚 مكتبة بيانات ضخمة</h3>
-                <p>مرتبط بأقوى واجهات البيانات العالمية (Jikan API) لجلب أدق التفاصيل، التقييمات، ومعلومات الشخصيات لكل أنمي.</p>
+                <h3>مكتبة بيانات ضخمة</h3>
+                <p>مرتبط بأقوى واجهات البيانات العالمية لجلب أدق التفاصيل، التقييمات، ومعلومات الشخصيات لكل أنمي متوفر.</p>
             </div>
 
             <div class="card">
-                <h3>👤 ملف شخصي متكامل</h3>
-                <p>مساحتك الخاصة لحفظ مفضلتك، تتبع سجل مشاهداتك بدقة، وتخصيص هويتك لتبرز بين أعضاء مجتمع أنمي كاتش.</p>
+                <h3>ملف شخصي متكامل</h3>
+                <p>مساحتك الخاصة لحفظ مفضلتك، تتبع سجل مشاهداتك بدقة، وتخصيص هويتك لتبرز بين أعضاء مجتمع التطبيق.</p>
             </div>
         </div>
     </section>
@@ -324,5 +341,28 @@
         <p>البيانات الوصفية مقدمة عبر واجهة <a href="https://jikan.moe/" target="_blank">Jikan API</a>.</p>
     </footer>
 
+    <script>
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a.scroll-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
