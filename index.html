@@ -1,49 +1,57 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeCatch - الملاذ الأول لعشاق الأنمي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <title>AnimeCatch - The Ultimate Anime Haven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #C1973E;
-            --primary-glow: rgba(193, 151, 62, 0.4);
-            --bg-dark: #0a0a0a;
-            --bg-card: #141414;
+            --anime-blue: #1E90FF;
+            --anime-glow: rgba(30, 144, 255, 0.4);
+            --manga-pink: #FF5EAE;
+            --manga-glow: rgba(255, 94, 174, 0.4);
+            --bg-dark: #050508;
             --text-light: #ffffff;
-            --text-muted: #999999;
+            --text-muted: #a0aec0;
+            --glass-bg: rgba(20, 25, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
             background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 10%, rgba(30, 144, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(255, 94, 174, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
             color: var(--text-light);
             line-height: 1.6;
             overflow-x: hidden;
-            scroll-behavior: smooth; /* نعومة في التنقل */
+            scroll-behavior: smooth;
         }
 
-        /* 🌟 شريط التنقل (Navbar) الاحترافي */
+        /* 🌟 Glassmorphism Navbar */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 5%;
-            background-color: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(10, 12, 18, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(193, 151, 62, 0.15);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
         }
 
@@ -63,23 +71,26 @@
         .brand span {
             font-size: 26px;
             font-weight: 900;
-            color: var(--primary);
+            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: 1px;
-            text-shadow: 0 0 15px var(--primary-glow);
+            text-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 30px;
         }
 
         .nav-links a {
             color: var(--text-light);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             transition: 0.3s;
             position: relative;
+            padding-bottom: 5px;
         }
 
         .nav-links a::after {
@@ -87,30 +98,30 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -5px;
-            right: 0;
-            background-color: var(--primary);
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--anime-blue);
         }
 
-        /* تأثير الـ Hover والـ Active (ScrollSpy) */
         .nav-links a:hover, .nav-links a.active {
-            color: var(--primary);
+            color: var(--text-light);
+            text-shadow: 0 0 10px var(--anime-glow);
         }
 
         .nav-links a:hover::after, .nav-links a.active::after {
             width: 100%;
         }
 
-        /* 🚀 القسم الرئيسي (Hero Section) */
+        /* 🚀 Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 100px 20px 50px;
-            background: radial-gradient(circle at top center, rgba(193, 151, 62, 0.15) 0%, var(--bg-dark) 60%);
+            padding: 120px 20px 50px;
         }
 
         .hero-content {
@@ -118,108 +129,129 @@
             animation: fadeIn 1s ease-out forwards;
         }
 
-        /* تصميم رقم النسخة الأنيق */
         .version-badge {
             display: inline-block;
-            background-color: rgba(193, 151, 62, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(193, 151, 62, 0.3);
+            background: rgba(255, 94, 174, 0.1);
+            color: var(--manga-pink);
+            border: 1px solid rgba(255, 94, 174, 0.3);
             padding: 6px 20px;
             border-radius: 50px;
             font-size: 0.95rem;
             font-weight: 800;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             margin-bottom: 25px;
-            box-shadow: 0 0 15px rgba(193, 151, 62, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 94, 174, 0.15);
         }
 
         .hero-content h1 {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 900;
             margin-bottom: 20px;
-            line-height: 1.2;
+            line-height: 1.1;
         }
 
         .hero-content h1 span {
-            color: var(--primary);
+            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-content p {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
+            font-weight: 400;
         }
 
-        /* زر التحميل الفخم */
         .btn-download {
             display: inline-block;
-            background: linear-gradient(45deg, #A47D2E, var(--primary));
-            color: #000;
-            padding: 15px 45px;
-            font-size: 1.3rem;
-            font-weight: 900;
+            background: linear-gradient(45deg, var(--anime-blue), var(--manga-pink));
+            color: #fff;
+            padding: 16px 50px;
+            font-size: 1.2rem;
+            font-weight: 800;
             text-decoration: none;
             border-radius: 50px;
-            box-shadow: 0 10px 30px var(--primary-glow);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.4);
+            transition: all 0.4s ease;
             border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-download::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .btn-download:hover {
-            background: transparent;
-            color: var(--primary);
-            border-color: var(--primary);
-            box-shadow: 0 10px 40px rgba(193, 151, 62, 0.6);
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 94, 174, 0.5);
+        }
+        
+        .btn-download:hover::before {
+            opacity: 1;
         }
 
-        /* 🛡️ قسم المميزات (Grid System) */
+        /* 🛡️ Features Section (Glass Cards) */
         .features {
-            padding: 80px 5%;
-            background-color: #0d0d0d;
+            padding: 100px 5%;
+            position: relative;
         }
 
         .features-title {
             text-align: center;
-            font-size: 2.8rem;
+            font-size: 3rem;
             color: var(--text-light);
-            margin-bottom: 60px;
+            margin-bottom: 70px;
+            font-weight: 900;
         }
 
         .features-title span {
-            color: var(--primary);
+            color: var(--anime-blue);
+            text-shadow: 0 0 20px var(--anime-glow);
         }
 
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            gap: 35px;
         }
 
         .card {
-            background-color: var(--bg-card);
-            padding: 40px 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s ease;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 45px 35px;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .card::before {
             content: '';
             position: absolute;
-            top: 0; right: 0; width: 100%; height: 4px;
-            background: var(--primary);
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             transform: scaleX(0);
-            transform-origin: right;
+            transform-origin: left;
             transition: transform 0.4s ease;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(193, 151, 62, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow);
+            transform: translateY(-12px);
+            border-color: rgba(30, 144, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(30, 144, 255, 0.15);
         }
 
         .card:hover::before {
@@ -228,51 +260,65 @@
 
         .card h3 {
             font-size: 1.6rem;
-            color: var(--primary);
+            color: var(--text-light);
             margin-bottom: 15px;
             font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h3::before {
+            content: '✦';
+            color: var(--manga-pink);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px var(--manga-glow);
         }
 
         .card p {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.7;
         }
 
-        /* 📋 الفوتر */
+        /* 📋 Footer */
         footer {
             text-align: center;
             padding: 40px 20px;
-            background-color: #050505;
-            border-top: 1px solid rgba(193, 151, 62, 0.1);
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 50px;
         }
 
-        footer p { color: var(--text-muted); margin-bottom: 10px; }
-        footer strong { color: var(--primary); }
-        footer a { color: var(--text-light); text-decoration: none; border-bottom: 1px dotted var(--primary); }
+        footer p { color: var(--text-muted); margin-bottom: 10px; font-size: 0.95rem; }
+        footer strong { color: var(--anime-blue); }
+        footer a { color: var(--manga-pink); text-decoration: none; transition: 0.3s; }
+        footer a:hover { text-shadow: 0 0 10px var(--manga-glow); }
 
-        /* 📱 توافقية الهواتف */
+        /* 📱 Responsive */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
                 padding: 15px 20px;
                 gap: 15px;
             }
-            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content h1 { font-size: 3rem; }
             .hero-content p { font-size: 1.1rem; }
             .nav-links {
                 width: 100%;
                 justify-content: center;
                 flex-wrap: wrap;
-                gap: 15px;
+                gap: 20px;
             }
-            .nav-links a { font-size: 1rem; }
+            .nav-links a { font-size: 0.95rem; }
             .features-title { font-size: 2.2rem; }
+            .card { padding: 35px 25px; }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
     </style>
 </head>
@@ -284,61 +330,61 @@
             <span>AnimeCatch</span>
         </a>
         <nav class="nav-links">
-            <a href="#home" class="scroll-link active">الرئيسية</a>
-            <a href="#features" class="scroll-link">المميزات</a>
-            <a href="privacy.html">الخصوصية</a>
-            <a href="disclaimer.html">إخلاء المسؤولية</a>
+            <a href="#home" class="scroll-link active">Home</a>
+            <a href="#features" class="scroll-link">Features</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="disclaimer.html">Disclaimer</a>
         </nav>
     </header>
 
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="version-badge">Beta 1.0.1</div>
-            <h1>عالم الأنمي <span>الاحترافي</span></h1>
-            <p>التطبيق العربي الأقوى لمتابعة، تنظيم، والتفاعل مع عالم الأنمي. صُمم بأحدث التقنيات ليوفر لك تجربة مشاهدة ونقاش لا مثيل لها.</p>
-            <a href="#download" class="btn-download">تحميل الـ APK الآن</a>
+            <div class="version-badge">BETA 1.0.1</div>
+            <h1>The <span>Professional</span> Anime World</h1>
+            <p>The ultimate app to watch, organize, and interact with the anime world. Designed with cutting-edge technology to provide you with an unparalleled viewing and discussion experience.</p>
+            <a href="#download" class="btn-download">Download APK Now</a>
         </div>
     </section>
 
     <section id="features" class="features">
-        <h2 class="features-title">لماذا <span>أنمي كاتش؟</span></h2>
+        <h2 class="features-title">Why <span>AnimeCatch?</span></h2>
         
         <div class="cards-grid">
             <div class="card">
-                <h3>تعدد مصادر المشاهدة</h3>
-                <p>نوفر لك قائمة واسعة من سيرفرات وروابط المشاهدة الخارجية المتجددة لضمان استمرار متعتك بأعلى جودة وبدون انقطاع.</p>
+                <h3>Multiple Streaming Sources</h3>
+                <p>We provide a wide array of constantly updated external streaming servers and links to ensure uninterrupted, high-quality entertainment.</p>
             </div>
             
             <div class="card">
-                <h3>أقوى تشفير عربي</h3>
-                <p>نظام حماية صارم يستخدم أحدث خوارزميات التشفير (V12) لضمان أمان اتصالاتك وحماية بياناتك من أي تطفل خارجي.</p>
+                <h3>Strongest Encryption</h3>
+                <p>A strict security system utilizing the latest encryption algorithms (V12) to ensure the safety of your connections and protect your data.</p>
             </div>
             
             <div class="card">
-                <h3>بنية تحتية معزولة</h3>
-                <p>فصل كامل واحترافي للمعلومات الحساسة في قواعد بيانات مستقلة تماماً عن خوادم التفاعل والتعليقات لضمان الخصوصية التامة.</p>
+                <h3>Isolated Infrastructure</h3>
+                <p>Professional and complete isolation of sensitive information in independent databases, fully separated from interaction servers.</p>
             </div>
 
             <div class="card">
-                <h3>مجتمع تفاعلي حي</h3>
-                <p>نظام تعليقات لحظي، إعجابات، وردود يتيح لك النقاش ومشاركة نظرياتك حول الحلقات والشخصيات مع آلاف الأوتاكو فوراً.</p>
+                <h3>Live Interactive Community</h3>
+                <p>A real-time comment system, likes, and replies that allows you to discuss and share your theories with thousands of Otakus instantly.</p>
             </div>
 
             <div class="card">
-                <h3>مكتبة بيانات ضخمة</h3>
-                <p>مرتبط بأقوى واجهات البيانات العالمية لجلب أدق التفاصيل، التقييمات، ومعلومات الشخصيات لكل أنمي متوفر.</p>
+                <h3>Massive Database</h3>
+                <p>Connected to the most powerful global data APIs to fetch precise details, ratings, and character info for every available anime.</p>
             </div>
 
             <div class="card">
-                <h3>ملف شخصي متكامل</h3>
-                <p>مساحتك الخاصة لحفظ مفضلتك، تتبع سجل مشاهداتك بدقة، وتخصيص هويتك لتبرز بين أعضاء مجتمع التطبيق.</p>
+                <h3>Comprehensive Profile</h3>
+                <p>Your personal space to save favorites, accurately track your watch history, and customize your identity within the community.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 جميع الحقوق محفوظة لتطبيق <strong>AnimeCatch</strong>.</p>
-        <p>البيانات الوصفية مقدمة عبر واجهة <a href="https://jikan.moe/" target="_blank">Jikan API</a>.</p>
+        <p>&copy; 2026 All Rights Reserved for <strong>AnimeCatch</strong>.</p>
+        <p>Metadata provided via <a href="https://jikan.moe/" target="_blank">Jikan API</a>.</p>
     </footer>
 
     <script>
@@ -362,6 +408,16 @@
                     link.classList.add('active');
                 }
             });
+            
+            // Navbar glass effect enhancement on scroll
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(10, 12, 18, 0.85)';
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.8)';
+            } else {
+                header.style.background = 'rgba(10, 12, 18, 0.6)';
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+            }
         });
     </script>
 </body>
