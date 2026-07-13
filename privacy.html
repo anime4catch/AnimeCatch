@@ -1,34 +1,90 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سياسة الخصوصية | أنمي كاتش</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Privacy Policy | AnimeCatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #C1973E;
-            --bg-dark: #0f0f0f;
-            --bg-card: #1a1a1a;
+            --anime-blue: #1E90FF;
+            --manga-pink: #FF5EAE;
+            --bg-dark: #050508;
             --text-light: #ffffff;
-            --text-muted: #aaaaaa;
+            --text-muted: #a0aec0;
+            --glass-bg: rgba(20, 25, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.8; padding-top: 80px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { 
+            background-color: var(--bg-dark); 
+            background-image: radial-gradient(circle at 100% 100%, rgba(255, 94, 174, 0.08) 0%, transparent 50%);
+            color: var(--text-light); 
+            line-height: 1.8; 
+            padding-top: 100px; 
+            padding-bottom: 50px;
+        }
+        header { 
+            background: rgba(10, 12, 18, 0.6); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px 50px; 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            border-bottom: 1px solid var(--glass-border); 
+            z-index: 100; 
+            text-align: center; 
+        }
+        header a { 
+            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none; 
+            font-weight: 900; 
+            font-size: 26px; 
+            letter-spacing: 1px;
+        }
+        .container { 
+            max-width: 850px; 
+            margin: 0 auto; 
+            padding: 50px; 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--manga-pink), var(--anime-blue));
+        }
+        h1 { color: var(--text-light); text-align: center; margin-bottom: 10px; font-size: 2.5rem; font-weight: 800; }
+        .date { text-align: center; color: var(--anime-blue); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; }
+        h2 { 
+            color: var(--text-light); 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            font-size: 1.6rem; 
+            border-left: 4px solid var(--manga-pink); 
+            padding-left: 15px; 
+        }
+        p, li { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 15px; }
+        ul { margin-left: 20px; margin-bottom: 20px; }
+        li { margin-bottom: 10px; }
+        strong { color: var(--text-light); font-weight: 600; }
+        a { color: var(--anime-blue); text-decoration: none; transition: 0.3s; }
+        a:hover { color: var(--manga-pink); text-shadow: 0 0 10px rgba(255, 94, 174, 0.4); }
         
-        /* شريط علوي بسيط */
-        header { background-color: rgba(15, 15, 15, 0.9); padding: 15px 50px; position: fixed; top: 0; width: 100%; border-bottom: 1px solid rgba(193, 151, 62, 0.2); z-index: 100; text-align: center; }
-        header a { color: var(--primary); text-decoration: none; font-weight: 900; font-size: 24px; }
-        
-        /* حاوية النص */
-        .container { max-width: 800px; margin: 40px auto; padding: 40px; background-color: var(--bg-card); border-radius: 15px; border-top: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        h1 { color: var(--primary); text-align: center; margin-bottom: 10px; font-size: 2.2rem; }
-        .date { text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem; }
-        h2 { color: var(--text-light); margin-top: 30px; margin-bottom: 15px; font-size: 1.5rem; border-right: 4px solid var(--primary); padding-right: 10px; }
-        p, li { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 15px; }
-        ul { margin-right: 20px; }
-        a { color: var(--primary); text-decoration: none; }
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; margin: 0 15px; }
+            h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -37,50 +93,50 @@
     </header>
 
     <div class="container">
-        <h1>سياسة الخصوصية</h1>
-        <div class="date">تاريخ آخر تحديث: 22 مارس 2026</div>
+        <h1>Privacy Policy</h1>
+        <div class="date">Last Updated: March 22, 2026</div>
         
-        <p>نحن في تطبيق <strong>أنمي كاتش</strong> ("نحن"، "التطبيق"، "فريق التطوير") نلتزم التزاماً كاملاً بحماية خصوصيتك وبياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمعنا للمعلومات، واستخدامها، وحمايتها عند استخدامك لتطبيقنا وخدماتنا.</p>
+        <p>We at <strong>AnimeCatch</strong> ("we", "the App", "Development Team") are fully committed to protecting your privacy and personal data. This privacy policy outlines how we collect, use, and protect your information when you use our application and services.</p>
 
-        <h2>1. المعلومات التي نجمعها:</h2>
-        <p>لتقديم تجربة مستخدم متكاملة، قد نقوم بجمع الأنواع التالية من المعلومات:</p>
+        <h2>1. Information We Collect</h2>
+        <p>To provide a seamless user experience, we may collect the following types of information:</p>
         <ul>
-            <li><strong>معلومات التسجيل (البيانات الشخصية):</strong> عند إنشاء حساب، نطلب معلومات أساسية مثل (الاسم، البريد الإلكتروني، كلمة المرور، وتاريخ الميلاد).</li>
-            <li><strong>بيانات الملف الشخصي:</strong> المعلومات الإضافية التي تختار إضافتها طواعية، مثل (اللقب، النبذة الشخصية "Bio"، الموقع الجغرافي، والأنمي المفضل).</li>
-            <li><strong>المحتوى الذي تنشئه:</strong> التعليقات، الردود، التقييمات، والإعجابات التي تقوم بمشاركتها داخل التطبيق.</li>
-            <li><strong>بيانات الاستخدام والجهاز:</strong> قد يتم جمع معلومات تقنية تلقائياً مثل (نوع الجهاز، نظام التشغيل، ومعرّفات الأجهزة الفريدة) لتحسين أداء التطبيق وحل المشاكل التقنية.</li>
+            <li><strong>Registration Information (Personal Data):</strong> When creating an account, we ask for basic information such as (Name, Email, Password, and Date of Birth).</li>
+            <li><strong>Profile Data:</strong> Additional information you voluntarily choose to add, such as (Nickname, Bio, Geolocation, and Favorite Anime).</li>
+            <li><strong>User-Generated Content:</strong> Comments, replies, ratings, and likes you share within the app.</li>
+            <li><strong>Usage and Device Data:</strong> Technical information may be collected automatically, such as (Device type, Operating System, and unique device identifiers) to improve app performance and resolve technical issues.</li>
         </ul>
 
-        <h2>2. كيف نستخدم معلوماتك؟</h2>
-        <p>نحن لا نقوم ببيع أو تأجير بياناتك لأي جهة. نستخدم المعلومات التي نجمعها للأغراض التالية فقط:</p>
+        <h2>2. How Do We Use Your Information?</h2>
+        <p>We do not sell or rent your data to any third party. We use the collected information exclusively for the following purposes:</p>
         <ul>
-            <li>إنشاء وإدارة حسابك الشخصي في التطبيق.</li>
-            <li>توفير الميزات الأساسية للتطبيق (مثل عرض التعليقات والملفات الشخصية).</li>
-            <li>التواصل معك لإرسال رسائل التفعيل (Verification Emails) أو إشعارات الأمان.</li>
-            <li>تحسين وتطوير أداء التطبيق بناءً على كيفية تفاعل المستخدمين معه.</li>
+            <li>Creating and managing your personal account in the app.</li>
+            <li>Providing core features of the app (such as displaying profiles and comments).</li>
+            <li>Communicating with you to send verification emails or security alerts.</li>
+            <li>Improving and developing the app's performance based on how users interact with it.</li>
         </ul>
 
-        <h2>3. مشاركة البيانات مع أطراف ثالثة (Third-Party Services):</h2>
-        <p>لضمان استقرار الخدمة، نعتمد على مزودي خدمات سحابية موثوقين وذوي معايير أمنية عالمية (مثل خوادم Appwrite / قواعد البيانات). هذه الجهات تعالج البيانات بالنيابة عنا تحت شروط سرية صارمة، ولا يُسمح لها باستخدام بياناتك لأغراضها الخاصة.</p>
+        <h2>3. Sharing Data with Third-Party Services</h2>
+        <p>To ensure service stability, we rely on trusted cloud service providers with global security standards (e.g., Appwrite Servers / Databases). These entities process data on our behalf under strict confidentiality terms and are not permitted to use your data for their own purposes.</p>
 
-        <h2>4. أمان البيانات (Data Security):</h2>
-        <p>نتخذ إجراءات أمنية وتشفيرية متقدمة لحماية بياناتك من الوصول غير المصرح به، التعديل، أو الإفشاء. يتم تخزين كلمات المرور بشكل مشفر تماماً (Hashed) بحيث لا يمكن لأي شخص، بما في ذلك فريق التطوير، الاطلاع عليها.</p>
+        <h2>4. Data Security</h2>
+        <p>We implement advanced security and encryption measures to protect your data from unauthorized access, modification, or disclosure. Passwords are completely hashed so that no one, including the development team, can view them.</p>
 
-        <h2>5. حقوق المستخدم (التحكم في بياناتك):</h2>
-        <p>أنت تمتلك السيطرة الكاملة على بياناتك:</p>
+        <h2>5. User Rights (Controlling Your Data)</h2>
+        <p>You have full control over your data:</p>
         <ul>
-            <li><strong>الوصول والتعديل:</strong> يمكنك تعديل بيانات ملفك الشخصي في أي وقت من خلال إعدادات التطبيق.</li>
-            <li><strong>حذف الحساب (Data Deletion):</strong> يحق لك طلب حذف حسابك وكافة بياناتك المرتبطة به بشكل نهائي من خوادمنا عبر خيار الحذف داخل التطبيق.</li>
+            <li><strong>Access and Modification:</strong> You can edit your profile data at any time through the app settings.</li>
+            <li><strong>Data Deletion:</strong> You have the right to request the permanent deletion of your account and all associated data from our servers via the deletion option within the app.</li>
         </ul>
 
-        <h2>6. خصوصية الأطفال (Children’s Privacy):</h2>
-        <p>تطبيقنا غير موجه للأطفال دون سن الـ 13 عاماً (أو السن القانوني في بلدك). نحن لا نجمع عن قصد أي معلومات شخصية من الأطفال. إذا تبين لنا أننا جمعنا بيانات طفل دون موافقة الوالدين، سنقوم بحذف هذه المعلومات فوراً.</p>
+        <h2>6. Children's Privacy</h2>
+        <p>Our application is not directed to children under the age of 13 (or the legal age in your country). We do not knowingly collect personal information from children. If we discover that we have collected a child's data without parental consent, we will delete this information immediately.</p>
 
-        <h2>7. التغييرات على سياسة الخصوصية:</h2>
-        <p>قد نقوم بتحديث هذه السياسة من وقت لآخر لمواكبة التغييرات التقنية أو القانونية. سنقوم بإعلامك بأي تغييرات جوهرية عبر التطبيق أو البريد الإلكتروني. استمرارك في استخدام التطبيق بعد التحديث يعني موافقتك على السياسة المعدلة.</p>
+        <h2>7. Changes to the Privacy Policy</h2>
+        <p>We may update this policy from time to time to keep pace with technical or legal changes. We will notify you of any material changes via the app or email. Your continued use of the app after an update constitutes your agreement to the revised policy.</p>
 
-        <h2>8. اتصل بنا:</h2>
-        <p>إذا كان لديك أي أسئلة، استفسارات، أو طلبات تتعلق بسياسة الخصوصية وبياناتك، يرجى التواصل معنا عبر البريد الإلكتروني:<br>
+        <h2>8. Contact Us</h2>
+        <p>If you have any questions, inquiries, or requests regarding the privacy policy and your data, please contact us via email:<br>
         <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
     </div>
 </body>
