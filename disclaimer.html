@@ -15,46 +15,109 @@
     </script>
 
     <style>
+        
         :root {
             --anime-blue: #1E90FF;
+            --anime-glow: rgba(30, 144, 255, 0.4);
             --manga-pink: #FF5EAE;
+            --manga-glow: rgba(255, 94, 174, 0.4);
             --bg-dark: #050508;
             --text-light: #ffffff;
             --text-muted: #a0aec0;
             --glass-bg: rgba(20, 25, 35, 0.4);
             --glass-border: rgba(255, 255, 255, 0.08);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         html[lang="en"] * { font-family: 'Poppins', sans-serif; }
         html[lang="ar"] * { font-family: 'Cairo', sans-serif; }
-        
+
         html[lang="en"] .ar { display: none !important; }
         html[lang="ar"] .en { display: none !important; }
 
-        body { 
-            background-color: var(--bg-dark); 
-            background-image: radial-gradient(circle at 50% 0%, rgba(30, 144, 255, 0.1) 0%, transparent 60%);
-            color: var(--text-light); line-height: 1.8; padding-top: 100px; padding-bottom: 50px;
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 10%, rgba(30, 144, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(255, 94, 174, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
-        
-        header { 
-            background: rgba(10, 12, 18, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 15px 5%; position: fixed; top: 0; width: 100%; border-bottom: 1px solid var(--glass-border); 
-            z-index: 100; display: flex; justify-content: space-between; align-items: center;
+
+        /* 🌟 Glassmorphism Navbar */
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(10, 12, 18, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
-        header .brand { 
+
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand img { height: 45px; width: auto; border-radius: 8px; }
+        .brand span {
+            font-size: 26px; font-weight: 900;
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-decoration: none; font-weight: 900; font-size: 26px; letter-spacing: 1px;
+            letter-spacing: 1px; text-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 25px; }
+        .nav-links a {
+            color: var(--text-light); text-decoration: none; font-weight: 600;
+            font-size: 1.05rem; transition: 0.3s; position: relative; padding-bottom: 5px;
         }
         
+        /* FIXED UNDERLINE (Centered for both LTR & RTL) */
+        .nav-links a::after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 2px; 
+            bottom: 0; 
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            transition: width 0.3s ease; 
+            box-shadow: 0 0 10px var(--anime-blue);
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+        /* FIXED LANGUAGE BUTTON PLACEMENT */
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
         .lang-btn {
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-light); padding: 8px 18px; border-radius: 20px;
+            color: var(--text-light); padding: 8px 20px; border-radius: 20px;
             cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
         }
-        .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px rgba(30,144,255,0.4); }
+        .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px var(--anime-glow); transform: translateY(-2px); }
+
+        @media (max-width: 900px) {
+            .nav-links { order: 3; width: 100%; justify-content: center; margin-top: 15px; gap: 15px; }
+            .nav-links a { font-size: 0.95rem; }
+        }
+
+        
+        body { padding-top: 120px; padding-bottom: 50px; }
 
         .container { 
             max-width: 850px; margin: 0 auto; padding: 50px; 
@@ -68,13 +131,16 @@
         }
         h1 { color: var(--text-light); text-align: center; margin-bottom: 10px; font-size: 2.5rem; font-weight: 800; }
         .date { text-align: center; color: var(--manga-pink); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; }
+        
         h2 { 
             color: var(--text-light); margin-top: 40px; margin-bottom: 20px; font-size: 1.6rem; 
-            html[dir="ltr"] & { border-left: 4px solid var(--anime-blue); padding-left: 15px; }
-            html[dir="rtl"] & { border-right: 4px solid var(--anime-blue); padding-right: 15px; }
         }
+        html[dir="ltr"] h2 { border-left: 4px solid var(--anime-blue); padding-left: 15px; }
+        html[dir="rtl"] h2 { border-right: 4px solid var(--anime-blue); padding-right: 15px; }
+        
         p, li { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 15px; }
-        ul { margin-left: 20px; margin-bottom: 20px; } html[dir="rtl"] ul { margin-left: 0; margin-right: 20px; }
+        ul { margin-left: 20px; margin-bottom: 20px; } 
+        html[dir="rtl"] ul { margin-left: 0; margin-right: 20px; }
         li { margin-bottom: 10px; }
         strong { color: var(--text-light); font-weight: 600; }
         a { color: var(--anime-blue); text-decoration: none; transition: 0.3s; }
@@ -85,10 +151,30 @@
 </head>
 <body>
     <header>
-        <a href="index.html" class="brand">AniCatch</a>
-        <button class="lang-btn" onclick="toggleLanguage()">
-            <span class="en">🌐 العربية</span><span class="ar">🌐 English</span>
-        </button>
+        <a href="index.html" class="brand">
+            <img src="logo.png" alt="AniCatch Logo" onerror="this.style.display='none'">
+            <span>AniCatch</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">
+                <span class="en">Home</span><span class="ar">الرئيسية</span>
+            </a>
+            <a href="index.html#features">
+                <span class="en">Features</span><span class="ar">المميزات</span>
+            </a>
+            <a href="privacy.html">
+                <span class="en">Privacy</span><span class="ar">الخصوصية</span>
+            </a>
+            <a href="disclaimer.html" class="active">
+                <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
+            </a>
+        </nav>
+        <div class="header-actions">
+            <button class="lang-btn" onclick="toggleLanguage()">
+                <span class="en">🌐 العربية</span>
+                <span class="ar">🌐 English</span>
+            </button>
+        </div>
     </header>
 
     <div class="container">
@@ -100,29 +186,89 @@
             <span class="ar">تاريخ الإصدار: 22 مارس 2026</span>
         </div>
         
+        <!-- ENGLISH CONTENT -->
         <div class="en">
-            <h2>1. Content Aggregation & Subtitles</h2>
-            <p><strong>AniCatch</strong> does not host, upload, or broadcast any video files. The application functions solely as an indexing tool and integrates with AniList for metadata. Subtitles (such as those provided via OpenSubtitles in the ACN Player) are fetched externally and we do not own them.</p>
-            <h2>2. Third-Party Interactions</h2>
-            <p>Interactions made on AniList through our app are subject to AniList's Terms of Service.</p>
+            <h2>Introduction</h2>
+            <p>This document aims to clarify the limits of legal liability regarding the use of the <strong>AniCatch</strong> application. By using this application, you fully agree to the terms and conditions stated below. If you do not agree to any part of this disclaimer, please discontinue using the app immediately.</p>
+
+            <h2>1. Content Nature & Intellectual Property</h2>
+            <ul>
+                <li><strong>Content Aggregation:</strong> The <strong>AniCatch</strong> application does not host, upload, or broadcast any video or media files on its own servers. The app solely acts as an indexing and search interface, providing links to content already hosted on third-party servers. Subtitles (such as those provided via OpenSubtitles in the ACN Player) are fetched externally and we do not own them.</li>
+                <li><strong>Copyrights:</strong> We respect the intellectual property rights of others. The app and its developers bear no legal responsibility for the content displayed via external links. If there is any content that violates copyrights, the responsibility for its removal lies entirely with the hosting server.</li>
+            </ul>
+
+            <h2>2. User-Generated Content & Third-Party Interactions</h2>
+            <ul>
+                <li><strong>Personal Responsibility:</strong> All comments, opinions, and ratings posted within the app exclusively represent the views of their authors.</li>
+                <li><strong>AniList Integration:</strong> Interactions made on AniList through our app are subject to AniList's Terms of Service.</li>
+                <li><strong>Moderation:</strong> The app reserves the full right (without obligation) to delete or modify any comment that contains abuse, defamation, promotion of third parties, or spoilers.</li>
+            </ul>
+
+            <h2>3. External Links & Services</h2>
+            <p>The app may contain links to third-party websites or applications. We do not control the content or privacy policies of these sites, and we assume no responsibility for any damages or losses that may result from your use of them.</p>
+
+            <h2>4. Technical Disclaimer (Service Guarantee)</h2>
+            <ul>
+                <li>The app and its services are provided on an "As Is" and "As Available" basis, without any express or implied warranties that it is free of bugs or unexpected downtimes.</li>
+                <li>The developers are not responsible for any data loss, damage to your device, or any technical damages resulting from the use of the app.</li>
+            </ul>
+
+            <h2>5. Amendments to Disclaimer</h2>
+            <p>We reserve the right to update or modify the text of this disclaimer at any time without prior notice. Your continued use of the application after any modifications indicates your explicit consent to the new text.</p>
+
+            <h2>6. Contact & Reporting</h2>
+            <p>For any legal inquiries, or to report violations or abusive content, please contact us via email:<br>
+            <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
         </div>
 
+        <!-- ARABIC CONTENT -->
         <div class="ar">
-            <h2>1. تجميع المحتوى والترجمة:</h2>
-            <p>لا يقوم تطبيق <strong>AniCatch</strong> باستضافة أو بث أي ملفات فيديو على خوادمه. التطبيق يعمل كفهرس متكامل مع منصة AniList للبيانات. ملفات الترجمة (مثل تلك التي يتم جلبها عبر OpenSubtitles داخل مشغل ACN) يتم استدعاؤها من مصادر خارجية ولا نملك حقوقها.</p>
-            <h2>2. خدمات الأطراف الثالثة:</h2>
-            <p>التفاعلات التي تتم في مجتمع AniList عبر تطبيقنا تخضع لشروط استخدام منصة AniList نفسها.</p>
+            <h2>مقدمة:</h2>
+            <p>يهدف هذا المستند إلى توضيح حدود المسؤولية القانونية المتعلقة باستخدام تطبيق <strong>AniCatch</strong>. باستخدامك لهذا التطبيق، فإنك توافق بشكل كامل على الشروط والبنود المذكورة أدناه. إذا كنت لا توافق على أي جزء من هذا الإخلاء، يرجى التوقف عن استخدام التطبيق فوراً.</p>
+
+            <h2>1. طبيعة المحتوى وحقوق الملكية الفكرية:</h2>
+            <ul>
+                <li><strong>تجميع المحتوى والترجمة:</strong> لا يقوم تطبيق <strong>AniCatch</strong> باستضافة، أو رفع، أو بث أي ملفات فيديو أو وسائط على خوادمه الخاصة. التطبيق يعمل فقط كواجهة برمجية للبحث والفهرسة. ملفات الترجمة (مثل تلك التي يتم جلبها عبر OpenSubtitles داخل مشغل ACN) يتم استدعاؤها من مصادر خارجية ولا نملك حقوقها.</li>
+                <li><strong>حقوق الطبع والنشر:</strong> نحن نحترم حقوق الملكية الفكرية للآخرين. لا يتحمل التطبيق أو مطوروه أي مسؤولية قانونية تجاه المحتوى الذي يتم عرضه عبر الروابط الخارجية. في حال وجود أي محتوى ينتهك حقوق الطبع والنشر، تقع مسؤولية إزالته على عاتق الخادم المضيف للمحتوى.</li>
+            </ul>
+
+            <h2>2. المحتوى الذي ينشئه المستخدمون وخدمات الأطراف الثالثة:</h2>
+            <ul>
+                <li><strong>المسؤولية الشخصية:</strong> كافة التعليقات، الآراء، والتقييمات التي يتم نشرها داخل التطبيق تعبر حصراً عن رأي كاتبها.</li>
+                <li><strong>التكامل مع AniList:</strong> التفاعلات التي تتم في مجتمع AniList عبر تطبيقنا تخضع لشروط استخدام منصة AniList نفسها.</li>
+                <li><strong>الرقابة والحذف:</strong> لا يلتزم التطبيق بمراقبة كل تعليق، ولكنه يحتفظ بالحق الكامل في حذف أو تعديل أي تعليق يحتوي على إساءة، تشهير، أو حرق للأحداث.</li>
+            </ul>
+
+            <h2>3. الروابط والخدمات الخارجية:</h2>
+            <p>قد يحتوي التطبيق على روابط تؤدي إلى مواقع أو تطبيقات أطراف ثالثة. نحن لا نتحكم في محتوى أو سياسات الخصوصية الخاصة بتلك المواقع، ولا نتحمل أي مسؤولية عن أي أضرار قد تنتج عن استخدامك لها.</p>
+
+            <h2>4. إخلاء المسؤولية التقنية (ضمان الخدمة):</h2>
+            <ul>
+                <li>يتم تقديم التطبيق وخدماته على أساس "كما هو" (As Is) و"كما هو متوفر" (As Available)، دون أي ضمانات صريحة أو ضمنية بخلوه من الأخطاء البرمجية (Bugs).</li>
+                <li>لا يتحمل المطورون مسؤولية أي فقدان للبيانات، أو تلف يلحق بجهازك، أو أي أضرار تقنية تنتج عن استخدام التطبيق.</li>
+            </ul>
+
+            <h2>5. التعديل على إخلاء المسؤولية:</h2>
+            <p>نحتفظ بالحق في تحديث أو تعديل نص إخلاء المسؤولية هذا في أي وقت دون إشعار مسبق. يُعتبر استمرارك في استخدام التطبيق بعد إجراء أي تعديلات بمثابة موافقة صريحة منك على النص الجديد.</p>
+
+            <h2>6. التواصل والإبلاغ:</h2>
+            <p>لأي استفسارات قانونية، أو للإبلاغ عن انتهاكات أو محتوى مسيء، يرجى التواصل معنا عبر البريد الإلكتروني:<br>
+            <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
         </div>
     </div>
 
     <script>
+        
+        // Language Toggle Functionality
         function toggleLanguage() {
             var current = document.documentElement.lang;
             var nextLang = current === 'en' ? 'ar' : 'en';
+            
             localStorage.setItem('anicatch_lang', nextLang);
             document.documentElement.lang = nextLang;
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
+
     </script>
 </body>
 </html>
