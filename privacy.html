@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | AnimeCatch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <title>Privacy Policy | AniCatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        (function() {
+            var savedLang = localStorage.getItem('anicatch_lang') || 'en';
+            document.documentElement.lang = savedLang;
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+        })();
+    </script>
+
     <style>
         :root {
             --anime-blue: #1E90FF;
@@ -15,129 +24,113 @@
             --glass-bg: rgba(20, 25, 35, 0.4);
             --glass-border: rgba(255, 255, 255, 0.08);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html[lang="en"] * { font-family: 'Poppins', sans-serif; }
+        html[lang="ar"] * { font-family: 'Cairo', sans-serif; }
+        
+        html[lang="en"] .ar { display: none !important; }
+        html[lang="ar"] .en { display: none !important; }
+
         body { 
             background-color: var(--bg-dark); 
             background-image: radial-gradient(circle at 100% 100%, rgba(255, 94, 174, 0.08) 0%, transparent 50%);
-            color: var(--text-light); 
-            line-height: 1.8; 
-            padding-top: 100px; 
-            padding-bottom: 50px;
+            color: var(--text-light); line-height: 1.8; padding-top: 100px; padding-bottom: 50px;
         }
+        
         header { 
-            background: rgba(10, 12, 18, 0.6); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            padding: 20px 50px; 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            border-bottom: 1px solid var(--glass-border); 
-            z-index: 100; 
-            text-align: center; 
+            background: rgba(10, 12, 18, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 15px 5%; position: fixed; top: 0; width: 100%; border-bottom: 1px solid var(--glass-border); 
+            z-index: 100; display: flex; justify-content: space-between; align-items: center;
         }
-        header a { 
+        header .brand { 
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none; 
-            font-weight: 900; 
-            font-size: 26px; 
-            letter-spacing: 1px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none; font-weight: 900; font-size: 26px; letter-spacing: 1px;
         }
+        
+        .lang-btn {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            color: var(--text-light); padding: 8px 18px; border-radius: 20px;
+            cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: 0.3s;
+        }
+        .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px rgba(30,144,255,0.4); }
+
         .container { 
-            max-width: 850px; 
-            margin: 0 auto; 
-            padding: 50px; 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 24px; 
-            border: 1px solid var(--glass-border); 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
-            position: relative;
-            overflow: hidden;
+            max-width: 850px; margin: 0 auto; padding: 50px; 
+            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px; border: 1px solid var(--glass-border); box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+            position: relative; overflow: hidden;
         }
         .container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
             background: linear-gradient(90deg, var(--manga-pink), var(--anime-blue));
         }
         h1 { color: var(--text-light); text-align: center; margin-bottom: 10px; font-size: 2.5rem; font-weight: 800; }
         .date { text-align: center; color: var(--anime-blue); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; }
         h2 { 
-            color: var(--text-light); 
-            margin-top: 40px; 
-            margin-bottom: 20px; 
-            font-size: 1.6rem; 
-            border-left: 4px solid var(--manga-pink); 
-            padding-left: 15px; 
+            color: var(--text-light); margin-top: 40px; margin-bottom: 20px; font-size: 1.6rem; 
+            html[dir="ltr"] & { border-left: 4px solid var(--manga-pink); padding-left: 15px; }
+            html[dir="rtl"] & { border-right: 4px solid var(--manga-pink); padding-right: 15px; }
         }
         p, li { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 15px; }
-        ul { margin-left: 20px; margin-bottom: 20px; }
+        ul { margin-left: 20px; margin-bottom: 20px; } html[dir="rtl"] ul { margin-left: 0; margin-right: 20px; }
         li { margin-bottom: 10px; }
         strong { color: var(--text-light); font-weight: 600; }
         a { color: var(--anime-blue); text-decoration: none; transition: 0.3s; }
         a:hover { color: var(--manga-pink); text-shadow: 0 0 10px rgba(255, 94, 174, 0.4); }
         
-        @media (max-width: 768px) {
-            .container { padding: 30px 20px; margin: 0 15px; }
-            h1 { font-size: 2rem; }
-        }
+        @media (max-width: 768px) { .container { padding: 30px 20px; margin: 0 15px; } h1 { font-size: 2rem; } }
     </style>
 </head>
 <body>
     <header>
-        <a href="index.html">AnimeCatch</a>
+        <a href="index.html" class="brand">AniCatch</a>
+        <button class="lang-btn" onclick="toggleLanguage()">
+            <span class="en">🌐 العربية</span><span class="ar">🌐 English</span>
+        </button>
     </header>
 
     <div class="container">
-        <h1>Privacy Policy</h1>
-        <div class="date">Last Updated: March 22, 2026</div>
+        <h1 class="en">Privacy Policy</h1>
+        <h1 class="ar">سياسة الخصوصية</h1>
         
-        <p>We at <strong>AnimeCatch</strong> ("we", "the App", "Development Team") are fully committed to protecting your privacy and personal data. This privacy policy outlines how we collect, use, and protect your information when you use our application and services.</p>
+        <div class="date">
+            <span class="en">Last Updated: March 22, 2026</span>
+            <span class="ar">تاريخ آخر تحديث: 22 مارس 2026</span>
+        </div>
+        
+        <div class="en">
+            <p>We at <strong>AniCatch</strong> are fully committed to protecting your privacy and personal data. This privacy policy outlines how we collect, use, and protect your information when you use our application and services, including our integration with AniList.</p>
+            <h2>1. Information We Collect</h2>
+            <ul>
+                <li><strong>AniList Data:</strong> Since we integrate with AniList, we may fetch public data or authorized private data based on the permissions you grant via AniList OAuth.</li>
+                <li><strong>Usage Data:</strong> Technical info like device type and OS to improve our custom ACN Player casting features.</li>
+            </ul>
+            <h2>2. Data Security</h2>
+            <p>We use V12 encryption for connections and rely on robust databases to isolate sensitive information.</p>
+        </div>
 
-        <h2>1. Information We Collect</h2>
-        <p>To provide a seamless user experience, we may collect the following types of information:</p>
-        <ul>
-            <li><strong>Registration Information (Personal Data):</strong> When creating an account, we ask for basic information such as (Name, Email, Password, and Date of Birth).</li>
-            <li><strong>Profile Data:</strong> Additional information you voluntarily choose to add, such as (Nickname, Bio, Geolocation, and Favorite Anime).</li>
-            <li><strong>User-Generated Content:</strong> Comments, replies, ratings, and likes you share within the app.</li>
-            <li><strong>Usage and Device Data:</strong> Technical information may be collected automatically, such as (Device type, Operating System, and unique device identifiers) to improve app performance and resolve technical issues.</li>
-        </ul>
-
-        <h2>2. How Do We Use Your Information?</h2>
-        <p>We do not sell or rent your data to any third party. We use the collected information exclusively for the following purposes:</p>
-        <ul>
-            <li>Creating and managing your personal account in the app.</li>
-            <li>Providing core features of the app (such as displaying profiles and comments).</li>
-            <li>Communicating with you to send verification emails or security alerts.</li>
-            <li>Improving and developing the app's performance based on how users interact with it.</li>
-        </ul>
-
-        <h2>3. Sharing Data with Third-Party Services</h2>
-        <p>To ensure service stability, we rely on trusted cloud service providers with global security standards (e.g., Appwrite Servers / Databases). These entities process data on our behalf under strict confidentiality terms and are not permitted to use your data for their own purposes.</p>
-
-        <h2>4. Data Security</h2>
-        <p>We implement advanced security and encryption measures to protect your data from unauthorized access, modification, or disclosure. Passwords are completely hashed so that no one, including the development team, can view them.</p>
-
-        <h2>5. User Rights (Controlling Your Data)</h2>
-        <p>You have full control over your data:</p>
-        <ul>
-            <li><strong>Access and Modification:</strong> You can edit your profile data at any time through the app settings.</li>
-            <li><strong>Data Deletion:</strong> You have the right to request the permanent deletion of your account and all associated data from our servers via the deletion option within the app.</li>
-        </ul>
-
-        <h2>6. Children's Privacy</h2>
-        <p>Our application is not directed to children under the age of 13 (or the legal age in your country). We do not knowingly collect personal information from children. If we discover that we have collected a child's data without parental consent, we will delete this information immediately.</p>
-
-        <h2>7. Changes to the Privacy Policy</h2>
-        <p>We may update this policy from time to time to keep pace with technical or legal changes. We will notify you of any material changes via the app or email. Your continued use of the app after an update constitutes your agreement to the revised policy.</p>
-
-        <h2>8. Contact Us</h2>
-        <p>If you have any questions, inquiries, or requests regarding the privacy policy and your data, please contact us via email:<br>
-        <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
+        <div class="ar">
+            <p>نحن في تطبيق <strong>AniCatch</strong> نلتزم التزاماً كاملاً بحماية خصوصيتك وبياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمعنا للمعلومات، واستخدامها عند استخدامك لتطبيقنا، بما في ذلك التكامل مع منصة AniList.</p>
+            <h2>1. المعلومات التي نجمعها:</h2>
+            <ul>
+                <li><strong>بيانات AniList:</strong> نظراً لارتباطنا بمنصة AniList، قد نقوم بجلب بياناتك العامة أو المصرح بها بناءً على الأذونات التي تمنحها عبر تسجيل الدخول.</li>
+                <li><strong>بيانات الاستخدام:</strong> معلومات تقنية لتحسين أداء مشغل ACN وميزة البث للشاشات (Smart TV).</li>
+            </ul>
+            <h2>2. أمان البيانات:</h2>
+            <p>نستخدم تشفير V12 لحماية اتصالاتك وقواعد بيانات معزولة تماماً للحفاظ على سريتك.</p>
+        </div>
     </div>
+
+    <script>
+        function toggleLanguage() {
+            var current = document.documentElement.lang;
+            var nextLang = current === 'en' ? 'ar' : 'en';
+            localStorage.setItem('anicatch_lang', nextLang);
+            document.documentElement.lang = nextLang;
+            document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
+        }
+    </script>
 </body>
 </html>
