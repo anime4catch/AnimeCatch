@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeCatch - The Ultimate Anime Haven</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <title>AniCatch - The Ultimate Anime Haven</title>
+    <!-- Fonts for both EN and AR -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        // Set language immediately to prevent flickering
+        (function() {
+            var savedLang = localStorage.getItem('anicatch_lang') || 'en';
+            document.documentElement.lang = savedLang;
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+        })();
+    </script>
+
     <style>
         :root {
             --anime-blue: #1E90FF;
@@ -22,8 +33,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
+
+        /* Language Font Handling */
+        html[lang="en"] * { font-family: 'Poppins', sans-serif; }
+        html[lang="ar"] * { font-family: 'Cairo', sans-serif; }
+
+        /* Language Toggle Display Logic */
+        html[lang="en"] .ar { display: none !important; }
+        html[lang="ar"] .en { display: none !important; }
 
         body {
             background-color: var(--bg-dark);
@@ -55,345 +73,268 @@
             transition: all 0.3s ease;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .brand img {
-            height: 45px;
-            width: auto;
-            border-radius: 8px;
-        }
-
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand img { height: 45px; width: auto; border-radius: 8px; }
         .brand span {
-            font-size: 26px;
-            font-weight: 900;
+            font-size: 26px; font-weight: 900;
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-            text-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 1px; text-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
         }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
+        .nav-links { display: flex; align-items: center; gap: 25px; }
         .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: 0.3s;
-            position: relative;
-            padding-bottom: 5px;
+            color: var(--text-light); text-decoration: none; font-weight: 600;
+            font-size: 1.05rem; transition: 0.3s; position: relative; padding-bottom: 5px;
         }
-
         .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0;
+            html[dir="ltr"] & { left: 0; } html[dir="rtl"] & { right: 0; }
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px var(--anime-blue);
+            transition: width 0.3s ease; box-shadow: 0 0 10px var(--anime-blue);
         }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-light);
-            text-shadow: 0 0 10px var(--anime-glow);
+        /* Language Button */
+        .lang-btn {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            color: var(--text-light); padding: 8px 18px; border-radius: 20px;
+            cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
         }
-
-        .nav-links a:hover::after, .nav-links a.active::after {
-            width: 100%;
-        }
+        .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px var(--anime-glow); transform: translateY(-2px); }
 
         /* 🚀 Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 120px 20px 50px;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            animation: fadeIn 1s ease-out forwards;
-        }
-
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 20px 30px; }
+        .hero-content { max-width: 800px; animation: fadeIn 1s ease-out forwards; }
         .version-badge {
-            display: inline-block;
-            background: rgba(255, 94, 174, 0.1);
-            color: var(--manga-pink);
-            border: 1px solid rgba(255, 94, 174, 0.3);
-            padding: 6px 20px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(255, 94, 174, 0.15);
+            display: inline-block; background: rgba(255, 94, 174, 0.1); color: var(--manga-pink);
+            border: 1px solid rgba(255, 94, 174, 0.3); padding: 6px 20px; border-radius: 50px;
+            font-size: 0.95rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 25px;
+            backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(255, 94, 174, 0.15);
         }
-
-        .hero-content h1 {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            line-height: 1.1;
-        }
-
-        .hero-content h1 span {
-            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-content p {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            margin-bottom: 45px;
-            font-weight: 400;
-        }
-
+        .hero-content h1 { font-size: 4rem; font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
+        .hero-content h1 span { background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 45px; font-weight: 400; }
+        
         .btn-download {
-            display: inline-block;
-            background: linear-gradient(45deg, var(--anime-blue), var(--manga-pink));
-            color: #fff;
-            padding: 16px 50px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            text-decoration: none;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.4);
-            transition: all 0.4s ease;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
+            display: inline-block; background: linear-gradient(45deg, var(--anime-blue), var(--manga-pink));
+            color: #fff; padding: 16px 50px; font-size: 1.2rem; font-weight: 800; text-decoration: none;
+            border-radius: 50px; box-shadow: 0 10px 30px rgba(30, 144, 255, 0.4); transition: all 0.4s ease;
+            position: relative; overflow: hidden; z-index: 1; border: 2px solid transparent;
         }
+        .btn-download:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 40px rgba(255, 94, 174, 0.5); }
+
+        /* 🖼️ Carousel Section 🥵 */
+        .preview-section { padding: 40px 5%; text-align: center; }
+        .preview-title { font-size: 2rem; margin-bottom: 30px; font-weight: 800; }
+        .preview-title span { color: var(--manga-pink); text-shadow: 0 0 15px var(--manga-glow); }
         
-        .btn-download::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.2);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+        .carousel-wrapper {
+            max-width: 800px; margin: 0 auto;
+            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3); position: relative;
         }
+        .carousel {
+            display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+            padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--anime-blue) transparent;
+        }
+        .carousel::-webkit-scrollbar { height: 8px; }
+        .carousel::-webkit-scrollbar-thumb { background: var(--anime-blue); border-radius: 10px; }
+        .carousel-item {
+            flex: 0 0 auto; scroll-snap-align: center; width: 140px; height: 280px;
+            background: rgba(5,5,8,0.5); border-radius: 20px; padding: 6px;
+            border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+        .carousel-item:hover { transform: translateY(-5px); border-color: rgba(255,94,174,0.4); box-shadow: 0 10px 20px rgba(255,94,174,0.2); }
+        .carousel-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
 
-        .btn-download:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(255, 94, 174, 0.5);
-        }
-        
-        .btn-download:hover::before {
-            opacity: 1;
-        }
+        /* 🛡️ Features Section */
+        .features { padding: 80px 5%; position: relative; }
+        .features-title { text-align: center; font-size: 3rem; margin-bottom: 70px; font-weight: 900; }
+        .features-title span { color: var(--anime-blue); text-shadow: 0 0 20px var(--anime-glow); }
 
-        /* 🛡️ Features Section (Glass Cards) */
-        .features {
-            padding: 100px 5%;
-            position: relative;
-        }
-
-        .features-title {
-            text-align: center;
-            font-size: 3rem;
-            color: var(--text-light);
-            margin-bottom: 70px;
-            font-weight: 900;
-        }
-
-        .features-title span {
-            color: var(--anime-blue);
-            text-shadow: 0 0 20px var(--anime-glow);
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 35px;
-        }
-
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
         .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 45px 35px;
-            border-radius: 24px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: var(--glass-bg); backdrop-filter: blur(15px); padding: 45px 35px;
+            border-radius: 24px; border: 1px solid var(--glass-border); transition: all 0.4s;
+            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-
         .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
+            content: ''; position: absolute; top: 0; width: 100%; height: 4px;
+            html[dir="ltr"] & { left: 0; transform-origin: left; }
+            html[dir="rtl"] & { right: 0; transform-origin: right; }
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
+            transform: scaleX(0); transition: transform 0.4s ease;
         }
-
-        .card:hover {
-            transform: translateY(-12px);
-            border-color: rgba(30, 144, 255, 0.3);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(30, 144, 255, 0.15);
-        }
-
-        .card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .card h3 {
-            font-size: 1.6rem;
-            color: var(--text-light);
-            margin-bottom: 15px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .card h3::before {
-            content: '✦';
-            color: var(--manga-pink);
-            font-size: 1.2rem;
-            text-shadow: 0 0 10px var(--manga-glow);
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            line-height: 1.7;
-        }
+        .card:hover { transform: translateY(-12px); border-color: rgba(30, 144, 255, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(30,144,255,0.15); }
+        .card:hover::before { transform: scaleX(1); }
+        .card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .card h3::before { content: '✦'; color: var(--manga-pink); font-size: 1.2rem; text-shadow: 0 0 10px var(--manga-glow); }
+        .card p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
+        .card a { color: var(--anime-blue); text-decoration: none; font-weight: 800; transition: 0.3s; }
+        .card a:hover { color: var(--manga-pink); text-shadow: 0 0 10px var(--manga-glow); }
 
         /* 📋 Footer */
         footer {
-            text-align: center;
-            padding: 40px 20px;
-            background: rgba(5, 5, 8, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--glass-border);
-            margin-top: 50px;
+            text-align: center; padding: 40px 20px; background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); margin-top: 50px;
         }
-
         footer p { color: var(--text-muted); margin-bottom: 10px; font-size: 0.95rem; }
         footer strong { color: var(--anime-blue); }
-        footer a { color: var(--manga-pink); text-decoration: none; transition: 0.3s; }
+        footer a { color: var(--manga-pink); text-decoration: none; font-weight: 600; transition: 0.3s; }
         footer a:hover { text-shadow: 0 0 10px var(--manga-glow); }
 
-        /* 📱 Responsive */
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                padding: 15px 20px;
-                gap: 15px;
-            }
-            .hero-content h1 { font-size: 3rem; }
-            .hero-content p { font-size: 1.1rem; }
-            .nav-links {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-            .nav-links a { font-size: 0.95rem; }
-            .features-title { font-size: 2.2rem; }
-            .card { padding: 35px 25px; }
+            header { flex-direction: column; padding: 15px 20px; gap: 15px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; gap: 15px; }
+            .carousel-wrapper { padding: 15px; }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
     </style>
 </head>
 <body>
 
     <header>
         <a href="#home" class="brand">
-            <img src="logo.png" alt="AnimeCatch Logo">
-            <span>AnimeCatch</span>
+            <img src="logo.png" alt="AniCatch Logo">
+            <span>AniCatch</span>
         </a>
         <nav class="nav-links">
-            <a href="#home" class="scroll-link active">Home</a>
-            <a href="#features" class="scroll-link">Features</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="disclaimer.html">Disclaimer</a>
+            <a href="#home" class="scroll-link active">
+                <span class="en">Home</span><span class="ar">الرئيسية</span>
+            </a>
+            <a href="#features" class="scroll-link">
+                <span class="en">Features</span><span class="ar">المميزات</span>
+            </a>
+            <a href="privacy.html">
+                <span class="en">Privacy</span><span class="ar">الخصوصية</span>
+            </a>
+            <a href="disclaimer.html">
+                <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
+            </a>
+            <button class="lang-btn" onclick="toggleLanguage()">
+                <span class="en">🌐 العربية</span>
+                <span class="ar">🌐 English</span>
+            </button>
         </nav>
     </header>
 
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="version-badge">BETA 1.0.1</div>
-            <h1>The <span>Professional</span> Anime World</h1>
-            <p>The ultimate app to watch, organize, and interact with the anime world. Designed with cutting-edge technology to provide you with an unparalleled viewing and discussion experience.</p>
-            <a href="#download" class="btn-download">Download APK Now</a>
+            <div class="version-badge">BETA 1.1.0</div>
+            
+            <h1 class="en">The <span>Professional</span> Anime World</h1>
+            <h1 class="ar">عالم الأنمي <span>الاحترافي</span></h1>
+            
+            <p class="en">The ultimate app to watch, organize, and interact with the anime world. Experience AniList integration, Smart TV casting, and multi-language support seamlessly.</p>
+            <p class="ar">التطبيق الأقوى لمتابعة، تنظيم، والتفاعل مع عالم الأنمي. استمتع بتكامل منصة AniList، والبث للشاشات الذكية، ودعم اللغات المتعددة بسلاسة تامة.</p>
+            
+            <a href="#download" class="btn-download">
+                <span class="en">Download APK Now</span>
+                <span class="ar">تحميل الـ APK الآن</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- 🖼️ Small App Previews (Carousel) -->
+    <section class="preview-section">
+        <h2 class="preview-title">
+            <span class="en">App <span>Preview</span></span>
+            <span class="ar">نظرة على <span>التطبيق</span></span>
+        </h2>
+        <div class="carousel-wrapper">
+            <div class="carousel">
+                <!-- Placeholders for your app screenshots -->
+                <div class="carousel-item"><img src="screen1.png" alt="App UI 1"></div>
+                <div class="carousel-item"><img src="screen2.png" alt="App UI 2"></div>
+                <div class="carousel-item"><img src="screen3.png" alt="App UI 3"></div>
+                <div class="carousel-item"><img src="screen4.png" alt="App UI 4"></div>
+            </div>
         </div>
     </section>
 
     <section id="features" class="features">
-        <h2 class="features-title">Why <span>AnimeCatch?</span></h2>
+        <h2 class="features-title">
+            <span class="en">Why <span>AniCatch?</span></span>
+            <span class="ar">لماذا <span>أنمي كاتش؟</span></span>
+        </h2>
         
         <div class="cards-grid">
+            <!-- Feature 1: AniList -->
             <div class="card">
-                <h3>Multiple Streaming Sources</h3>
-                <p>We provide a wide array of constantly updated external streaming servers and links to ensure uninterrupted, high-quality entertainment.</p>
+                <h3 class="en">AniList Integrated</h3>
+                <h3 class="ar">تكامل مع AniList</h3>
+                <p class="en">The first app offering full interaction with your AniList account combined natively with free streaming capabilities.</p>
+                <p class="ar">أول تطبيق يتيح لك التفاعل الكامل في منصة AniList وإدارة حسابك بالتزامن مع توفير المشاهدة المجانية.</p>
             </div>
             
+            <!-- Feature 2: ACN Player -->
             <div class="card">
-                <h3>Strongest Encryption</h3>
-                <p>A strict security system utilizing the latest encryption algorithms (V12) to ensure the safety of your connections and protect your data.</p>
+                <h3 class="en">Advanced ACN Player</h3>
+                <h3 class="ar">مشغل ACN المتطور</h3>
+                <p class="en">Our custom <a href="acn-player.html">ACN Player</a> supports OpenSubtitles online, acts as a Manga Reader, and casts to Smart TVs flawlessly via NanoHttpd.</p>
+                <p class="ar">يوفر <a href="acn-player.html">مشغل ACN</a> الخاص بنا ترجمة OpenSubtitles الأونلاين، وقارئ مانجا مدمج، ويتعرف على شاشتك الذكية للبث المباشر عبر NanoHttpd.</p>
             </div>
             
+            <!-- Feature 3: Multi-Language -->
             <div class="card">
-                <h3>Isolated Infrastructure</h3>
-                <p>Professional and complete isolation of sensitive information in independent databases, fully separated from interaction servers.</p>
+                <h3 class="en">Global Access</h3>
+                <h3 class="ar">وصول عالمي</h3>
+                <p class="en">Native support for English (EN) and Arabic (AR) interfaces, plus an independent lightweight server dedicated to Spanish content.</p>
+                <p class="ar">دعم أساسي ومدمج للغتين الإنجليزية (EN) والعربية (AR)، بالإضافة إلى سيرفر مخصص ومرن للغة الإسبانية.</p>
             </div>
 
+            <!-- Feature 4: Encryption -->
             <div class="card">
-                <h3>Live Interactive Community</h3>
-                <p>A real-time comment system, likes, and replies that allows you to discuss and share your theories with thousands of Otakus instantly.</p>
+                <h3 class="en">Strongest Encryption</h3>
+                <h3 class="ar">أقوى تشفير</h3>
+                <p class="en">A strict security system utilizing V12 encryption algorithms to ensure the safety of your connections and protect your data.</p>
+                <p class="ar">نظام حماية صارم يستخدم أحدث خوارزميات التشفير (V12) لضمان أمان اتصالاتك وحماية بياناتك بالكامل.</p>
             </div>
 
+            <!-- Feature 5: Infrastructure -->
             <div class="card">
-                <h3>Massive Database</h3>
-                <p>Connected to the most powerful global data APIs to fetch precise details, ratings, and character info for every available anime.</p>
-            </div>
-
-            <div class="card">
-                <h3>Comprehensive Profile</h3>
-                <p>Your personal space to save favorites, accurately track your watch history, and customize your identity within the community.</p>
+                <h3 class="en">Isolated Infrastructure</h3>
+                <h3 class="ar">بنية تحتية معزولة</h3>
+                <p class="en">Professional isolation of sensitive information in independent databases, separated from the main interaction servers.</p>
+                <p class="ar">فصل كامل واحترافي للمعلومات الحساسة في قواعد بيانات مستقلة تماماً لضمان الخصوصية التامة لك.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 All Rights Reserved for <strong>AnimeCatch</strong>.</p>
-        <p>Metadata provided via <a href="https://jikan.moe/" target="_blank">Jikan API</a>.</p>
+        <p class="en">&copy; 2026 All Rights Reserved for <strong>AniCatch</strong>.</p>
+        <p class="ar">&copy; 2026 جميع الحقوق محفوظة لتطبيق <strong>AniCatch</strong>.</p>
+        
+        <p class="en">Metadata & Social features provided by <a href="https://anilist.co/" target="_blank">AniList</a>.</p>
+        <p class="ar">البيانات الوصفية والمجتمع مقدمة عبر <a href="https://anilist.co/" target="_blank">AniList</a>.</p>
     </footer>
 
     <script>
+        // Language Toggle Functionality
+        function toggleLanguage() {
+            var current = document.documentElement.lang;
+            var nextLang = current === 'en' ? 'ar' : 'en';
+            
+            // Save to localStorage
+            localStorage.setItem('anicatch_lang', nextLang);
+            
+            // Apply language and direction
+            document.documentElement.lang = nextLang;
+            document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
+        }
+
+        // Navbar active state logic
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-links a.scroll-link');
 
         window.addEventListener('scroll', () => {
             let current = '';
-            
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
@@ -401,7 +342,6 @@
                     current = section.getAttribute('id');
                 }
             });
-
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href').includes(current)) {
