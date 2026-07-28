@@ -444,7 +444,7 @@
                     });
                 });
 
-                // 🔢 إذا أردت إضافة رقم ثابت تحسبه يدوياً من ميديافاير، ضعه هنا (مثلاً: const mediafireDownloads = 150;)
+                // 🔢 ضع هنا عدد التحميلات اليدوي الخاص بميديافاير ليتم جمعه مع جيت هب تلقائياً
                 const mediafireDownloads = 0; 
                 const totalDownloads = githubDownloads + mediafireDownloads;
 
@@ -518,8 +518,8 @@
                 }
             });
             
-            navLinks.forEach(link =>.classList.remove('active'));
             navLinks.forEach(link => {
+                link.classList.remove('active');
                 if (link.getAttribute('href').includes(current)) {
                     link.classList.add('active');
                 }
