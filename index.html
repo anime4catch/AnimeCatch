@@ -20,7 +20,6 @@
             --anime-glow: rgba(30, 144, 255, 0.4);
             --manga-pink: #FF5EAE;
             --manga-glow: rgba(255, 94, 174, 0.4);
-            --acn-purple: #8A2BE2;
             --bg-dark: #050508;
             --text-light: #ffffff;
             --text-muted: #a0aec0;
@@ -29,10 +28,8 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html[lang="en"] * { font-family: 'Poppins', sans-serif; }
         html[lang="ar"] * { font-family: 'Cairo', sans-serif; }
-
         html[lang="en"] .ar { display: none !important; }
         html[lang="ar"] .en { display: none !important; }
 
@@ -48,23 +45,12 @@
             scroll-behavior: smooth;
         }
 
-        /* 🌟 Glassmorphism Navbar */
         header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(10, 12, 18, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background: rgba(10, 12, 18, 0.6); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); position: fixed; width: 100%; top: 0;
+            z-index: 1000; border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); transition: all 0.3s ease;
         }
 
         .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
@@ -81,24 +67,19 @@
             color: var(--text-light); text-decoration: none; font-weight: 600;
             font-size: 1.05rem; transition: 0.3s; position: relative; padding-bottom: 5px;
         }
-        
         .nav-links a::after {
             content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            transform: translateX(-50%); background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             transition: width 0.3s ease; box-shadow: 0 0 10px var(--anime-blue);
         }
-        
         .nav-links a.active::after { width: 100%; }
-        .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
-        .nav-links a:hover { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        .nav-links a.active, .nav-links a:hover { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
 
         .header-actions { display: flex; align-items: center; }
         .lang-btn {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-light); padding: 8px 20px; border-radius: 20px;
-            cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-light);
+            padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 800;
+            font-size: 0.95rem; transition: 0.3s; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
         }
         .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px var(--anime-glow); transform: translateY(-2px); }
 
@@ -107,39 +88,19 @@
             .nav-links a { font-size: 0.95rem; }
         }
 
-        /* 🚀 Hero Section */
         .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 20px 30px; }
         .hero-content { max-width: 800px; animation: fadeIn 1s ease-out forwards; }
         .version-badge {
-            display: inline-block; background: rgba(255, 94, 174, 0.1); color: var(--manga-pink);
-            border: 1px solid rgba(255, 94, 174, 0.3); padding: 6px 20px; border-radius: 50px;
+            display: inline-block; background: rgba(30, 144, 255, 0.1); color: var(--anime-blue);
+            border: 1px solid rgba(30, 144, 255, 0.3); padding: 6px 20px; border-radius: 50px;
             font-size: 0.95rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 25px;
-            backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(255, 94, 174, 0.15);
+            backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(30, 144, 255, 0.15);
         }
-
-        /* تنسيقات خاصة بـ ACN Player */
-        .acn-badge {
-            color: var(--acn-purple); border-color: rgba(138, 43, 226, 0.3); background: rgba(138, 43, 226, 0.1);
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.15);
-        }
-        .acn-text { background: linear-gradient(90deg, var(--anime-blue), var(--acn-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-acn {
-            background: linear-gradient(45deg, var(--anime-blue), var(--acn-purple));
-            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
-        }
-        .btn-acn:hover { box-shadow: 0 15px 40px rgba(138, 43, 226, 0.5); }
-
         .hero-content h1 { font-size: 4rem; font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
         .hero-content h1 span { background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; font-weight: 400; }
         
-        #count-text {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
+        #count-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 25px; color: var(--text-muted); letter-spacing: 0.5px; }
 
         .btn-download {
             display: inline-block; background: linear-gradient(45deg, var(--anime-blue), var(--manga-pink));
@@ -149,165 +110,117 @@
         }
         .btn-download:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 40px rgba(255, 94, 174, 0.5); }
 
-        /* 🖼️ Carousel Section */
         .preview-section { padding: 40px 5%; text-align: center; }
         .preview-title { font-size: 2rem; margin-bottom: 30px; font-weight: 800; }
         .preview-title span { color: var(--manga-pink); text-shadow: 0 0 15px var(--manga-glow); }
-        
         .carousel-wrapper {
-            max-width: 800px; margin: 0 auto;
-            background: rgba(20, 25, 35, 0.2); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            max-width: 800px; margin: 0 auto; background: rgba(20, 25, 35, 0.2); backdrop-filter: blur(25px);
             border-radius: 30px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.3); position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
-        .carousel {
-            display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
-            padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--anime-blue) transparent;
-        }
+        .carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--anime-blue) transparent; }
         .carousel::-webkit-scrollbar { height: 8px; }
         .carousel::-webkit-scrollbar-thumb { background: var(--anime-blue); border-radius: 10px; }
         .carousel-item {
             flex: 0 0 auto; scroll-snap-align: center; width: 140px; height: 280px;
             background: rgba(5,5,8,0.5); border-radius: 20px; padding: 6px;
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); transition: 0.3s;
         }
         .carousel-item:hover { transform: translateY(-5px); border-color: rgba(255,94,174,0.4); box-shadow: 0 10px 20px rgba(255,94,174,0.2); }
         .carousel-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
 
-        /* 🛡️ Features Section */
         .features { padding: 80px 5%; position: relative; }
         .features-title { text-align: center; font-size: 3rem; margin-bottom: 70px; font-weight: 900; }
         .features-title span { color: var(--anime-blue); text-shadow: 0 0 20px var(--anime-glow); }
-
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
-        
         .card {
-            background: rgba(20, 25, 35, 0.25); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: rgba(20, 25, 35, 0.25); backdrop-filter: blur(25px);
             padding: 45px 35px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05);
             border-top: 1px solid rgba(255, 255, 255, 0.12); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.02);
         }
-        
         html[dir="ltr"] .card { border-left: 1px solid rgba(255, 255, 255, 0.12); }
         html[dir="rtl"] .card { border-right: 1px solid rgba(255, 255, 255, 0.12); }
-
         .card::before {
-            content: ''; position: absolute; bottom: 0; width: 100%; height: 4px;
-            left: 0;
+            content: ''; position: absolute; bottom: 0; width: 100%; height: 4px; left: 0;
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            transform: scaleX(0); transition: transform 0.4s ease;
-            transform-origin: left;
+            transform: scaleX(0); transition: transform 0.4s ease; transform-origin: left;
         }
-        
-        .card:hover { 
-            transform: translateY(-12px); background: rgba(30, 40, 55, 0.35);
-            border-color: rgba(30, 144, 255, 0.3); box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 30px rgba(30,144,255,0.15); 
-        }
+        .card:hover { transform: translateY(-12px); background: rgba(30, 40, 55, 0.35); border-color: rgba(30, 144, 255, 0.3); box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 30px rgba(30,144,255,0.15); }
         .card:hover::before { transform: scaleX(1); }
-        
         .card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 800; display: flex; align-items: center; gap: 12px; }
         .card h3::before { 
             content: ''; display: block; width: 12px; height: 12px; border-radius: 50%;
             background: linear-gradient(45deg, var(--anime-blue), var(--manga-pink));
             box-shadow: 0 0 12px var(--manga-pink); flex-shrink: 0;
         }
-        
         .card p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
         .card a { color: var(--anime-blue); text-decoration: none; font-weight: 800; transition: 0.3s; }
         .card a:hover { color: var(--manga-pink); text-shadow: 0 0 10px var(--manga-glow); }
 
-        /* 🌌 GLASS BOTTOM SHEET */
         .download-sheet-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
             z-index: 2000; display: flex; align-items: flex-end; justify-content: center;
             opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .download-sheet-overlay.active { opacity: 1; visibility: visible; }
-
         .download-sheet {
-            width: 100%; max-width: 500px;
-            background: rgba(15, 20, 30, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            width: 100%; max-width: 500px; background: rgba(15, 20, 30, 0.85); backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.12); border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 35px 35px 0 0; padding: 35px 30px; text-align: center;
             transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         .download-sheet-overlay.active .download-sheet { transform: translateY(0); }
-
-        .sheet-handle {
-            width: 50px; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 10px;
-            margin: 0 auto 25px auto;
-        }
-
+        .sheet-handle { width: 50px; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 10px; margin: 0 auto 25px auto; }
         .sheet-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
         .sheet-title span { background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .sheet-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; }
-
         .sheet-buttons { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-
         .sheet-btn {
             display: flex; align-items: center; justify-content: center; gap: 12px;
             width: 100%; padding: 16px; border-radius: 20px; font-size: 1.1rem; font-weight: 800;
             text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer; background: none; color: #fff; font-family: inherit;
         }
-
         .btn-github { background: rgba(255, 255, 255, 0.05); }
         .btn-github:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--anime-blue); box-shadow: 0 0 20px rgba(30,144,255,0.3); transform: translateY(-3px); }
-
         .btn-mediafire { background: linear-gradient(45deg, #0085FF, #00A3FF); box-shadow: 0 10px 25px rgba(0, 133, 255, 0.3); border: none; }
         .btn-mediafire:hover:not(:disabled) { background: linear-gradient(45deg, #0070D8, #0085FF); box-shadow: 0 15px 30px rgba(0, 133, 255, 0.5); transform: translateY(-3px); }
         .btn-mediafire:disabled { opacity: 0.7; cursor: wait; }
-
-        .sheet-close {
-            background: transparent; border: none; color: var(--text-muted); font-weight: 600;
-            font-size: 1rem; cursor: pointer; padding: 10px; transition: 0.3s; font-family: inherit;
-        }
+        .sheet-close { background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 1rem; cursor: pointer; padding: 10px; transition: 0.3s; font-family: inherit; }
         .sheet-close:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-        /* 📋 Footer */
-        footer {
-            text-align: center; padding: 40px 20px; background: rgba(5, 5, 8, 0.8);
-            backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); margin-top: 50px;
-        }
+        footer { text-align: center; padding: 40px 20px; background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); margin-top: 50px; }
         footer p { color: var(--text-muted); margin-bottom: 10px; font-size: 0.95rem; }
         footer strong { color: var(--anime-blue); }
         footer a { color: var(--manga-pink); text-decoration: none; font-weight: 600; transition: 0.3s; }
         footer a:hover { text-shadow: 0 0 10px var(--manga-glow); }
 
-        @media (max-width: 768px) {
-            .hero-content h1 { font-size: 2.5rem; }
-            .carousel-wrapper { padding: 15px; }
-            .card { padding: 35px 25px; }
-        }
+        @media (max-width: 768px) { .hero-content h1 { font-size: 2.5rem; } .carousel-wrapper { padding: 15px; } .card { padding: 35px 25px; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="#home" class="brand">
+        <a href="index.html" class="brand">
             <img src="logo.png" alt="AniCatch Logo" onerror="this.style.display='none'">
             <span>AniCatch</span>
         </a>
         <nav class="nav-links">
-            <a href="#home" class="scroll-link active">
-                <span class="en">Home</span><span class="ar">الرئيسية</span>
+            <a href="index.html" class="active">
+                <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
             </a>
             <a href="#features" class="scroll-link">
                 <span class="en">Features</span><span class="ar">المميزات</span>
             </a>
-            <!-- التبويب الجديد لـ ACN Player -->
-            <a href="#acn-section" class="scroll-link">
+            <a href="acn.html">
                 <span class="en">ACN Player</span><span class="ar">مشغل ACN</span>
             </a>
             <a href="privacy.html">
                 <span class="en">Privacy</span><span class="ar">الخصوصية</span>
-            </a>
-            <a href="disclaimer.html">
-                <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
             </a>
         </nav>
         <div class="header-actions">
@@ -320,7 +233,7 @@
 
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="version-badge">BETA 1.1.0</div>
+            <div class="version-badge">BETA 1.0.0</div>
             
             <h1 class="en">The <span>Professional</span> Anime World</h1>
             <h1 class="ar">عالم الأنمي <span>الاحترافي</span></h1>
@@ -368,58 +281,21 @@
                 <p class="en">The first app offering full interaction with your AniList account combined natively with free streaming capabilities.</p>
                 <p class="ar">أول تطبيق يتيح لك التفاعل الكامل في منصة AniList وإدارة حسابك بالتزامن مع توفير المشاهدة المجانية.</p>
             </div>
-            
-            <div class="card">
-                <h3 class="en">Advanced ACN Player</h3>
-                <h3 class="ar">مشغل ACN المتطور</h3>
-                <p class="en">Our custom <a href="#acn-section">ACN Player</a> supports OpenSubtitles online, acts as a Manga Reader, and casts to Smart TVs flawlessly via NanoHttpd.</p>
-                <p class="ar">يوفر <a href="#acn-section">مشغل ACN</a> الخاص بنا ترجمة OpenSubtitles الأونلاين، وقارئ مانجا مدمج، ويتعرف على شاشتك الذكية للبث المباشر عبر NanoHttpd.</p>
-            </div>
-            
             <div class="card">
                 <h3 class="en">Global Access</h3>
                 <h3 class="ar">وصول عالمي</h3>
                 <p class="en">Native support for English (EN) and Arabic (AR) interfaces, plus an independent lightweight server dedicated to Spanish content.</p>
                 <p class="ar">دعم أساسي ومدمج للغتين الإنجليزية (EN) والعربية (AR)، بالإضافة إلى سيرفر مخصص ومرن للغة الإسبانية.</p>
             </div>
-
             <div class="card">
                 <h3 class="en">Strongest Encryption</h3>
                 <h3 class="ar">أقوى تشفير</h3>
                 <p class="en">A strict security system utilizing V12 encryption algorithms to ensure the safety of your connections and protect your data.</p>
                 <p class="ar">نظام حماية صارم يستخدم أحدث خوارزميات التشفير (V12) لضمان أمان اتصالاتك وحماية بياناتك بالكامل.</p>
             </div>
-
-            <div class="card">
-                <h3 class="en">Isolated Infrastructure</h3>
-                <h3 class="ar">بنية تحتية معزولة</h3>
-                <p class="en">Professional isolation of sensitive information in independent databases, separated from the main interaction servers.</p>
-                <p class="ar">فصل كامل واحترافي للمعلومات الحساسة في قواعد بيانات مستقلة تماماً لضمان الخصوصية التامة لك.</p>
-            </div>
         </div>
     </section>
 
-    <!-- قسم ACN Player الجديد -->
-    <section id="acn-section" class="hero" style="min-height: auto; padding: 60px 20px 100px;">
-        <div class="hero-content" style="margin: 0 auto;">
-            <div class="version-badge acn-badge">STANDALONE APP</div>
-            
-            <h2 class="features-title" style="margin-bottom: 25px; font-size: 3.5rem;">
-                <span class="en">Meet <span class="acn-text">ACN Player</span></span>
-                <span class="ar">تعرف على <span class="acn-text">مشغل ACN</span></span>
-            </h2>
-            
-            <p class="en" style="max-width: 700px; margin: 0 auto 35px;">A powerful, standalone video and manga player designed for the ultimate viewing experience. Take full control of your entertainment with ultra-fast streaming and deep casting integration.</p>
-            <p class="ar" style="max-width: 700px; margin: 0 auto 35px;">مشغل فيديو ومانجا مستقل وقوي مصمم لتجربة مشاهدة لا مثيل لها. تحكم بالكامل في متعتك مع بث فائق السرعة وتكامل عميق مع الشاشات الذكية.</p>
-            
-            <button class="btn-download btn-acn" onclick="openAcnDownloadSheet()">
-                <span class="en">Download ACN Player</span>
-                <span class="ar">تحميل مشغل ACN</span>
-            </button>
-        </div>
-    </section>
-
-    <!-- مودال التحميل الخاص بتطبيق AniCatch -->
     <div class="download-sheet-overlay" id="downloadSheet" onclick="closeDownloadSheet(event)">
         <div class="download-sheet" onclick="event.stopPropagation()">
             <div class="sheet-handle"></div>
@@ -440,53 +316,14 @@
                     <span class="ar" id="mf-text-ar">تحميل من ميديافاير</span>
                 </button>
 
-                <a href="https://github.com/anime4catch/AnimeCatch/releases/download/AniCatch_Beta_V1.0.0/com.animecatch_V1.0.0.apk" target="_blank" download="AniCatch.apk" class="sheet-btn btn-github">
+                <a href="https://raw.githubusercontent.com/anime4catch/AnimeCatch/AniCatch_Beta_V1.0.0/com.animecatch_V1.0.0.apk" target="_blank" download="AniCatch.apk" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
                     <span class="ar">تحميل من GitHub</span>
                 </a>
             </div>
-
             <button class="sheet-close" onclick="closeDownloadSheet()">
-                <span class="en">Cancel</span>
-                <span class="ar">إلغاء</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- مودال التحميل الجديد الخاص بـ ACN Player -->
-    <div class="download-sheet-overlay" id="acnDownloadSheet" onclick="closeAcnDownloadSheet(event)">
-        <div class="download-sheet" onclick="event.stopPropagation()">
-            <div class="sheet-handle"></div>
-            
-            <h3 class="sheet-title">
-                <span class="en">Download <span class="acn-text">ACN Player</span></span>
-                <span class="ar">تحميل <span class="acn-text">مشغل ACN</span></span>
-            </h3>
-            <p class="sheet-desc">
-                <span class="en">Select your preferred mirror to download ACN Player safely.</span>
-                <span class="ar">اختر السيرفر المفضل لتحميل مشغل ACN بأمان تام.</span>
-            </p>
-
-            <div class="sheet-buttons">
-                <!-- استبدل YOUR_ACN_MEDIAFIRE_LINK برابط التحميل الخاص بك -->
-                <a href="YOUR_ACN_MEDIAFIRE_LINK" target="_blank" class="sheet-btn btn-mediafire" style="text-decoration: none;">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    <span class="en">Download from Mediafire</span>
-                    <span class="ar">تحميل من ميديافاير</span>
-                </a>
-
-                <!-- استبدل YOUR_ACN_GITHUB_LINK برابط التحميل المباشر من جيت هب -->
-                <a href="YOUR_ACN_GITHUB_LINK" target="_blank" class="sheet-btn btn-github">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                    <span class="en">Download from GitHub</span>
-                    <span class="ar">تحميل من GitHub</span>
-                </a>
-            </div>
-
-            <button class="sheet-close" onclick="closeAcnDownloadSheet()">
-                <span class="en">Cancel</span>
-                <span class="ar">إلغاء</span>
+                <span class="en">Cancel</span><span class="ar">إلغاء</span>
             </button>
         </div>
     </div>
@@ -494,60 +331,35 @@
     <footer>
         <p class="en">&copy; 2026 All Rights Reserved for <strong>AniCatch</strong>.</p>
         <p class="ar">&copy; 2026 جميع الحقوق محفوظة لتطبيق <strong>AniCatch</strong>.</p>
-        
         <p class="en">Metadata & Social features provided by <a href="https://anilist.co/" target="_blank">AniList</a>.</p>
         <p class="ar">البيانات الوصفية والمجتمع مقدمة عبر <a href="https://anilist.co/" target="_blank">AniList</a>.</p>
     </footer>
 
     <script>
-        // ==================== إعدادات ====================
         const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
         const APK_FILENAME = "AniCatch.apk";
+        const CORS_PROXIES = ["https://corsproxy.io/?", "https://api.codetabs.com/v1/proxy?quest=", "https://api.allorigins.win/raw?url="];
 
-        const CORS_PROXIES = [
-            "https://corsproxy.io/?",
-            "https://api.codetabs.com/v1/proxy?quest=",
-            "https://api.allorigins.win/raw?url="
-        ];
-
-        // ==================== عداد التحميلات من GitHub ====================
         async function fetchTotalDownloads() {
             const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases";
             const countElement = document.getElementById("count-text");
-
             try {
-                const response = await fetch(repoUrl + "?per_page=100", {
-                    headers: { 'Accept': 'application/vnd.github.v3+json' }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`GitHub API Error: ${response.status}`);
-                }
-
+                const response = await fetch(repoUrl + "?per_page=100", { headers: { 'Accept': 'application/vnd.github.v3+json' }});
+                if (!response.ok) throw new Error(`GitHub API Error`);
                 const releases = await response.json();
                 let githubDownloads = 0;
-
                 releases.forEach(release => {
-                    if (release.assets && Array.isArray(release.assets)) {
+                    if (release.assets) {
                         release.assets.forEach(asset => {
-                            if (asset.name && asset.name.toLowerCase().endsWith('.apk') && typeof asset.download_count === 'number') {
+                            if (asset.name.toLowerCase().endsWith('.apk') && typeof asset.download_count === 'number') {
                                 githubDownloads += asset.download_count;
                             }
                         });
                     }
                 });
-
-                const totalDownloads = Math.max(githubDownloads, 0);
-                animateValue(countElement, 0, totalDownloads, 1500);
-
+                animateValue(countElement, 0, Math.max(githubDownloads, 0), 1500);
             } catch (error) {
-                console.error("[-] GitHub Tracker Error:", error);
-                if (countElement) {
-                    countElement.innerHTML = `
-                        <span style='color: #FF5555;' class="en">Failed to fetch downloads (API Error)</span>
-                        <span style='color: #FF5555;' class="ar">فشل جلب البيانات (خطأ API)</span>
-                    `;
-                }
+                if (countElement) countElement.innerHTML = `<span style='color: #FF5555;' class="en">Tracking Offline</span><span style='color: #FF5555;' class="ar">العداد غير متصل</span>`;
             }
         }
 
@@ -557,249 +369,67 @@
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 const currentCount = Math.floor(progress * (end - start) + start);
-                
-                obj.innerHTML = `
-                    <span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${currentCount}</strong></span>
-                    <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${currentCount}</strong></span>
-                `;
-                
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    obj.innerHTML = `
-                        <span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(GitHub)</span></span>
-                        <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(جيت هب)</span></span>
-                    `;
-                }
+                obj.innerHTML = `<span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${currentCount}</strong></span>
+                                 <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${currentCount}</strong></span>`;
+                if (progress < 1) window.requestAnimationFrame(step);
+                else obj.innerHTML = `<span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${end}</strong></span>
+                                      <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${end}</strong></span>`;
             };
             window.requestAnimationFrame(step);
         }
 
-        // ==================== تحميل من Mediafire (AniCatch) ====================
         async function downloadFromMediafire() {
             const btn = document.getElementById('mediafire-btn');
             const originalHTML = btn.innerHTML;
-
             setButtonState(btn, 'loading');
-
             try {
                 const directLink = await scrapeMediafireWithProxy(MEDIAFIRE_PAGE_URL);
-                if (directLink) {
-                    triggerDownload(directLink, APK_FILENAME);
-                    setButtonState(btn, 'success');
-                    setTimeout(() => {
-                        resetButton(btn, originalHTML);
-                        closeDownloadSheet();
-                    }, 800);
-                    return;
-                }
-            } catch (err) {
-                console.warn("⚠️ Method 1 failed:", err.message);
-            }
-
-            try {
-                const directLink = await tryMediafireApi();
-                if (directLink) {
-                    triggerDownload(directLink, APK_FILENAME);
-                    setButtonState(btn, 'success');
-                    setTimeout(() => {
-                        resetButton(btn, originalHTML);
-                        closeDownloadSheet();
-                    }, 800);
-                    return;
-                }
-            } catch (err) {
-                console.warn("⚠️ Method 2 failed:", err.message);
-            }
-
-            console.warn("🔄 All methods failed → opening Mediafire page in new tab");
+                if (directLink) { triggerDownload(directLink, APK_FILENAME); setButtonState(btn, 'success'); setTimeout(() => { resetButton(btn, originalHTML); closeDownloadSheet(); }, 800); return; }
+            } catch (err) {}
             setButtonState(btn, 'fallback');
             window.open(MEDIAFIRE_PAGE_URL, '_blank', 'noopener,noreferrer');
-            setTimeout(() => {
-                resetButton(btn, originalHTML);
-                closeDownloadSheet();
-            }, 1200);
+            setTimeout(() => { resetButton(btn, originalHTML); closeDownloadSheet(); }, 1200);
         }
 
         async function scrapeMediafireWithProxy(pageUrl) {
             for (const proxy of CORS_PROXIES) {
                 try {
-                    const targetUrl = proxy + encodeURIComponent(pageUrl);
-                    const response = await fetch(targetUrl, {
-                        method: 'GET',
-                        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-                    });
-
+                    const response = await fetch(proxy + encodeURIComponent(pageUrl), { headers: { 'User-Agent': 'Mozilla/5.0' }});
                     if (!response.ok) continue;
-
                     const html = await response.text();
-                    const directLink = extractMediafireDirectLink(html);
-
-                    if (directLink) return directLink;
-                } catch (e) {
-                    continue;
-                }
+                    const match = html.match(/id=["']downloadButton["']\s+href=["']([^"']+)["']/i) || html.match(/href=["']([^"']+)["']\s+id=["']downloadButton["']/i);
+                    if (match && match[1].includes('mediafire.com')) return match[1].replace(/&amp;/g, '&').trim();
+                } catch (e) { continue; }
             }
             throw new Error('All CORS proxies failed');
         }
 
-        function extractMediafireDirectLink(html) {
-            const patterns = [
-                /id=["']downloadButton["']\s+href=["']([^"']+)["']/i,
-                /href=["']([^"']+)["']\s+id=["']downloadButton["']/i,
-                /aria-label=["']Download file["']\s+href=["']([^"']+)["']/i,
-                /href=["']([^"']+)["']\s+aria-label=["']Download file["']/i,
-                /https?:\/\/download[0-9]*\.mediafire\.com\/[A-Za-z0-9_\-\/\.\?=&]+/g
-            ];
-
-            for (const pattern of patterns) {
-                const match = html.match(pattern);
-                if (match) {
-                    const link = match[1] || match[0];
-                    if (link && link.includes('mediafire.com')) {
-                        return link.replace(/&amp;/g, '&').trim();
-                    }
-                }
-            }
-            return null;
-        }
-
-        async function tryMediafireApi() {
-            const keyMatch = MEDIAFIRE_PAGE_URL.match(/\/file\/([a-zA-Z0-9]+)\//);
-            if (!keyMatch) throw new Error('Could not extract Mediafire key');
-            
-            const quickKey = keyMatch[1];
-            const apiUrl = `https://www.mediafire.com/api/1.5/file/get_url.php?quick_key=${quickKey}&httpsftp=https&response_format=json`;
-
-            const response = await fetch(apiUrl, {
-                method: 'GET',
-                headers: { 'User-Agent': 'Mozilla/5.0' }
-            });
-
-            if (!response.ok) throw new Error(`API HTTP ${response.status}`);
-            const text = await response.text();
-            let link = null;
-
-            try {
-                const data = JSON.parse(text);
-                link = data?.response?.direct_url;
-            } catch {
-                const match = text.match(/<direct_url>(.*?)<\/direct_url>/);
-                if (match) link = match[1];
-            }
-
-            if (!link) throw new Error('No direct_url in API response');
-            return link;
-        }
-
         function triggerDownload(url, filename) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            link.rel = 'noopener noreferrer';
-            link.target = '_blank';
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            setTimeout(() => document.body.removeChild(link), 100);
+            const link = document.createElement('a'); link.href = url; link.download = filename; link.rel = 'noopener noreferrer'; link.target = '_blank'; link.style.display = 'none';
+            document.body.appendChild(link); link.click(); setTimeout(() => document.body.removeChild(link), 100);
         }
 
         function setButtonState(btn, state) {
-            const messages = {
-                loading: { en: 'Processing...', ar: 'جاري المعالجة...' },
-                success: { en: 'Download Started ✓', ar: 'بدأ التحميل ✓' },
-                fallback: { en: 'Opening Mediafire...', ar: 'جاري فتح الميديا فاير...' }
-            };
-
-            const msg = messages[state] || messages.loading;
-            btn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span class="en">${msg.en}</span>
-                <span class="ar">${msg.ar}</span>
-            `;
-            btn.disabled = true;
+            const msgs = { loading: { en: 'Processing...', ar: 'جاري المعالجة...' }, success: { en: 'Download Started ✓', ar: 'بدأ التحميل ✓' }, fallback: { en: 'Opening Mediafire...', ar: 'جاري فتح الميديا فاير...' }};
+            btn.innerHTML = `<span class="en">${msgs[state].en}</span><span class="ar">${msgs[state].ar}</span>`; btn.disabled = true;
         }
+        function resetButton(btn, originalHTML) { btn.innerHTML = originalHTML; btn.disabled = false; }
 
-        function resetButton(btn, originalHTML) {
-            btn.innerHTML = originalHTML;
-            btn.disabled = false;
-        }
-
-        // ==================== دوال المودال (AniCatch) ====================
-        function openDownloadSheet() {
-            document.getElementById('downloadSheet').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDownloadSheet(event) {
-            if (event && event.target.id !== 'downloadSheet') return;
-            document.getElementById('downloadSheet').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // ==================== دوال المودال (ACN Player) ====================
-        function openAcnDownloadSheet() {
-            document.getElementById('acnDownloadSheet').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeAcnDownloadSheet(event) {
-            if (event && event.target.id !== 'acnDownloadSheet') return;
-            document.getElementById('acnDownloadSheet').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // ==================== تبديل اللغة ====================
+        function openDownloadSheet() { document.getElementById('downloadSheet').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeDownloadSheet(event) { if (event && event.target.id !== 'downloadSheet') return; document.getElementById('downloadSheet').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        
         function toggleLanguage() {
-            var current = document.documentElement.lang;
-            var nextLang = current === 'en' ? 'ar' : 'en';
-            
-            localStorage.setItem('anicatch_lang', nextLang);
-            document.documentElement.lang = nextLang;
-            document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
+            var nextLang = document.documentElement.lang === 'en' ? 'ar' : 'en';
+            localStorage.setItem('anicatch_lang', nextLang); document.documentElement.lang = nextLang; document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
-
-        // ==================== Navigation Scroll Spy ====================
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-links a.scroll-link');
-
-        const observerOptions = {
-            threshold: 0.5,
-            rootMargin: '-50% 0px -50% 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
-                    if (activeLink) activeLink.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        sections.forEach(section => observer.observe(section));
 
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(10, 12, 18, 0.85)';
-                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.8)';
-            } else {
-                header.style.background = 'rgba(10, 12, 18, 0.6)';
-                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
-            }
+            if (window.scrollY > 50) { header.style.background = 'rgba(10, 12, 18, 0.85)'; header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.8)'; } 
+            else { header.style.background = 'rgba(10, 12, 18, 0.6)'; header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)'; }
         });
 
-        // ==================== Init ====================
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchTotalDownloads();
-        });
+        document.addEventListener("DOMContentLoaded", () => { fetchTotalDownloads(); });
     </script>
 </body>
 </html>
-َ
