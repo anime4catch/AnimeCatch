@@ -491,6 +491,11 @@
             document.body.style.overflow = 'hidden';
         }
 
+        function openDownloadSheet() {
+            document.getElementById('downloadSheet').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
         function closeDownloadSheet(event) {
             document.getElementById('downloadSheet').classList.remove('active');
             document.body.style.overflow = 'auto';
