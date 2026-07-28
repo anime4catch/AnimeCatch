@@ -15,12 +15,11 @@
     </script>
 
     <style>
-        
         :root {
             --anime-blue: #1E90FF;
             --anime-glow: rgba(30, 144, 255, 0.4);
             --manga-pink: #FF5EAE;
-            --manga-glow: rgba(255, 94, 174, 0.4);
+            --acn-purple: #8A2BE2;
             --bg-dark: #050508;
             --text-light: #ffffff;
             --text-muted: #a0aec0;
@@ -29,10 +28,8 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html[lang="en"] * { font-family: 'Poppins', sans-serif; }
         html[lang="ar"] * { font-family: 'Cairo', sans-serif; }
-
         html[lang="en"] .ar { display: none !important; }
         html[lang="ar"] .en { display: none !important; }
 
@@ -41,100 +38,63 @@
             background-image: 
                 radial-gradient(circle at 15% 10%, rgba(30, 144, 255, 0.15) 0%, transparent 40%),
                 radial-gradient(circle at 85% 80%, rgba(255, 94, 174, 0.12) 0%, transparent 40%);
-            background-attachment: fixed;
-            color: var(--text-light);
-            line-height: 1.6;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            background-attachment: fixed; color: var(--text-light); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; padding-top: 120px; padding-bottom: 50px;
         }
 
-        /* 🌟 Glassmorphism Navbar */
         header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(10, 12, 18, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background: rgba(10, 12, 18, 0.6); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); position: fixed; width: 100%; top: 0;
+            z-index: 1000; border-bottom: 1px solid var(--glass-border); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
         }
 
         .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .brand img { height: 45px; width: auto; border-radius: 8px; }
         .brand span {
-            font-size: 26px; font-weight: 900;
-            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 1px; text-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
+            font-size: 26px; font-weight: 900; background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
         }
 
         .nav-links { display: flex; align-items: center; gap: 25px; }
-        .nav-links a {
-            color: var(--text-light); text-decoration: none; font-weight: 600;
-            font-size: 1.05rem; transition: 0.3s; position: relative; padding-bottom: 5px;
-        }
-        
-        /* FIXED UNDERLINE (Centered for both LTR & RTL) */
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 600; font-size: 1.05rem; transition: 0.3s; position: relative; padding-bottom: 5px; }
         .nav-links a::after {
-            content: ''; 
-            position: absolute; 
-            width: 0; 
-            height: 2px; 
-            bottom: 0; 
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
-            transition: width 0.3s ease; 
-            box-shadow: 0 0 10px var(--anime-blue);
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 50%;
+            transform: translateX(-50%); background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
+            transition: width 0.3s ease; box-shadow: 0 0 10px var(--anime-blue);
         }
         .nav-links a:hover, .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
-        /* FIXED LANGUAGE BUTTON PLACEMENT */
-        .header-actions {
-            display: flex;
-            align-items: center;
-        }
+        .header-actions { display: flex; align-items: center; }
         .lang-btn {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: var(--text-light); padding: 8px 20px; border-radius: 20px;
-            cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-light);
+            padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 800; font-size: 0.95rem;
+            transition: 0.3s; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
         }
         .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px var(--anime-glow); transform: translateY(-2px); }
 
-        @media (max-width: 900px) {
-            .nav-links { order: 3; width: 100%; justify-content: center; margin-top: 15px; gap: 15px; }
-            .nav-links a { font-size: 0.95rem; }
-        }
+        @media (max-width: 900px) { .nav-links { order: 3; width: 100%; justify-content: center; margin-top: 15px; gap: 15px; } .nav-links a { font-size: 0.95rem; } }
 
-        
-        body { padding-top: 120px; padding-bottom: 50px; }
+        /* الأنيميشن الجديد لحاوية النصوص */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
         .container { 
             max-width: 850px; margin: 0 auto; padding: 50px; 
             background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-radius: 24px; border: 1px solid var(--glass-border); box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
             position: relative; overflow: hidden;
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        .container::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
-            background: linear-gradient(90deg, var(--manga-pink), var(--anime-blue));
-        }
+        .container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, var(--manga-pink), var(--anime-blue)); }
         h1 { color: var(--text-light); text-align: center; margin-bottom: 10px; font-size: 2.5rem; font-weight: 800; }
         .date { text-align: center; color: var(--anime-blue); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; }
         
-        h2 { 
-            color: var(--text-light); margin-top: 40px; margin-bottom: 20px; font-size: 1.6rem; 
-        }
+        h2 { color: var(--text-light); margin-top: 40px; margin-bottom: 20px; font-size: 1.6rem; }
         html[dir="ltr"] h2 { border-left: 4px solid var(--manga-pink); padding-left: 15px; }
         html[dir="rtl"] h2 { border-right: 4px solid var(--manga-pink); padding-right: 15px; }
         
@@ -157,10 +117,10 @@
         </a>
         <nav class="nav-links">
             <a href="index.html">
-                <span class="en">Home</span><span class="ar">الرئيسية</span>
+                <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
             </a>
-            <a href="index.html#features">
-                <span class="en">Features</span><span class="ar">المميزات</span>
+            <a href="acn.html">
+                <span class="en">ACN</span><span class="ar">ACN</span>
             </a>
             <a href="privacy.html" class="active">
                 <span class="en">Privacy</span><span class="ar">الخصوصية</span>
@@ -282,17 +242,13 @@
     </div>
 
     <script>
-        
-        // Language Toggle Functionality
         function toggleLanguage() {
             var current = document.documentElement.lang;
             var nextLang = current === 'en' ? 'ar' : 'en';
-            
             localStorage.setItem('anicatch_lang', nextLang);
             document.documentElement.lang = nextLang;
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
-
     </script>
 </body>
 </html>
