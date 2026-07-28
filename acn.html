@@ -254,11 +254,12 @@
         </h2>
         <div class="carousel-wrapper">
             <div class="carousel">
+                            <div class="carousel-item vertical"><img src="acn5.jpg" alt="ACN UI 5"></div>
                 <div class="carousel-item vertical"><img src="acn1.jpg" alt="ACN UI 1"></div>
                 <div class="carousel-item vertical"><img src="acn2.jpg" alt="ACN UI 2"></div>
                 <div class="carousel-item horizontal"><img src="acn3.jpg" alt="ACN UI 3"></div>
                 <div class="carousel-item horizontal"><img src="acn4.jpg" alt="ACN UI 4"></div>
-                <div class="carousel-item vertical"><img src="acn5.jpg" alt="ACN UI 5"></div>
+
             </div>
         </div>
     </section>
@@ -318,20 +319,21 @@
             </p>
 
             <div class="sheet-buttons">
-                <!-- زر ميديافاير مع سكربت السحب أو التحويل المباشر -->
+                <!-- زر ميديافاير -->
                 <button type="button" class="sheet-btn btn-mediafire" id="mediafire-btn" onclick="downloadFromMediafireACN()">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span class="en" id="mf-text-en">Download from Mediafire</span>
                     <span class="ar" id="mf-text-ar">تحميل من ميديافاير</span>
                 </button>
 
-                <!-- زر جيت هب للتحميل المباشر لـ ACN -->
+                <!-- زر جيت هب للتحميل المباشر لـ ACN (هذا الرابط الرسمي الذي يزيد العداد) -->
                 <a href="https://github.com/anime4catch/AnimeCatch/releases/download/ACN_Player_V1.1.0/com.acnplayer_V1.1.0.apk" target="_blank" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
                     <span class="ar">تحميل من GitHub</span>
                 </a>
             </div>
+
             <button class="sheet-close" onclick="closeDownloadSheet()">
                 <span class="en">Cancel</span><span class="ar">إلغاء</span>
             </button>
@@ -348,35 +350,44 @@
         const ACN_MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/0jhgdiluwx09hs9/com.acnplayer_V1.1.0.apk/file"; 
         const ACN_APK_FILENAME = "ACN_Player.apk";
 
-        async function fetchTotalDownloads() {
-            // استبدل هذا الرابط بمسار مستودع ACN Player على GitHub لو كان منفصلاً
+         async function fetchTotalDownloads() {
             const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases"; 
             const countElement = document.getElementById("count-text");
 
             try {
-                const response = await fetch(repoUrl + "?per_page=100", { headers: { 'Accept': 'application/vnd.github.v3+json' }});
+                const response = await fetch(repoUrl + "?per_page=100&t=" + new Date().getTime(), { 
+                    headers: { 'Accept': 'application/vnd.github.v3+json' }
+                });
+                
                 if (!response.ok) throw new Error(`GitHub API Error`);
+                
                 const releases = await response.json();
                 let githubDownloads = 0;
                 
-                // يمكنك تعديل الشرط أدناه ليجمع الملفات التي تحتوي اسم acn فقط لو كانا في نفس المستودع
+                // 🎯 التعديل الجراحي هنا: الفلترة الذكية للبحث عن ACN فقط
                 releases.forEach(release => {
                     if (release.assets) {
                         release.assets.forEach(asset => {
-                            if (asset.name.toLowerCase().endsWith('.apk') && typeof asset.download_count === 'number') {
+                            // يفحص إذا كان الملف ينتهي بـ apk ويحتوي على كلمة acn
+                            if (asset.name.toLowerCase().includes('acn') && asset.name.toLowerCase().endsWith('.apk') && typeof asset.download_count === 'number') {
                                 githubDownloads += asset.download_count;
                             }
                         });
                     }
                 });
 
-                const acnMediafireDownloads = 0; // ضع رقم التحميلات اليدوي لـ ACN من ميديافاير هنا
+                // ضع رقم التحميلات اليدوي لـ ACN من ميديافاير هنا إذا أردت
+                const acnMediafireDownloads = 0; 
+                
                 animateValue(countElement, 0, Math.max(githubDownloads + acnMediafireDownloads, 0), 1500);
 
             } catch (error) {
-                if (countElement) countElement.innerHTML = `<span style='color: #FF5555;' class="en">Tracking Offline</span><span style='color: #FF5555;' class="ar">العداد غير متصل</span>`;
+                if (countElement) {
+                    countElement.innerHTML = `<span style='color: #FF5555;' class="en">Tracking Offline</span><span style='color: #FF5555;' class="ar">العداد غير متصل</span>`;
+                }
             }
         }
+
 
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
