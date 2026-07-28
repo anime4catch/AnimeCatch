@@ -87,12 +87,13 @@
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             transition: width 0.3s ease; box-shadow: 0 0 10px var(--anime-blue);
         }
-        .nav-links a:hover { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
-        .nav-links a:hover::after { width: 100%; }
-
-        /* ✅ تصحيح: active يظهر الخط فقط له */
-        .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        
+        /* ✅ تصحيح: فقط الـ active يظهر الخط */
         .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        
+        /* ❌ إزالة hover::after لكي لا يتداخل */
+        .nav-links a:hover { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
 
         .header-actions { display: flex; align-items: center; }
         .lang-btn {
@@ -399,8 +400,8 @@
             </p>
 
             <div class="sheet-buttons">
-                <!-- ✅ زر ميديافاير محسّن: تحميل مباشري -->
-                <button type="button" class="sheet-btn btn-mediafire" onclick="downloadFromMediafire()">
+                <!-- ✅ زر ميديافاير محسّن: تحميل مباشري من Scraping -->
+                <button type="button" class="sheet-btn btn-mediafire" id="mediafire-btn" onclick="downloadFromMediafireScrape()">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span class="en">Download from Mediafire</span>
                     <span class="ar">تحميل من ميديافاير</span>
@@ -430,13 +431,17 @@
     </footer>
 
     <script>
-        // ✅ 1️⃣ تحسين عداد GitHub مع better error handling
+        // ✅ 1️⃣ تحسين عداد GitHub - مع تشخيص أفضل
         async function fetchTotalDownloads() {
             const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases";
             const countElement = document.getElementById("count-text");
 
             try {
-                const response = await fetch(repoUrl + "?per_page=100&t=" + new Date().getTime());
+                const response = await fetch(repoUrl + "?per_page=100", {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
                 
                 if (!response.ok) {
                     throw new Error(`GitHub API Error: ${response.status}`);
@@ -445,19 +450,25 @@
                 const releases = await response.json();
                 let githubDownloads = 0;
 
-                if (Array.isArray(releases)) {
-                    releases.forEach(release => {
-                        if (release.assets && Array.isArray(release.assets)) {
-                            release.assets.forEach(asset => {
-                                if (asset.name.endsWith('.apk') && asset.download_count) {
-                                    githubDownloads += asset.download_count;
-                                }
-                            });
-                        }
-                    });
-                }
+                console.log("🔍 GitHub Releases Found:", releases.length);
 
-                // 🔢 ضع هنا عدد التحميلات اليدوي الخاص بميديافاير ليتم جمعه مع جيت هب تلقائياً
+                releases.forEach((release, idx) => {
+                    console.log(`Release ${idx}:`, release.tag_name, release.assets.length, "assets");
+                    
+                    if (release.assets && Array.isArray(release.assets)) {
+                        release.assets.forEach(asset => {
+                            console.log(`  - Asset: ${asset.name}, Downloads: ${asset.download_count}`);
+                            
+                            if (asset.name.includes('.apk') && typeof asset.download_count === 'number') {
+                                githubDownloads += asset.download_count;
+                            }
+                        });
+                    }
+                });
+
+                console.log("✅ Total GitHub Downloads:", githubDownloads);
+
+                // 🔢 ضع هنا عدد التحميلات اليدوي الخاص بميديافاير
                 const mediafireDownloads = 0;
                 const totalDownloads = Math.max(githubDownloads + mediafireDownloads, 0);
 
@@ -466,7 +477,7 @@
             } catch (error) {
                 console.error("[-] GitHub Tracker Error:", error);
                 if (countElement) {
-                    countElement.innerHTML = "<span style='color: #FF5555;' class='en'>Tracking Offline</span><span style='color: #FF5555;' class='ar'>العداد غير متصل</span>";
+                    countElement.innerHTML = "<span style='color: #FF5555;' class='en'>Failed to fetch downloads (API Error)</span><span style='color: #FF5555;' class='ar'>فشل جلب البيانات (خطأ API)</span>";
                 }
             }
         }
@@ -487,8 +498,8 @@
                     window.requestAnimationFrame(step);
                 } else {
                     obj.innerHTML = `
-                        <span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(GitHub & Mediafire)</span></span>
-                        <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(جيت هب وميديافاير)</span></span>
+                        <span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(GitHub)</span></span>
+                        <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(جيت هب)</span></span>
                     `;
                 }
             };
@@ -499,26 +510,88 @@
             fetchTotalDownloads();
         });
 
-        // ✅ 2️⃣ تحميل مباشر من Mediafire (بدون فتح صفحة الموقع)
-        function downloadFromMediafire() {
-            const mediafireURL = "https://www.mediafire.com/file/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
+        // ✅ 2️⃣ تحميل مباشر من Mediafire عبر Scraping
+        async function downloadFromMediafireScrape() {
+            const btn = document.getElementById('mediafire-btn');
+            const originalText = btn.innerHTML;
             
-            // إنشا رابط التحميل المباشر
-            const directDownloadURL = mediafireURL.replace('/file', '/download');
-            
-            // إنشاء عنصر <a> مؤقت للتحميل
-            const link = document.createElement('a');
-            link.href = directDownloadURL;
-            link.download = 'AniCatch.apk';
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            
-            // تنظيف
-            setTimeout(() => {
-                document.body.removeChild(link);
+            // إظهار حالة التحميل
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span class="en">Processing...</span><span class="ar">جاري المعالجة...</span>';
+            btn.disabled = true;
+
+            try {
+                // محاولة الحصول على رابط Mediafire
+                const mediafireLink = "https://www.mediafire.com/file/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
+                
+                // محاولة جلب صفحة Mediafire والبحث عن رابط التحميل المباشر
+                const response = await fetch(`https://www.mediafire.com/api/1.5/file/get_url.php?quick_key=a1c34i7xnt6oue9&httpsftp=https`, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.text();
+                    
+                    // محاولة استخراج رابط التحميل من XML
+                    const urlMatch = data.match(/<direct_url>(.*?)<\/direct_url>/);
+                    if (urlMatch && urlMatch[1]) {
+                        // تحميل مباشر من الرابط المستخرج
+                        const directLink = document.createElement('a');
+                        directLink.href = urlMatch[1];
+                        directLink.download = 'AniCatch.apk';
+                        directLink.style.display = 'none';
+                        document.body.appendChild(directLink);
+                        directLink.click();
+                        document.body.removeChild(directLink);
+                        
+                        console.log("✅ Direct download from Mediafire API successful");
+                        closeDownloadSheet();
+                        return;
+                    }
+                }
+
+                // إذا فشلت API، استخدم الطريقة البديلة
+                console.warn("⚠️ Mediafire API fallback");
+                await fallbackMediafireDownload();
+                
+            } catch (error) {
+                console.error("❌ Mediafire Scraping Error:", error);
+                
+                // الطريقة البديلة: فتح رابط التحميل المباشري
+                await fallbackMediafireDownload();
+            }
+
+            // استعادة النص الأصلي
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+
+        // طريقة بديلة عند فشل API
+        async function fallbackMediafireDownload() {
+            try {
+                // محاولة التحميل من رابط مباشري بديل
+                const fallbackUrl = "https://download2290.mediafire.com/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
+                
+                const link = document.createElement('a');
+                link.href = fallbackUrl;
+                link.download = 'AniCatch.apk';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    closeDownloadSheet();
+                }, 1000);
+                
+                console.log("✅ Fallback download started");
+            } catch (error) {
+                console.error("❌ Fallback Error:", error);
+                alert("Please use the direct link or try again later");
                 closeDownloadSheet();
-            }, 100);
+            }
         }
 
         function openDownloadSheet() {
@@ -541,35 +614,41 @@
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
 
-        // ✅ 3️⃣ تحسين scroll navigation: حساب صحيح + تحديث صحيح للـ active
-        const sections = document.querySelectorAll('section');
+        // ✅ 3️⃣ تحسين Navigation Scroll - استخدام Intersection Observer API
+        const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-links a.scroll-link');
 
-        window.addEventListener('scroll', () => {
-            let current = 'home';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.offsetHeight;
-                
-                // تحسين: التحقق من أن المستخدم في هذا القسم
-                if (window.scrollY >= (sectionTop - 200) && 
-                    window.scrollY < (sectionTop + sectionHeight - 200)) {
-                    current = section.getAttribute('id');
+        // استخدام Intersection Observer للحصول على أفضل دقة
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '-50% 0px -50% 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    
+                    // إزالة active من جميع الروابط
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    
+                    // إضافة active للرابط الصحيح فقط
+                    const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
                 }
             });
-            
-            // تحديث الروابط النشطة
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            const activeLink = document.querySelector(`.nav-links a[href="#${current}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
-            
-            // تأثير التمويه على الـ header
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // تأثير الـ header عند التمرير
+        window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (window.scrollY > 50) {
                 header.style.background = 'rgba(10, 12, 18, 0.85)';
