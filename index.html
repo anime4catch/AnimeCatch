@@ -339,13 +339,9 @@
         const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/3zpob9fg3otrd3m/com.animecatch_Fix_1_1.0.apk/file";
         const APK_FILENAME = "AniCatch.apk";
         const CORS_PROXIES = ["https://corsproxy.io/?", "https://api.codetabs.com/v1/proxy?quest=", "https://api.allorigins.win/raw?url="];
-
-        const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/3zpob9fg3otrd3m/com.animecatch_Fix_1_1.0.apk/file";
-        const APK_FILENAME = "AniCatch.apk";
-        const CORS_PROXIES = ["https://corsproxy.io/?", "https://api.codetabs.com/v1/proxy?quest=", "https://api.allorigins.win/raw?url="];
         
         // 🔢 حط هون الرقم اليدوي لتحميلات الميديافاير اللي بدك تضيفها للإجمالي:
-        const MANUAL_MEDIAFIRE_DOWNLOADS = 63; // (غير الرقم هون حسب رغبتك)
+        const MANUAL_MEDIAFIRE_DOWNLOADS = 150; // (غير الرقم هون حسب رغبتك)
 
         async function fetchTotalDownloads() {
             const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases";
@@ -370,7 +366,7 @@
                 
                 animateValue(countElement, 0, totalDownloads, 1500);
             } catch (error) {
-                // حتى لو جيته شبكة GitHub قطعت، بنرجع نظهر الرقم اليدوي على الأقل كاحتياط
+                // حتى لو شبكة GitHub قطعت، بنرجع نظهر الرقم اليدوي على الأقل كاحتياط
                 const fallbackTotal = MANUAL_MEDIAFIRE_DOWNLOADS;
                 animateValue(countElement, 0, fallbackTotal, 1500);
             }
@@ -443,7 +439,6 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => { fetchTotalDownloads(); });
-
     </script>
 </body>
 </html>
