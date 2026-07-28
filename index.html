@@ -87,8 +87,12 @@
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             transition: width 0.3s ease; box-shadow: 0 0 10px var(--anime-blue);
         }
-        .nav-links a:hover, .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ✅ تصحيح: active يظهر الخط فقط له */
+        .nav-links a.active { color: var(--text-light); text-shadow: 0 0 10px var(--anime-glow); }
+        .nav-links a.active::after { width: 100%; }
 
         .header-actions { display: flex; align-items: center; }
         .lang-btn {
@@ -178,10 +182,10 @@
 
         .card::before {
             content: ''; position: absolute; bottom: 0; width: 100%; height: 4px;
-            html[dir="ltr"] & { left: 0; transform-origin: left; }
-            html[dir="rtl"] & { right: 0; transform-origin: right; }
+            left: 0;
             background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink));
             transform: scaleX(0); transition: transform 0.4s ease;
+            transform-origin: left;
         }
         
         .card:hover { 
@@ -235,12 +239,13 @@
             display: flex; align-items: center; justify-content: center; gap: 12px;
             width: 100%; padding: 16px; border-radius: 20px; font-size: 1.1rem; font-weight: 800;
             text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer; background: none;
         }
 
         .btn-github { background: rgba(255, 255, 255, 0.05); color: #fff; }
         .btn-github:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--anime-blue); box-shadow: 0 0 20px rgba(30,144,255,0.3); transform: translateY(-3px); }
 
-        .btn-mediafire { background: linear-gradient(45deg, #0085FF, #00A3FF); color: #fff; box-shadow: 0 10px 25px rgba(0, 133, 255, 0.3); }
+        .btn-mediafire { background: linear-gradient(45deg, #0085FF, #00A3FF); color: #fff; box-shadow: 0 10px 25px rgba(0, 133, 255, 0.3); border: none; }
         .btn-mediafire:hover { background: linear-gradient(45deg, #0070D8, #0085FF); box-shadow: 0 15px 30px rgba(0, 133, 255, 0.5); transform: translateY(-3px); }
 
         .sheet-close {
@@ -394,15 +399,15 @@
             </p>
 
             <div class="sheet-buttons">
-                <!-- رابط ميديافاير -->
-                <a href="https://www.mediafire.com/file/YOUR_LINK_HERE" target="_blank" class="sheet-btn btn-mediafire">
+                <!-- ✅ زر ميديافاير محسّن: تحميل مباشري -->
+                <button type="button" class="sheet-btn btn-mediafire" onclick="downloadFromMediafire()">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span class="en">Download from Mediafire</span>
                     <span class="ar">تحميل من ميديافاير</span>
-                </a>
+                </button>
 
-                <!-- رابط جيت هب -->
-                <a href="https://raw.githubusercontent.com/anime4catch/AnimeCatch/AniCatch_Beta_V1.0.0/com.animecatch_V1.0.0.apk" target="_blank" class="sheet-btn btn-github">
+                <!-- ✅ رابط جيت هب محسّن: تحميل مباشري -->
+                <a href="https://raw.githubusercontent.com/anime4catch/AnimeCatch/AniCatch_Beta_V1.0.0/com.animecatch_V1.0.0.apk" target="_blank" download="AniCatch.apk" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
                     <span class="ar">تحميل من GitHub</span>
@@ -425,28 +430,36 @@
     </footer>
 
     <script>
+        // ✅ 1️⃣ تحسين عداد GitHub مع better error handling
         async function fetchTotalDownloads() {
             const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases";
             const countElement = document.getElementById("count-text");
 
             try {
-                const response = await fetch(repoUrl + "?t=" + new Date().getTime());
-                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+                const response = await fetch(repoUrl + "?per_page=100&t=" + new Date().getTime());
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API Error: ${response.status}`);
+                }
 
                 const releases = await response.json();
                 let githubDownloads = 0;
 
-                releases.forEach(release => {
-                    release.assets.forEach(asset => {
-                        if (asset.name.endsWith('.apk')) {
-                            githubDownloads += asset.download_count;
+                if (Array.isArray(releases)) {
+                    releases.forEach(release => {
+                        if (release.assets && Array.isArray(release.assets)) {
+                            release.assets.forEach(asset => {
+                                if (asset.name.endsWith('.apk') && asset.download_count) {
+                                    githubDownloads += asset.download_count;
+                                }
+                            });
                         }
                     });
-                });
+                }
 
                 // 🔢 ضع هنا عدد التحميلات اليدوي الخاص بميديافاير ليتم جمعه مع جيت هب تلقائياً
-                const mediafireDownloads = 0; 
-                const totalDownloads = githubDownloads + mediafireDownloads;
+                const mediafireDownloads = 0;
+                const totalDownloads = Math.max(githubDownloads + mediafireDownloads, 0);
 
                 animateValue(countElement, 0, totalDownloads, 1500);
 
@@ -486,9 +499,26 @@
             fetchTotalDownloads();
         });
 
-        function openDownloadSheet() {
-            document.getElementById('downloadSheet').classList.add('active');
-            document.body.style.overflow = 'hidden';
+        // ✅ 2️⃣ تحميل مباشر من Mediafire (بدون فتح صفحة الموقع)
+        function downloadFromMediafire() {
+            const mediafireURL = "https://www.mediafire.com/file/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
+            
+            // إنشا رابط التحميل المباشر
+            const directDownloadURL = mediafireURL.replace('/file', '/download');
+            
+            // إنشاء عنصر <a> مؤقت للتحميل
+            const link = document.createElement('a');
+            link.href = directDownloadURL;
+            link.download = 'AniCatch.apk';
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            
+            // تنظيف
+            setTimeout(() => {
+                document.body.removeChild(link);
+                closeDownloadSheet();
+            }, 100);
         }
 
         function openDownloadSheet() {
@@ -497,6 +527,7 @@
         }
 
         function closeDownloadSheet(event) {
+            if (event && event.target.id !== 'downloadSheet') return;
             document.getElementById('downloadSheet').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
@@ -510,6 +541,7 @@
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
 
+        // ✅ 3️⃣ تحسين scroll navigation: حساب صحيح + تحديث صحيح للـ active
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-links a.scroll-link');
 
@@ -518,18 +550,26 @@
             
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (window.scrollY >= (sectionTop - 250)) {
+                const sectionHeight = section.offsetHeight;
+                
+                // تحسين: التحقق من أن المستخدم في هذا القسم
+                if (window.scrollY >= (sectionTop - 200) && 
+                    window.scrollY < (sectionTop + sectionHeight - 200)) {
                     current = section.getAttribute('id');
                 }
             });
             
+            // تحديث الروابط النشطة
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
             });
             
+            const activeLink = document.querySelector(`.nav-links a[href="#${current}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // تأثير التمويه على الـ header
             const header = document.querySelector('header');
             if (window.scrollY > 50) {
                 header.style.background = 'rgba(10, 12, 18, 0.85)';
