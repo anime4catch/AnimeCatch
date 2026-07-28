@@ -20,6 +20,7 @@
             --anime-glow: rgba(30, 144, 255, 0.4);
             --manga-pink: #FF5EAE;
             --manga-glow: rgba(255, 94, 174, 0.4);
+            --acn-purple: #8A2BE2;
             --bg-dark: #050508;
             --text-light: #ffffff;
             --text-muted: #a0aec0;
@@ -102,7 +103,7 @@
         .lang-btn:hover { background: rgba(30, 144, 255, 0.2); box-shadow: 0 0 15px var(--anime-glow); transform: translateY(-2px); }
 
         @media (max-width: 900px) {
-            .nav-links { order: 3; width: 100%; justify-content: center; margin-top: 15px; gap: 15px; }
+            .nav-links { order: 3; width: 100%; justify-content: center; margin-top: 15px; gap: 15px; flex-wrap: wrap; }
             .nav-links a { font-size: 0.95rem; }
         }
 
@@ -115,6 +116,19 @@
             font-size: 0.95rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 25px;
             backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(255, 94, 174, 0.15);
         }
+
+        /* تنسيقات خاصة بـ ACN Player */
+        .acn-badge {
+            color: var(--acn-purple); border-color: rgba(138, 43, 226, 0.3); background: rgba(138, 43, 226, 0.1);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.15);
+        }
+        .acn-text { background: linear-gradient(90deg, var(--anime-blue), var(--acn-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-acn {
+            background: linear-gradient(45deg, var(--anime-blue), var(--acn-purple));
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+        }
+        .btn-acn:hover { box-shadow: 0 15px 40px rgba(138, 43, 226, 0.5); }
+
         .hero-content h1 { font-size: 4rem; font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
         .hero-content h1 span { background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; font-weight: 400; }
@@ -285,6 +299,10 @@
             <a href="#features" class="scroll-link">
                 <span class="en">Features</span><span class="ar">المميزات</span>
             </a>
+            <!-- التبويب الجديد لـ ACN Player -->
+            <a href="#acn-section" class="scroll-link">
+                <span class="en">ACN Player</span><span class="ar">مشغل ACN</span>
+            </a>
             <a href="privacy.html">
                 <span class="en">Privacy</span><span class="ar">الخصوصية</span>
             </a>
@@ -354,8 +372,8 @@
             <div class="card">
                 <h3 class="en">Advanced ACN Player</h3>
                 <h3 class="ar">مشغل ACN المتطور</h3>
-                <p class="en">Our custom <a href="acn-player.html">ACN Player</a> supports OpenSubtitles online, acts as a Manga Reader, and casts to Smart TVs flawlessly via NanoHttpd.</p>
-                <p class="ar">يوفر <a href="acn-player.html">مشغل ACN</a> الخاص بنا ترجمة OpenSubtitles الأونلاين، وقارئ مانجا مدمج، ويتعرف على شاشتك الذكية للبث المباشر عبر NanoHttpd.</p>
+                <p class="en">Our custom <a href="#acn-section">ACN Player</a> supports OpenSubtitles online, acts as a Manga Reader, and casts to Smart TVs flawlessly via NanoHttpd.</p>
+                <p class="ar">يوفر <a href="#acn-section">مشغل ACN</a> الخاص بنا ترجمة OpenSubtitles الأونلاين، وقارئ مانجا مدمج، ويتعرف على شاشتك الذكية للبث المباشر عبر NanoHttpd.</p>
             </div>
             
             <div class="card">
@@ -381,6 +399,27 @@
         </div>
     </section>
 
+    <!-- قسم ACN Player الجديد -->
+    <section id="acn-section" class="hero" style="min-height: auto; padding: 60px 20px 100px;">
+        <div class="hero-content" style="margin: 0 auto;">
+            <div class="version-badge acn-badge">STANDALONE APP</div>
+            
+            <h2 class="features-title" style="margin-bottom: 25px; font-size: 3.5rem;">
+                <span class="en">Meet <span class="acn-text">ACN Player</span></span>
+                <span class="ar">تعرف على <span class="acn-text">مشغل ACN</span></span>
+            </h2>
+            
+            <p class="en" style="max-width: 700px; margin: 0 auto 35px;">A powerful, standalone video and manga player designed for the ultimate viewing experience. Take full control of your entertainment with ultra-fast streaming and deep casting integration.</p>
+            <p class="ar" style="max-width: 700px; margin: 0 auto 35px;">مشغل فيديو ومانجا مستقل وقوي مصمم لتجربة مشاهدة لا مثيل لها. تحكم بالكامل في متعتك مع بث فائق السرعة وتكامل عميق مع الشاشات الذكية.</p>
+            
+            <button class="btn-download btn-acn" onclick="openAcnDownloadSheet()">
+                <span class="en">Download ACN Player</span>
+                <span class="ar">تحميل مشغل ACN</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- مودال التحميل الخاص بتطبيق AniCatch -->
     <div class="download-sheet-overlay" id="downloadSheet" onclick="closeDownloadSheet(event)">
         <div class="download-sheet" onclick="event.stopPropagation()">
             <div class="sheet-handle"></div>
@@ -415,6 +454,43 @@
         </div>
     </div>
 
+    <!-- مودال التحميل الجديد الخاص بـ ACN Player -->
+    <div class="download-sheet-overlay" id="acnDownloadSheet" onclick="closeAcnDownloadSheet(event)">
+        <div class="download-sheet" onclick="event.stopPropagation()">
+            <div class="sheet-handle"></div>
+            
+            <h3 class="sheet-title">
+                <span class="en">Download <span class="acn-text">ACN Player</span></span>
+                <span class="ar">تحميل <span class="acn-text">مشغل ACN</span></span>
+            </h3>
+            <p class="sheet-desc">
+                <span class="en">Select your preferred mirror to download ACN Player safely.</span>
+                <span class="ar">اختر السيرفر المفضل لتحميل مشغل ACN بأمان تام.</span>
+            </p>
+
+            <div class="sheet-buttons">
+                <!-- استبدل YOUR_ACN_MEDIAFIRE_LINK برابط التحميل الخاص بك -->
+                <a href="YOUR_ACN_MEDIAFIRE_LINK" target="_blank" class="sheet-btn btn-mediafire" style="text-decoration: none;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span class="en">Download from Mediafire</span>
+                    <span class="ar">تحميل من ميديافاير</span>
+                </a>
+
+                <!-- استبدل YOUR_ACN_GITHUB_LINK برابط التحميل المباشر من جيت هب -->
+                <a href="YOUR_ACN_GITHUB_LINK" target="_blank" class="sheet-btn btn-github">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    <span class="en">Download from GitHub</span>
+                    <span class="ar">تحميل من GitHub</span>
+                </a>
+            </div>
+
+            <button class="sheet-close" onclick="closeAcnDownloadSheet()">
+                <span class="en">Cancel</span>
+                <span class="ar">إلغاء</span>
+            </button>
+        </div>
+    </div>
+
     <footer>
         <p class="en">&copy; 2026 All Rights Reserved for <strong>AniCatch</strong>.</p>
         <p class="ar">&copy; 2026 جميع الحقوق محفوظة لتطبيق <strong>AniCatch</strong>.</p>
@@ -428,7 +504,6 @@
         const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
         const APK_FILENAME = "AniCatch.apk";
 
-        // ✅ قائمة CORS Proxies للتجربة عند الفشل
         const CORS_PROXIES = [
             "https://corsproxy.io/?",
             "https://api.codetabs.com/v1/proxy?quest=",
@@ -500,16 +575,13 @@
             window.requestAnimationFrame(step);
         }
 
-        // ==================== تحميل من Mediafire ====================
-        // ✅ منطق نظيف: يجرب 3 طرق، ولو فشلت كلها يفتح صفحة الميديا فاير مباشرة
+        // ==================== تحميل من Mediafire (AniCatch) ====================
         async function downloadFromMediafire() {
             const btn = document.getElementById('mediafire-btn');
             const originalHTML = btn.innerHTML;
 
-            // حالة التحميل (processing)
             setButtonState(btn, 'loading');
 
-            // 🎯 الطريقة 1: CORS Proxy + Scraping
             try {
                 const directLink = await scrapeMediafireWithProxy(MEDIAFIRE_PAGE_URL);
                 if (directLink) {
@@ -519,14 +591,12 @@
                         resetButton(btn, originalHTML);
                         closeDownloadSheet();
                     }, 800);
-                    console.log("✅ Method 1 (Proxy + Scrape) succeeded");
                     return;
                 }
             } catch (err) {
                 console.warn("⚠️ Method 1 failed:", err.message);
             }
 
-            // 🎯 الطريقة 2: Mediafire Official API (لو فجأة رجعت تشتغل)
             try {
                 const directLink = await tryMediafireApi();
                 if (directLink) {
@@ -536,28 +606,21 @@
                         resetButton(btn, originalHTML);
                         closeDownloadSheet();
                     }, 800);
-                    console.log("✅ Method 2 (Official API) succeeded");
                     return;
                 }
             } catch (err) {
                 console.warn("⚠️ Method 2 failed:", err.message);
             }
 
-            // 🎯 الطريقة 3 (Fallback): فتح صفحة الميديا فاير مباشرة
             console.warn("🔄 All methods failed → opening Mediafire page in new tab");
             setButtonState(btn, 'fallback');
-            
             window.open(MEDIAFIRE_PAGE_URL, '_blank', 'noopener,noreferrer');
-            
             setTimeout(() => {
                 resetButton(btn, originalHTML);
                 closeDownloadSheet();
             }, 1200);
         }
 
-        // ====== Helpers ======
-
-        // 1) Scraping عبر CORS Proxy مع تجربة عدة بروكسيات
         async function scrapeMediafireWithProxy(pageUrl) {
             for (const proxy of CORS_PROXIES) {
                 try {
@@ -572,21 +635,15 @@
                     const html = await response.text();
                     const directLink = extractMediafireDirectLink(html);
 
-                    if (directLink) {
-                        console.log(`✅ Scraped via ${proxy}`);
-                        return directLink;
-                    }
+                    if (directLink) return directLink;
                 } catch (e) {
-                    console.warn(`Proxy ${proxy} failed:`, e.message);
                     continue;
                 }
             }
-            throw new Error('All CORS proxies failed or no direct link found');
+            throw new Error('All CORS proxies failed');
         }
 
-        // استخراج رابط التحميل المباشر من HTML صفحة الميديا فاير
         function extractMediafireDirectLink(html) {
-            // 🎯 Mediafire يستخدم هذا الـ id لزر التحميل الرسمي
             const patterns = [
                 /id=["']downloadButton["']\s+href=["']([^"']+)["']/i,
                 /href=["']([^"']+)["']\s+id=["']downloadButton["']/i,
@@ -598,7 +655,6 @@
             for (const pattern of patterns) {
                 const match = html.match(pattern);
                 if (match) {
-                    // لو pattern فيه capture group
                     const link = match[1] || match[0];
                     if (link && link.includes('mediafire.com')) {
                         return link.replace(/&amp;/g, '&').trim();
@@ -608,9 +664,7 @@
             return null;
         }
 
-        // 2) محاولة API الرسمي (احتياط)
         async function tryMediafireApi() {
-            // استخراج الـ key من الـ URL
             const keyMatch = MEDIAFIRE_PAGE_URL.match(/\/file\/([a-zA-Z0-9]+)\//);
             if (!keyMatch) throw new Error('Could not extract Mediafire key');
             
@@ -623,8 +677,6 @@
             });
 
             if (!response.ok) throw new Error(`API HTTP ${response.status}`);
-
-            // API بترجع JSON أحياناً و XML أحياناً
             const text = await response.text();
             let link = null;
 
@@ -640,7 +692,6 @@
             return link;
         }
 
-        // 3) محاكاة ضغط زر التحميل
         function triggerDownload(url, filename) {
             const link = document.createElement('a');
             link.href = url;
@@ -653,9 +704,7 @@
             setTimeout(() => document.body.removeChild(link), 100);
         }
 
-        // 4) تغيير حالة الزرار (loading / success / fallback)
         function setButtonState(btn, state) {
-            const isAr = document.documentElement.lang === 'ar';
             const messages = {
                 loading: { en: 'Processing...', ar: 'جاري المعالجة...' },
                 success: { en: 'Download Started ✓', ar: 'بدأ التحميل ✓' },
@@ -679,7 +728,7 @@
             btn.disabled = false;
         }
 
-        // ==================== مودال التحميل ====================
+        // ==================== دوال المودال (AniCatch) ====================
         function openDownloadSheet() {
             document.getElementById('downloadSheet').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -688,6 +737,18 @@
         function closeDownloadSheet(event) {
             if (event && event.target.id !== 'downloadSheet') return;
             document.getElementById('downloadSheet').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ==================== دوال المودال (ACN Player) ====================
+        function openAcnDownloadSheet() {
+            document.getElementById('acnDownloadSheet').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAcnDownloadSheet(event) {
+            if (event && event.target.id !== 'acnDownloadSheet') return;
+            document.getElementById('acnDownloadSheet').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
 
@@ -723,7 +784,6 @@
 
         sections.forEach(section => observer.observe(section));
 
-        // Header scroll effect
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (window.scrollY > 50) {
@@ -742,3 +802,4 @@
     </script>
 </body>
 </html>
+َ
