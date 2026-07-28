@@ -24,6 +24,7 @@
             --text-muted: #a0aec0;
             --glass-bg: rgba(20, 25, 35, 0.4);
             --glass-border: rgba(255, 255, 255, 0.08);
+            --manga-pink: #FF5EAE;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -93,7 +94,9 @@
         }
         .hero-content h1 { font-size: 4rem; font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
         .hero-content h1 span { background: linear-gradient(90deg, var(--acn-purple), var(--anime-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 45px; font-weight: 400; }
+        .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; font-weight: 400; }
+        
+        #count-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 25px; color: var(--text-muted); letter-spacing: 0.5px; }
 
         .btn-download {
             display: inline-block; background: linear-gradient(45deg, var(--acn-purple), var(--anime-blue));
@@ -111,25 +114,13 @@
             border-radius: 30px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.05);
             border-top: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
-        
-        /* تصميم ذكي للـ Carousel ليدعم الصور الأفقية والعمودية */
-        .carousel { 
-            display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; 
-            padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--acn-purple) transparent; 
-            align-items: center; 
-        }
+        .carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--acn-purple) transparent; align-items: center; }
         .carousel::-webkit-scrollbar { height: 8px; }
         .carousel::-webkit-scrollbar-thumb { background: var(--acn-purple); border-radius: 10px; }
         
-        .carousel-item {
-            flex: 0 0 auto; scroll-snap-align: center; background: rgba(5,5,8,0.5); border-radius: 20px; 
-            padding: 6px; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
-            transition: 0.3s;
-        }
-        
+        .carousel-item { flex: 0 0 auto; scroll-snap-align: center; background: rgba(5,5,8,0.5); border-radius: 20px; padding: 6px; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); transition: 0.3s; }
         .carousel-item.vertical { width: 140px; height: 280px; }
         .carousel-item.horizontal { width: 250px; height: 140px; }
-        
         .carousel-item:hover { transform: translateY(-5px); border-color: rgba(138, 43, 226, 0.4); box-shadow: 0 10px 20px rgba(138, 43, 226, 0.2); }
         .carousel-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
 
@@ -160,6 +151,7 @@
         }
         .card p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
 
+        /* 🌌 GLASS BOTTOM SHEET */
         .download-sheet-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
@@ -180,6 +172,7 @@
         .sheet-title span { background: linear-gradient(90deg, var(--acn-purple), var(--anime-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .sheet-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; }
         .sheet-buttons { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        
         .sheet-btn {
             display: flex; align-items: center; justify-content: center; gap: 12px;
             width: 100%; padding: 16px; border-radius: 20px; font-size: 1.1rem; font-weight: 800;
@@ -189,7 +182,8 @@
         .btn-github { background: rgba(255, 255, 255, 0.05); }
         .btn-github:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--acn-purple); box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); transform: translateY(-3px); }
         .btn-mediafire { background: linear-gradient(45deg, #0085FF, #00A3FF); box-shadow: 0 10px 25px rgba(0, 133, 255, 0.3); border: none; }
-        .btn-mediafire:hover { background: linear-gradient(45deg, #0070D8, #0085FF); box-shadow: 0 15px 30px rgba(0, 133, 255, 0.5); transform: translateY(-3px); }
+        .btn-mediafire:hover:not(:disabled) { background: linear-gradient(45deg, #0070D8, #0085FF); box-shadow: 0 15px 30px rgba(0, 133, 255, 0.5); transform: translateY(-3px); }
+        .btn-mediafire:disabled { opacity: 0.7; cursor: wait; }
         .sheet-close { background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 1rem; cursor: pointer; padding: 10px; transition: 0.3s; font-family: inherit; }
         .sheet-close:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
@@ -212,7 +206,7 @@
             <a href="index.html">
                 <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
             </a>
-            <a href="#home" class="scroll-link active">
+            <a href="acn.html" class="active">
                 <span class="en">ACN</span><span class="ar">ACN</span>
             </a>
             <a href="privacy.html">
@@ -240,6 +234,12 @@
             <p class="en">A powerful, standalone video and manga player designed for the ultimate viewing experience. Take full control of your entertainment with ultra-fast streaming and deep casting integration.</p>
             <p class="ar">مشغل فيديو ومانجا مستقل وقوي مصمم لتجربة مشاهدة لا مثيل لها. تحكم بالكامل في متعتك مع بث فائق السرعة وتكامل عميق مع الشاشات الذكية.</p>
             
+            <!-- عداد ACN -->
+            <div id="count-text">
+                <span class="en">Loading downloads count...</span>
+                <span class="ar">جاري تحميل عدد التحميلات...</span>
+            </div>
+            
             <button class="btn-download" onclick="openDownloadSheet()">
                 <span class="en">Download ACN Player</span>
                 <span class="ar">تحميل مشغل ACN</span>
@@ -254,7 +254,6 @@
         </h2>
         <div class="carousel-wrapper">
             <div class="carousel">
-                <!-- الصور العمودية والأفقية مع الكلاسات الذكية -->
                 <div class="carousel-item vertical"><img src="acn1.jpg" alt="ACN UI 1"></div>
                 <div class="carousel-item vertical"><img src="acn2.jpg" alt="ACN UI 2"></div>
                 <div class="carousel-item horizontal"><img src="acn3.jpg" alt="ACN UI 3"></div>
@@ -304,6 +303,7 @@
         </div>
     </section>
 
+    <!-- شيت التحميل لـ ACN Player -->
     <div class="download-sheet-overlay" id="downloadSheet" onclick="closeDownloadSheet(event)">
         <div class="download-sheet" onclick="event.stopPropagation()">
             <div class="sheet-handle"></div>
@@ -318,14 +318,15 @@
             </p>
 
             <div class="sheet-buttons">
-                <!-- روابط التحميل الخاصة بـ ACN Player -->
-                <a href="YOUR_ACN_MEDIAFIRE_LINK" target="_blank" class="sheet-btn btn-mediafire" style="text-decoration: none;">
+                <!-- زر ميديافاير مع سكربت السحب أو التحويل المباشر -->
+                <button type="button" class="sheet-btn btn-mediafire" id="mediafire-btn" onclick="downloadFromMediafireACN()">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    <span class="en">Download from Mediafire</span>
-                    <span class="ar">تحميل من ميديافاير</span>
-                </a>
+                    <span class="en" id="mf-text-en">Download from Mediafire</span>
+                    <span class="ar" id="mf-text-ar">تحميل من ميديافاير</span>
+                </button>
 
-                <a href="YOUR_ACN_GITHUB_LINK" target="_blank" class="sheet-btn btn-github">
+                <!-- زر جيت هب للتحميل المباشر لـ ACN -->
+                <a href="https://github.com/anime4catch/AnimeCatch/releases/download/ACN_Player_V1.1.0/com.acnplayer_V1.1.0.apk" target="_blank" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
                     <span class="ar">تحميل من GitHub</span>
@@ -343,6 +344,72 @@
     </footer>
 
     <script>
+        // إعدادات ACN Player (تأكد من وضع رابط صفحة ميديافاير الخاص بـ ACN هنا)
+        const ACN_MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/0jhgdiluwx09hs9/com.acnplayer_V1.1.0.apk/file"; 
+        const ACN_APK_FILENAME = "ACN_Player.apk";
+
+        async function fetchTotalDownloads() {
+            // استبدل هذا الرابط بمسار مستودع ACN Player على GitHub لو كان منفصلاً
+            const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases"; 
+            const countElement = document.getElementById("count-text");
+
+            try {
+                const response = await fetch(repoUrl + "?per_page=100", { headers: { 'Accept': 'application/vnd.github.v3+json' }});
+                if (!response.ok) throw new Error(`GitHub API Error`);
+                const releases = await response.json();
+                let githubDownloads = 0;
+                
+                // يمكنك تعديل الشرط أدناه ليجمع الملفات التي تحتوي اسم acn فقط لو كانا في نفس المستودع
+                releases.forEach(release => {
+                    if (release.assets) {
+                        release.assets.forEach(asset => {
+                            if (asset.name.toLowerCase().endsWith('.apk') && typeof asset.download_count === 'number') {
+                                githubDownloads += asset.download_count;
+                            }
+                        });
+                    }
+                });
+
+                const acnMediafireDownloads = 0; // ضع رقم التحميلات اليدوي لـ ACN من ميديافاير هنا
+                animateValue(countElement, 0, Math.max(githubDownloads + acnMediafireDownloads, 0), 1500);
+
+            } catch (error) {
+                if (countElement) countElement.innerHTML = `<span style='color: #FF5555;' class="en">Tracking Offline</span><span style='color: #FF5555;' class="ar">العداد غير متصل</span>`;
+            }
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentCount = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = `<span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--acn-purple);">${currentCount}</strong></span>
+                                 <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--acn-purple);">${currentCount}</strong></span>`;
+                if (progress < 1) window.requestAnimationFrame(step);
+                else obj.innerHTML = `<span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--acn-purple);">${end}</strong></span>
+                                      <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--acn-purple);">${end}</strong></span>`;
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // نفس لوجيك التحميل لميديافاير
+        async function downloadFromMediafireACN() {
+            const btn = document.getElementById('mediafire-btn');
+            const originalHTML = btn.innerHTML;
+            const msgs = { loading: { en: 'Processing...', ar: 'جاري المعالجة...' }, fallback: { en: 'Opening Mediafire...', ar: 'جاري فتح الموقع...' }};
+            
+            btn.innerHTML = `<span class="en">${msgs.loading.en}</span><span class="ar">${msgs.loading.ar}</span>`;
+            btn.disabled = true;
+
+            setTimeout(() => {
+                window.open(ACN_MEDIAFIRE_PAGE_URL, '_blank', 'noopener,noreferrer');
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                closeDownloadSheet();
+            }, 1000);
+        }
+
         function openDownloadSheet() { document.getElementById('downloadSheet').classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closeDownloadSheet(event) { if (event && event.target.id !== 'downloadSheet') return; document.getElementById('downloadSheet').classList.remove('active'); document.body.style.overflow = 'auto'; }
         
@@ -356,6 +423,8 @@
             if (window.scrollY > 50) { header.style.background = 'rgba(10, 12, 18, 0.85)'; header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.8)'; } 
             else { header.style.background = 'rgba(10, 12, 18, 0.6)'; header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)'; }
         });
+
+        document.addEventListener("DOMContentLoaded", () => { fetchTotalDownloads(); });
     </script>
 </body>
 </html>
