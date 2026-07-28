@@ -117,7 +117,6 @@
         .hero-content h1 span { background: linear-gradient(90deg, var(--anime-blue), var(--manga-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-content p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; font-weight: 400; }
         
-        /* 🔽 Download Counter Text Style */
         #count-text {
             font-size: 1.1rem;
             font-weight: 600;
@@ -307,7 +306,7 @@
             <p class="en">The ultimate app to watch, organize, and interact with the anime world. Experience AniList integration, Smart TV casting, and multi-language support seamlessly.</p>
             <p class="ar">التطبيق الأقوى لمتابعة، تنظيم، والتفاعل مع عالم الأنمي. استمتع بتكامل منصة AniList، والبث للشاشات الذكية، ودعم اللغات المتعددة بسلاسة تامة.</p>
             
-            <!-- 🔽 عداد التحميلات التلقائي لـ GitHub -->
+            <!-- 🔽 عداد التحميلات (جيت هب + ميديافاير يدوي) -->
             <div id="count-text">
                 <span class="en">Loading downloads count...</span>
                 <span class="ar">جاري تحميل عدد التحميلات...</span>
@@ -395,15 +394,15 @@
             </p>
 
             <div class="sheet-buttons">
-                <!-- رابط ميديافاير الخاص بك -->
+                <!-- رابط ميديافاير -->
                 <a href="https://www.mediafire.com/file/YOUR_LINK_HERE" target="_blank" class="sheet-btn btn-mediafire">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span class="en">Download from Mediafire</span>
                     <span class="ar">تحميل من ميديافاير</span>
                 </a>
 
-                <!-- رابط مستودع جيت هب الخاص بك -->
-                <a href="https://github.com/icx4x/AniCatch/releases" target="_blank" class="sheet-btn btn-github">
+                <!-- رابط جيت هب -->
+                <a href="https://github.com/anime4catch/AnimeCatch/releases" target="_blank" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
                     <span class="ar">تحميل من GitHub</span>
@@ -426,10 +425,8 @@
     </footer>
 
     <script>
-        // 🚀 سكريبت العداد التلقائي لتحميلات GitHub (تم تحديث الرابط لـ AniCatch)
         async function fetchTotalDownloads() {
-            // ⚠️ استبدل `icx4x/AniCatch` باسم المستخدم والمستودع الخاص بك على جيت هب
-            const repoUrl = "https://api.github.com/repos/icx4x/AniCatch/releases";
+            const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases";
             const countElement = document.getElementById("count-text");
 
             try {
@@ -437,15 +434,19 @@
                 if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
 
                 const releases = await response.json();
-                let totalDownloads = 0;
+                let githubDownloads = 0;
 
                 releases.forEach(release => {
                     release.assets.forEach(asset => {
                         if (asset.name.endsWith('.apk')) {
-                            totalDownloads += asset.download_count;
+                            githubDownloads += asset.download_count;
                         }
                     });
                 });
+
+                // 🔢 إذا أردت إضافة رقم ثابت تحسبه يدوياً من ميديافاير، ضعه هنا (مثلاً: const mediafireDownloads = 150;)
+                const mediafireDownloads = 0; 
+                const totalDownloads = githubDownloads + mediafireDownloads;
 
                 animateValue(countElement, 0, totalDownloads, 1500);
 
@@ -473,31 +474,28 @@
                     window.requestAnimationFrame(step);
                 } else {
                     obj.innerHTML = `
-                        <span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(All Versions)</span></span>
-                        <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(جميع الإصدارات)</span></span>
+                        <span style="color: var(--text-muted);" class="en">Total Downloads: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(GitHub & Mediafire)</span></span>
+                        <span style="color: var(--text-muted);" class="ar">إجمالي التحميلات: <strong style="color: var(--manga-pink);">${end}</strong> <span style="font-size: 0.8em; color: var(--text-muted);">(جيت هب وميديافاير)</span></span>
                     `;
                 }
             };
             window.requestAnimationFrame(step);
         }
 
-        // تشغيل العداد عند تحميل الصفحة
         document.addEventListener("DOMContentLoaded", () => {
             fetchTotalDownloads();
         });
 
-        // 🌌 دحض وفتح وإغلاق شيت التحميل الزجاجي
         function openDownloadSheet() {
             document.getElementById('downloadSheet').classList.add('active');
-            document.body.style.overflow = 'hidden'; // إيقاف تمرير الصفحة الخلفية
+            document.body.style.overflow = 'hidden';
         }
 
         function closeDownloadSheet(event) {
             document.getElementById('downloadSheet').classList.remove('active');
-            document.body.style.overflow = 'auto'; // إعادة التمرير
+            document.body.style.overflow = 'auto';
         }
 
-        // Language Toggle Functionality
         function toggleLanguage() {
             var current = document.documentElement.lang;
             var nextLang = current === 'en' ? 'ar' : 'en';
@@ -507,7 +505,6 @@
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
 
-        // Scroll Spy Functionality
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-links a.scroll-link');
 
@@ -521,8 +518,8 @@
                 }
             });
             
+            navLinks.forEach(link =>.classList.remove('active'));
             navLinks.forEach(link => {
-                link.classList.remove('active');
                 if (link.getAttribute('href').includes(current)) {
                     link.classList.add('active');
                 }
