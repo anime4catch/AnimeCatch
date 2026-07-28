@@ -118,7 +118,7 @@
             border-radius: 30px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.05);
             border-top: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
-        .carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--anime-blue) transparent; align-items: center; }
+        .carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--anime-blue) transparent; }
         .carousel::-webkit-scrollbar { height: 8px; }
         .carousel::-webkit-scrollbar-thumb { background: var(--anime-blue); border-radius: 10px; }
         .carousel-item {
@@ -210,17 +210,17 @@
             <span>AniCatch</span>
         </a>
         <nav class="nav-links">
-            <a href="#home" class="scroll-link active">
+            <a href="index.html" class="active">
                 <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
             </a>
+            <a href="#features" class="scroll-link">
+                <span class="en">Features</span><span class="ar">المميزات</span>
+            </a>
             <a href="acn.html">
-                <span class="en">ACN</span><span class="ar">ACN</span>
+                <span class="en">ACN Player</span><span class="ar">مشغل ACN</span>
             </a>
             <a href="privacy.html">
                 <span class="en">Privacy</span><span class="ar">الخصوصية</span>
-            </a>
-            <a href="disclaimer.html">
-                <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
             </a>
         </nav>
         <div class="header-actions">
@@ -316,7 +316,7 @@
                     <span class="ar" id="mf-text-ar">تحميل من ميديافاير</span>
                 </button>
 
-                <a href="https://raw.githubusercontent.com/anime4catch/AnimeCatch/AniCatch_Beta_V1.0.0/com.animecatch_V1.0.0.apk" target="_blank" download="AniCatch.apk" class="sheet-btn btn-github">
+                <a href="https://github.com/anime4catch/AnimeCatch/releases/download/AniCatch_Beta_V1.0.0_Fix/com.animecatch_Fix_1_1.0.apk" target="_blank" download="AniCatch.apk" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
                     <span class="ar">تحميل من GitHub</span>
@@ -336,9 +336,16 @@
     </footer>
 
     <script>
-        const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/a1c34i7xnt6oue9/com.animecatch_V1.0.0.apk/file";
+        const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/3zpob9fg3otrd3m/com.animecatch_Fix_1_1.0.apk/file";
         const APK_FILENAME = "AniCatch.apk";
         const CORS_PROXIES = ["https://corsproxy.io/?", "https://api.codetabs.com/v1/proxy?quest=", "https://api.allorigins.win/raw?url="];
+
+        const MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/3zpob9fg3otrd3m/com.animecatch_Fix_1_1.0.apk/file";
+        const APK_FILENAME = "AniCatch.apk";
+        const CORS_PROXIES = ["https://corsproxy.io/?", "https://api.codetabs.com/v1/proxy?quest=", "https://api.allorigins.win/raw?url="];
+        
+        // 🔢 حط هون الرقم اليدوي لتحميلات الميديافاير اللي بدك تضيفها للإجمالي:
+        const MANUAL_MEDIAFIRE_DOWNLOADS = 150; // (غير الرقم هون حسب رغبتك)
 
         async function fetchTotalDownloads() {
             const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases";
@@ -357,9 +364,15 @@
                         });
                     }
                 });
-                animateValue(countElement, 0, Math.max(githubDownloads, 0), 1500);
+                
+                // ➕ جمع تحميلات GitHub مع الرقم اليدوي للميديافاير
+                const totalDownloads = Math.max(githubDownloads, 0) + MANUAL_MEDIAFIRE_DOWNLOADS;
+                
+                animateValue(countElement, 0, totalDownloads, 1500);
             } catch (error) {
-                if (countElement) countElement.innerHTML = `<span style='color: #FF5555;' class="en">Tracking Offline</span><span style='color: #FF5555;' class="ar">العداد غير متصل</span>`;
+                // حتى لو جيته شبكة GitHub قطعت، بنرجع نظهر الرقم اليدوي على الأقل كاحتياط
+                const fallbackTotal = MANUAL_MEDIAFIRE_DOWNLOADS;
+                animateValue(countElement, 0, fallbackTotal, 1500);
             }
         }
 
@@ -378,23 +391,18 @@
             window.requestAnimationFrame(step);
         }
 
-                function downloadFromMediafire() {
+        function downloadFromMediafire() {
             const btn = document.getElementById('mediafire-btn');
             const originalHTML = btn.innerHTML;
             
-            // إظهار أنيميشن "جاري فتح الموقع..."
             setButtonState(btn, 'fallback');
-            
-            // فتح الرابط فوراً وبشكل مباشر لتجنب حظر المتصفح (Popup Blocker)
             window.open(MEDIAFIRE_PAGE_URL, '_blank', 'noopener,noreferrer');
             
-            // إعادة الزر لشكله الأصلي وإغلاق الشيت بعد ثانية ونصف
             setTimeout(() => { 
                 resetButton(btn, originalHTML); 
                 closeDownloadSheet(); 
             }, 1500);
         }
-
 
         async function scrapeMediafireWithProxy(pageUrl) {
             for (const proxy of CORS_PROXIES) {
@@ -435,6 +443,7 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => { fetchTotalDownloads(); });
+
     </script>
 </body>
 </html>
