@@ -378,18 +378,23 @@
             window.requestAnimationFrame(step);
         }
 
-        async function downloadFromMediafire() {
+                function downloadFromMediafire() {
             const btn = document.getElementById('mediafire-btn');
             const originalHTML = btn.innerHTML;
-            setButtonState(btn, 'loading');
-            try {
-                const directLink = await scrapeMediafireWithProxy(MEDIAFIRE_PAGE_URL);
-                if (directLink) { triggerDownload(directLink, APK_FILENAME); setButtonState(btn, 'success'); setTimeout(() => { resetButton(btn, originalHTML); closeDownloadSheet(); }, 800); return; }
-            } catch (err) {}
+            
+            // إظهار أنيميشن "جاري فتح الموقع..."
             setButtonState(btn, 'fallback');
+            
+            // فتح الرابط فوراً وبشكل مباشر لتجنب حظر المتصفح (Popup Blocker)
             window.open(MEDIAFIRE_PAGE_URL, '_blank', 'noopener,noreferrer');
-            setTimeout(() => { resetButton(btn, originalHTML); closeDownloadSheet(); }, 1200);
+            
+            // إعادة الزر لشكله الأصلي وإغلاق الشيت بعد ثانية ونصف
+            setTimeout(() => { 
+                resetButton(btn, originalHTML); 
+                closeDownloadSheet(); 
+            }, 1500);
         }
+
 
         async function scrapeMediafireWithProxy(pageUrl) {
             for (const proxy of CORS_PROXIES) {
