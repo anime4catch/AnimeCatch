@@ -107,18 +107,29 @@
         .preview-title { font-size: 2rem; margin-bottom: 30px; font-weight: 800; }
         .preview-title span { color: var(--acn-purple); text-shadow: 0 0 15px var(--acn-glow); }
         .carousel-wrapper {
-            max-width: 800px; margin: 0 auto; background: rgba(20, 25, 35, 0.2); backdrop-filter: blur(25px);
+            max-width: 900px; margin: 0 auto; background: rgba(20, 25, 35, 0.2); backdrop-filter: blur(25px);
             border-radius: 30px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.05);
             border-top: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
-        .carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--acn-purple) transparent; }
+        
+        /* تصميم ذكي للـ Carousel ليدعم الصور الأفقية والعمودية */
+        .carousel { 
+            display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; 
+            padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--acn-purple) transparent; 
+            align-items: center; 
+        }
         .carousel::-webkit-scrollbar { height: 8px; }
         .carousel::-webkit-scrollbar-thumb { background: var(--acn-purple); border-radius: 10px; }
+        
         .carousel-item {
-            flex: 0 0 auto; scroll-snap-align: center; width: 140px; height: 280px;
-            background: rgba(5,5,8,0.5); border-radius: 20px; padding: 6px;
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); transition: 0.3s;
+            flex: 0 0 auto; scroll-snap-align: center; background: rgba(5,5,8,0.5); border-radius: 20px; 
+            padding: 6px; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
+            transition: 0.3s;
         }
+        
+        .carousel-item.vertical { width: 140px; height: 280px; }
+        .carousel-item.horizontal { width: 250px; height: 140px; }
+        
         .carousel-item:hover { transform: translateY(-5px); border-color: rgba(138, 43, 226, 0.4); box-shadow: 0 10px 20px rgba(138, 43, 226, 0.2); }
         .carousel-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
 
@@ -195,20 +206,20 @@
     <header>
         <a href="index.html" class="brand">
             <img src="logoacn.png" alt="ACN Logo" onerror="this.style.display='none'">
-            <span>ACN Player</span>
+            <span>ACN</span>
         </a>
         <nav class="nav-links">
             <a href="index.html">
                 <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
             </a>
-            <a href="#features" class="scroll-link">
-                <span class="en">Features</span><span class="ar">المميزات</span>
-            </a>
-            <a href="acn.html" class="active">
-                <span class="en">ACN Player</span><span class="ar">مشغل ACN</span>
+            <a href="#home" class="scroll-link active">
+                <span class="en">ACN</span><span class="ar">ACN</span>
             </a>
             <a href="privacy.html">
                 <span class="en">Privacy</span><span class="ar">الخصوصية</span>
+            </a>
+            <a href="disclaimer.html">
+                <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
             </a>
         </nav>
         <div class="header-actions">
@@ -243,10 +254,12 @@
         </h2>
         <div class="carousel-wrapper">
             <div class="carousel">
-                <div class="carousel-item"><img src="acn1.jpg" alt="ACN UI 1"></div>
-                <div class="carousel-item"><img src="acn2.jpg" alt="ACN UI 2"></div>
-                <div class="carousel-item"><img src="acn3.jpg" alt="ACN UI 3"></div>
-                <div class="carousel-item"><img src="acn4.jpg" alt="ACN UI 4"></div>
+                <!-- الصور العمودية والأفقية مع الكلاسات الذكية -->
+                <div class="carousel-item vertical"><img src="acn1.jpg" alt="ACN UI 1"></div>
+                <div class="carousel-item vertical"><img src="acn2.jpg" alt="ACN UI 2"></div>
+                <div class="carousel-item horizontal"><img src="acn3.jpg" alt="ACN UI 3"></div>
+                <div class="carousel-item horizontal"><img src="acn4.jpg" alt="ACN UI 4"></div>
+                <div class="carousel-item vertical"><img src="acn5.jpg" alt="ACN UI 5"></div>
             </div>
         </div>
     </section>
@@ -305,14 +318,13 @@
             </p>
 
             <div class="sheet-buttons">
-                <!-- ضع رابط الميديا فاير الخاص بـ ACN هنا -->
+                <!-- روابط التحميل الخاصة بـ ACN Player -->
                 <a href="YOUR_ACN_MEDIAFIRE_LINK" target="_blank" class="sheet-btn btn-mediafire" style="text-decoration: none;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span class="en">Download from Mediafire</span>
                     <span class="ar">تحميل من ميديافاير</span>
                 </a>
 
-                <!-- ضع رابط GitHub الخاص بـ ACN هنا -->
                 <a href="YOUR_ACN_GITHUB_LINK" target="_blank" class="sheet-btn btn-github">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span class="en">Download from GitHub</span>
