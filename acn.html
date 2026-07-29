@@ -254,12 +254,11 @@
         </h2>
         <div class="carousel-wrapper">
             <div class="carousel">
-                            <div class="carousel-item vertical"><img src="acn5.jpg" alt="ACN UI 5"></div>
+                <div class="carousel-item vertical"><img src="acn5.jpg" alt="ACN UI 5"></div>
                 <div class="carousel-item vertical"><img src="acn1.jpg" alt="ACN UI 1"></div>
                 <div class="carousel-item vertical"><img src="acn2.jpg" alt="ACN UI 2"></div>
                 <div class="carousel-item horizontal"><img src="acn3.jpg" alt="ACN UI 3"></div>
                 <div class="carousel-item horizontal"><img src="acn4.jpg" alt="ACN UI 4"></div>
-
             </div>
         </div>
     </section>
@@ -346,29 +345,52 @@
     </footer>
 
     <script>
-        // إعدادات ACN Player (تأكد من وضع رابط صفحة ميديافاير الخاص بـ ACN هنا)
         const ACN_MEDIAFIRE_PAGE_URL = "https://www.mediafire.com/file/0jhgdiluwx09hs9/com.acnplayer_V1.1.0.apk/file"; 
         const ACN_APK_FILENAME = "ACN_Player.apk";
 
-         async function fetchTotalDownloads() {
-            const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases"; 
+        // إضافة التخزين المؤقت وإزالة "+ new Date().getTime()" لمنع استهلاك الحد المسموح
+        async function fetchTotalDownloads() {
+            const repoUrl = "https://api.github.com/repos/anime4catch/AnimeCatch/releases?per_page=100"; 
             const countElement = document.getElementById("count-text");
 
+            const CACHE_KEY = 'acn_gh_downloads_count';
+            const CACHE_TIME_KEY = 'acn_gh_downloads_time';
+            const CACHE_DURATION = 3600000; // تخزين مؤقت لمدة ساعة كاملة
+
+            const cachedCount = localStorage.getItem(CACHE_KEY);
+            const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+            const now = new Date().getTime();
+            
+            const acnMediafireDownloads = 0; 
+            let githubDownloads = 0;
+
+            // التحقق من التخزين المؤقت قبل الإتصال بالـ API
+            if (cachedCount && cachedTime && (now - cachedTime < CACHE_DURATION)) {
+                githubDownloads = parseInt(cachedCount, 10);
+                animateValue(countElement, 0, Math.max(githubDownloads + acnMediafireDownloads, 0), 1500);
+                return;
+            }
+
             try {
-                const response = await fetch(repoUrl + "?per_page=100&t=" + new Date().getTime(), { 
+                const response = await fetch(repoUrl, { 
                     headers: { 'Accept': 'application/vnd.github.v3+json' }
                 });
                 
-                if (!response.ok) throw new Error(`GitHub API Error`);
+                if (!response.ok) {
+                    // إذا حدث باند نستخدم آخر رقم تم تخزينه بدلاً من رسالة الخطأ
+                    if (cachedCount) {
+                        githubDownloads = parseInt(cachedCount, 10);
+                        animateValue(countElement, 0, Math.max(githubDownloads + acnMediafireDownloads, 0), 1500);
+                        return;
+                    }
+                    throw new Error(`GitHub API Error`);
+                }
                 
                 const releases = await response.json();
-                let githubDownloads = 0;
                 
-                // 🎯 التعديل الجراحي هنا: الفلترة الذكية للبحث عن ACN فقط
                 releases.forEach(release => {
                     if (release.assets) {
                         release.assets.forEach(asset => {
-                            // يفحص إذا كان الملف ينتهي بـ apk ويحتوي على كلمة acn
                             if (asset.name.toLowerCase().includes('acn') && asset.name.toLowerCase().endsWith('.apk') && typeof asset.download_count === 'number') {
                                 githubDownloads += asset.download_count;
                             }
@@ -376,18 +398,21 @@
                     }
                 });
 
-                // ضع رقم التحميلات اليدوي لـ ACN من ميديافاير هنا إذا أردت
-                const acnMediafireDownloads = 0; 
-                
+                // حفظ البيانات الجديدة في المتصفح لتفادي الباند مستقبلاً
+                localStorage.setItem(CACHE_KEY, githubDownloads.toString());
+                localStorage.setItem(CACHE_TIME_KEY, now.toString());
+
                 animateValue(countElement, 0, Math.max(githubDownloads + acnMediafireDownloads, 0), 1500);
 
             } catch (error) {
-                if (countElement) {
+                if (cachedCount) {
+                    githubDownloads = parseInt(cachedCount, 10);
+                    animateValue(countElement, 0, Math.max(githubDownloads + acnMediafireDownloads, 0), 1500);
+                } else if (countElement) {
                     countElement.innerHTML = `<span style='color: #FF5555;' class="en">Tracking Offline</span><span style='color: #FF5555;' class="ar">العداد غير متصل</span>`;
                 }
             }
         }
-
 
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
@@ -404,7 +429,6 @@
             window.requestAnimationFrame(step);
         }
 
-        // نفس لوجيك التحميل لميديافاير
         async function downloadFromMediafireACN() {
             const btn = document.getElementById('mediafire-btn');
             const originalHTML = btn.innerHTML;
