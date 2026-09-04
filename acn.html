@@ -16,7 +16,6 @@
 
     <style>
         :root {
-            /* هوية ACN Player (بنفسجي وأزرق) */
             --ac-blue: #1a73e8;
             --ac-purple: #8b5cf6;
             --ac-purple-light: #a78bfa;
@@ -46,7 +45,6 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
-            /* خلفية ACN: شبكية مع توهج بنفسجي وأزرق */
             background-image: 
                 radial-gradient(circle at 15% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 85% 70%, rgba(26, 115, 232, 0.06) 0%, transparent 50%),
@@ -73,7 +71,7 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* --- Navbar --- */
+        /* --- Navbar Responsive --- */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
             padding: 20px 0; border-bottom: 1px solid transparent;
@@ -84,9 +82,9 @@
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom-color: var(--border-color);
         }
-        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+        .nav-wrap { display: flex; justify-content: space-between; align-items: center; position: relative; }
         
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; z-index: 1001; }
         .brand img { height: 38px; width: auto; border-radius: 8px; }
         .brand span { font-size: 1.4rem; font-weight: 900; color: var(--text-main); }
 
@@ -104,10 +102,25 @@
         }
         .lang-btn:hover { background: rgba(255, 255, 255, 0.15); }
 
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; background: transparent; border: none; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: var(--text-main); transition: 0.3s; border-radius: 2px; }
+
         @media (max-width: 900px) {
-            #navbar { padding: 15px 0; }
-            .nav-wrap { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
+            #navbar { padding: 15px 0; background: rgba(10, 10, 14, 0.95); border-bottom-color: var(--border-color); }
+            .menu-toggle { display: flex; }
+            .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .menu-toggle.active span:nth-child(2) { opacity: 0; }
+            .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+            
+            .nav-links {
+                position: absolute; top: 100%; left: 0; width: 100%;
+                background: var(--dark-sec); flex-direction: column; padding: 20px;
+                gap: 15px; border-bottom: 1px solid var(--border-color);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease;
+            }
+            .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            .nav-links a { width: 100%; text-align: center; padding: 12px; }
+            .lang-btn { width: 100%; margin: 10px 0 0 0; padding: 12px; }
         }
 
         /* --- Hero Section --- */
@@ -164,11 +177,6 @@
         }
         .feat-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.15); }
         
-        .feat-icon {
-            width: 50px; height: 50px; border-radius: 14px; margin-bottom: 24px;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-        }
         .feat-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 12px; }
         .feat-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; }
 
@@ -222,8 +230,12 @@
                 <img src="logoacn.png" alt="ACN Logo" onerror="this.style.display='none'">
                 <span>ACN</span>
             </a>
+
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
             
-            <div class="nav-links">
+            <div class="nav-links" id="nav-links">
                 <a href="index.html">
                     <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
                 </a>
@@ -247,7 +259,7 @@
     <section class="hero" id="home">
         <div class="container hero-content">
             <span class="chip chip-purple reveal">
-                ✧ <span class="en">Beta 1.1.0 Now Available</span><span class="ar">النسخة التجريبية 1.1.0 متاحة الآن</span>
+                <span class="en">Beta 1.1.0 Now Available</span><span class="ar">النسخة التجريبية 1.1.0 متاحة الآن</span>
             </span>
             
             <h1 class="reveal">
@@ -289,7 +301,9 @@
     <section class="feat-sec" id="features">
         <div class="container">
             <div class="sec-header reveal">
-                <span class="chip chip-purple">✦ <span class="en">Player Features</span><span class="ar">مميزات المشغل</span></span>
+                <span class="chip chip-purple">
+                    <span class="en">Player Features</span><span class="ar">مميزات المشغل</span>
+                </span>
                 <h2 class="en">Everything for viewing</h2>
                 <h2 class="ar">تجربة متكاملة</h2>
                 <p class="en">Advanced tools combined directly in the player for uninterrupted entertainment.</p>
@@ -298,7 +312,6 @@
 
             <div class="feat-grid">
                 <div class="feat-card reveal">
-                    <div class="feat-icon">⚡</div>
                     <h3 class="en">Seamless Episodes</h3>
                     <h3 class="ar">تنقل سلس</h3>
                     <p class="en">Navigate through episodes smoothly with a single tap without interrupting your viewing experience.</p>
@@ -306,7 +319,6 @@
                 </div>
                 
                 <div class="feat-card reveal" style="transition-delay: 0.1s;">
-                    <div class="feat-icon">📝</div>
                     <h3 class="en">Online Subtitles</h3>
                     <h3 class="ar">ترجمة أونلاين</h3>
                     <p class="en">Integrated OpenSubtitles support allows you to search and apply subtitles instantly from within the player.</p>
@@ -314,7 +326,6 @@
                 </div>
                 
                 <div class="feat-card reveal" style="transition-delay: 0.2s;">
-                    <div class="feat-icon">📺</div>
                     <h3 class="en">Smart TV Casting</h3>
                     <h3 class="ar">البث للشاشات</h3>
                     <p class="en">Cast your favorite media directly to your Smart TV flawlessly utilizing NanoHttpd integration.</p>
@@ -363,6 +374,14 @@
     </footer>
 
     <script>
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileBtn.classList.toggle('active');
+        });
+
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) navbar.classList.add('scrolled');
