@@ -16,6 +16,7 @@
 
     <style>
         :root {
+            /* الهوية البصرية الاحترافية والعميقة */
             --ac-blue: #1a73e8;
             --ac-blue-light: #4285f4;
             --ac-pink: #e91e63;
@@ -45,23 +46,31 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
+            /* خلفية شبكية حديثة تناسب تطبيقات البث */
             background-image: 
+                radial-gradient(circle at 15% 30%, rgba(26, 115, 232, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 70%, rgba(233, 30, 99, 0.04) 0%, transparent 50%),
                 linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
             background-attachment: fixed;
-            padding-top: 100px;
-            padding-bottom: 50px;
+            padding-top: 120px;
+            padding-bottom: 0px; /* الفوتر سيتولى المسافة السفلية */
         }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
         /* --- Navbar --- */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 20px 0; border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        #navbar.scrolled {
             padding: 12px 0; background: rgba(10, 10, 14, 0.95);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom-color: var(--border-color);
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
         
         .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
@@ -86,10 +95,10 @@
             #navbar { padding: 15px 0; }
             .nav-wrap { flex-direction: column; gap: 15px; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
-            body { padding-top: 140px; }
+            body { padding-top: 150px; }
         }
 
-        /* --- Content Block --- */
+        /* --- Content Block (Privacy Policy) --- */
         @keyframes slideUpFade {
             0% { opacity: 0; transform: translateY(40px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -101,7 +110,11 @@
             border-radius: var(--r-card); border: 1px solid var(--border-color);
             position: relative; overflow: hidden;
             animation: slideUpFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin-bottom: 80px;
         }
+        
+        /* الخط الملون أعلى البطاقة */
         .content-card::before { 
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; 
             background: linear-gradient(90deg, var(--ac-blue), var(--ac-pink)); 
@@ -120,14 +133,21 @@
         html[dir="rtl"] ul { margin-right: 20px; }
         li { margin-bottom: 10px; }
         strong { color: var(--text-main); font-weight: 700; }
-        a { color: var(--ac-blue-light); text-decoration: none; transition: 0.2s; }
+        a { color: var(--ac-blue-light); text-decoration: none; transition: 0.2s; font-weight: 600; }
         a:hover { color: var(--ac-pink); }
         
-        @media (max-width: 768px) { .content-card { padding: 30px 20px; border-radius: 16px; } h1 { font-size: 1.8rem; } }
+        @media (max-width: 768px) { .content-card { padding: 30px 20px; border-radius: 16px; margin: 0 15px 60px; } h1 { font-size: 1.8rem; } }
+
+        /* --- Footer --- */
+        footer { background: var(--dark-bg); padding: 50px 0; text-align: center; border-top: 1px solid var(--border-color); }
+        footer p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px; }
+        footer a { color: var(--text-main); font-weight: 700; text-decoration: none; transition: 0.2s; }
+        footer a:hover { color: var(--ac-blue-light); }
     </style>
 </head>
 <body>
-    
+
+    <!-- NAVBAR (مطابق للترتيب المطلوب) -->
     <nav id="navbar">
         <div class="container nav-wrap">
             <a href="index.html" class="brand">
@@ -142,12 +162,16 @@
                 <a href="acn.html">
                     <span class="en">ACN</span><span class="ar">ACN</span>
                 </a>
+                <!-- تم تفعيل كلاس active هنا -->
                 <a href="privacy.html" class="active">
                     <span class="en">Privacy</span><span class="ar">الخصوصية</span>
                 </a>
                 <a href="disclaimer.html">
                     <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
                 </a>
+            </div>
+
+            <div class="header-actions">
                 <button class="lang-btn" onclick="toggleLanguage()">
                     <span class="en">العربية</span>
                     <span class="ar">English</span>
@@ -156,6 +180,7 @@
         </div>
     </nav>
 
+    <!-- CONTENT -->
     <div class="container">
         <div class="content-card">
             <h1 class="en">Privacy Policy</h1>
@@ -262,7 +287,18 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="en">&copy; 2026 AniCatch. All Rights Reserved.</p>
+            <p class="ar">&copy; 2026 تطبيق AniCatch. جميع الحقوق محفوظة.</p>
+            <p class="en">Metadata provided by <a href="https://anilist.co/" target="_blank">AniList</a></p>
+            <p class="ar">البيانات الوصفية مقدمة من <a href="https://anilist.co/" target="_blank">AniList</a></p>
+        </div>
+    </footer>
+
     <script>
+        // تغيير اللغة
         function toggleLanguage() {
             var current = document.documentElement.lang;
             var nextLang = current === 'en' ? 'ar' : 'en';
@@ -270,6 +306,13 @@
             document.documentElement.lang = nextLang;
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
+
+        // تأثير نزول الشريط العلوي
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
     </script>
 </body>
 </html>
