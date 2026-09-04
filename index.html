@@ -46,7 +46,6 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
-            /* خلفية شبكية حديثة تناسب تطبيقات البث */
             background-image: 
                 radial-gradient(circle at 15% 30%, rgba(26, 115, 232, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 85% 70%, rgba(233, 30, 99, 0.06) 0%, transparent 50%),
@@ -60,7 +59,6 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
         .reveal.on { opacity: 1; transform: translateY(0); }
 
-        /* --- UI Elements --- */
         .chip {
             display: inline-flex; align-items: center; gap: 8px;
             padding: 6px 16px; border-radius: var(--r-pill);
@@ -75,7 +73,7 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* --- Navbar --- */
+        /* --- Navbar Responsive --- */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
             padding: 20px 0; border-bottom: 1px solid transparent;
@@ -86,9 +84,9 @@
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom-color: var(--border-color);
         }
-        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+        .nav-wrap { display: flex; justify-content: space-between; align-items: center; position: relative; }
         
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; z-index: 1001; }
         .brand img { height: 38px; width: auto; border-radius: 8px; }
         .brand span { font-size: 1.4rem; font-weight: 900; color: var(--text-main); }
 
@@ -106,10 +104,26 @@
         }
         .lang-btn:hover { background: rgba(255, 255, 255, 0.15); }
 
+        /* Hamburger Menu */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; background: transparent; border: none; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: var(--text-main); transition: 0.3s; border-radius: 2px; }
+
         @media (max-width: 900px) {
-            #navbar { padding: 15px 0; }
-            .nav-wrap { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
+            #navbar { padding: 15px 0; background: rgba(10, 10, 14, 0.95); border-bottom-color: var(--border-color); }
+            .menu-toggle { display: flex; }
+            .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .menu-toggle.active span:nth-child(2) { opacity: 0; }
+            .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+            
+            .nav-links {
+                position: absolute; top: 100%; left: 0; width: 100%;
+                background: var(--dark-sec); flex-direction: column; padding: 20px;
+                gap: 15px; border-bottom: 1px solid var(--border-color);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease;
+            }
+            .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            .nav-links a { width: 100%; text-align: center; padding: 12px; }
+            .lang-btn { width: 100%; margin: 10px 0 0 0; padding: 12px; }
         }
 
         /* --- Hero Section --- */
@@ -173,11 +187,6 @@
         }
         .feat-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.15); }
         
-        .feat-icon {
-            width: 50px; height: 50px; border-radius: 14px; margin-bottom: 24px;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-        }
         .feat-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 12px; }
         .feat-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; }
 
@@ -232,12 +241,16 @@
                 <span>AniCatch</span>
             </a>
             
-            <div class="nav-links">
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="nav-links" id="nav-links">
                 <a href="index.html" class="active">
-                    <span class="en">Home</span><span class="ar">الرئيسية</span>
+                    <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
                 </a>
                 <a href="acn.html">
-                    <span class="en">ACN Player</span><span class="ar">مشغل ACN</span>
+                    <span class="en">ACN</span><span class="ar">ACN</span>
                 </a>
                 <a href="privacy.html">
                     <span class="en">Privacy</span><span class="ar">الخصوصية</span>
@@ -256,7 +269,7 @@
     <section class="hero" id="home">
         <div class="container hero-content">
             <span class="chip chip-blue reveal">
-                ✧ <span class="en">Beta 1.0.0 Now Available</span><span class="ar">النسخة التجريبية 1.0.0 متاحة الآن</span>
+                <span class="en">Beta 1.0.0 Now Available</span><span class="ar">النسخة التجريبية 1.0.0 متاحة الآن</span>
             </span>
             
             <h1 class="reveal">
@@ -301,7 +314,9 @@
     <section class="feat-sec" id="features">
         <div class="container">
             <div class="sec-header reveal">
-                <span class="chip chip-pink">✦ <span class="en">Why AniCatch</span><span class="ar">لماذا AniCatch</span></span>
+                <span class="chip chip-pink">
+                    <span class="en">Why AniCatch</span><span class="ar">لماذا AniCatch</span>
+                </span>
                 <h2 class="en">Everything you need</h2>
                 <h2 class="ar">كل ما تحتاجه في مكان واحد</h2>
                 <p class="en">Built specifically to provide the best streaming and organizing experience for anime fans.</p>
@@ -310,7 +325,6 @@
 
             <div class="feat-grid">
                 <div class="feat-card reveal">
-                    <div class="feat-icon">✧</div>
                     <h3 class="en">AniList Integrated</h3>
                     <h3 class="ar">تكامل مع AniList</h3>
                     <p class="en">The first app offering full interaction with your AniList account combined natively with free streaming capabilities.</p>
@@ -318,7 +332,6 @@
                 </div>
                 
                 <div class="feat-card reveal" style="transition-delay: 0.1s;">
-                    <div class="feat-icon">🌐</div>
                     <h3 class="en">Global Access</h3>
                     <h3 class="ar">وصول عالمي</h3>
                     <p class="en">Native support for English and Arabic interfaces, plus an independent lightweight server dedicated to Spanish content.</p>
@@ -326,7 +339,6 @@
                 </div>
                 
                 <div class="feat-card reveal" style="transition-delay: 0.2s;">
-                    <div class="feat-icon">🛡️</div>
                     <h3 class="en">Strongest Encryption</h3>
                     <h3 class="ar">حماية قوية</h3>
                     <p class="en">A strict security system utilizing V12 encryption algorithms to ensure the safety of your connections and protect your data.</p>
@@ -356,11 +368,10 @@
                 </button>
 
                 <a href="https://github.com/anime4catch/AnimeCatch/releases/download/AniCatch_Beta_V1.0.1_Fix/com.animecatch_Fix_1_0.1.apk" target="_blank" download="AniCatch.apk" class="sheet-btn btn-github">
-                    <span class="en">Download via GitHub</span>
-                    <span class="ar">تحميل عبر GitHub</span>
+                    <span class="en">Download from GitHub</span>
+                    <span class="ar">تحميل من GitHub</span>
                 </a>
             </div>
-            
             <button class="sheet-close" onclick="closeDownloadSheet()">
                 <span class="en">Cancel</span><span class="ar">إلغاء</span>
             </button>
@@ -371,12 +382,21 @@
         <div class="container">
             <p class="en">&copy; 2026 AniCatch. All Rights Reserved.</p>
             <p class="ar">&copy; 2026 تطبيق AniCatch. جميع الحقوق محفوظة.</p>
-            <p class="en">Metadata provided by <a href="https://anilist.co/" target="_blank">AniList</a></p>
-            <p class="ar">البيانات الوصفية مقدمة من <a href="https://anilist.co/" target="_blank">AniList</a></p>
+            <p class="en">Metadata by <a href="https://anilist.co/" target="_blank">AniList</a></p>
+            <p class="ar">البيانات مقدمة من <a href="https://anilist.co/" target="_blank">AniList</a></p>
         </div>
     </footer>
 
     <script>
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileBtn.classList.toggle('active');
+        });
+
+        // Navbar Scroll
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) navbar.classList.add('scrolled');
@@ -431,7 +451,6 @@
                     if (cachedCount) githubDownloads = parseInt(cachedCount, 10);
                 }
             }
-
             const totalDownloads = githubDownloads + MANUAL_MEDIAFIRE_DOWNLOADS;
             countElement.innerHTML = `<span class="en">Trusted by <strong>${totalDownloads.toLocaleString()}</strong> users</span>
                                       <span class="ar">موثوق من قِبل <strong>${totalDownloads.toLocaleString()}</strong> مستخدم</span>`;
