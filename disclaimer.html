@@ -16,10 +16,8 @@
 
     <style>
         :root {
-            /* الهوية البصرية الاحترافية والعميقة */
             --ac-blue: #1a73e8;
             --ac-blue-light: #4285f4;
-            --ac-pink: #e91e63;
             
             --dark-bg: #0a0a0e;
             --dark-sec: #121218;
@@ -30,7 +28,7 @@
             --border-color: rgba(255, 255, 255, 0.08);
             
             --r-pill: 999px;
-            --r-card: 20px;
+            --r-card: 16px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,21 +44,12 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
-            /* خلفية شبكية حديثة تناسب تطبيقات البث */
-            background-image: 
-                radial-gradient(circle at 15% 30%, rgba(26, 115, 232, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 85% 70%, rgba(233, 30, 99, 0.04) 0%, transparent 50%),
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-            background-attachment: fixed;
-            padding-top: 120px;
-            padding-bottom: 0px; 
+            padding-top: 100px;
         }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-        /* --- Navbar --- */
+        /* --- Navbar Responsive --- */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
             padding: 20px 0; border-bottom: 1px solid transparent;
@@ -71,9 +60,9 @@
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom-color: var(--border-color);
         }
-        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+        .nav-wrap { display: flex; justify-content: space-between; align-items: center; position: relative; }
         
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; z-index: 1001; }
         .brand img { height: 38px; width: auto; border-radius: 8px; }
         .brand span { font-size: 1.4rem; font-weight: 900; color: var(--text-main); }
 
@@ -91,52 +80,60 @@
         }
         .lang-btn:hover { background: rgba(255, 255, 255, 0.15); }
 
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; background: transparent; border: none; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: var(--text-main); transition: 0.3s; border-radius: 2px; }
+
         @media (max-width: 900px) {
-            #navbar { padding: 15px 0; }
-            .nav-wrap { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            body { padding-top: 150px; }
+            #navbar { padding: 15px 0; background: rgba(10, 10, 14, 0.95); border-bottom-color: var(--border-color); }
+            body { padding-top: 130px; }
+            .menu-toggle { display: flex; }
+            .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .menu-toggle.active span:nth-child(2) { opacity: 0; }
+            .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+            
+            .nav-links {
+                position: absolute; top: 100%; left: 0; width: 100%;
+                background: var(--dark-sec); flex-direction: column; padding: 20px;
+                gap: 15px; border-bottom: 1px solid var(--border-color);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease;
+            }
+            .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            .nav-links a { width: 100%; text-align: center; padding: 12px; }
+            .lang-btn { width: 100%; margin: 10px 0 0 0; padding: 12px; }
         }
 
-        /* --- Content Block (Disclaimer) --- */
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .content-card { 
-            max-width: 850px; margin: 0 auto; padding: 50px; 
+        /* --- Classic Legal Document Style --- */
+        .doc-container { 
+            max-width: 850px; margin: 0 auto 80px; padding: 40px; 
             background: var(--dark-sec);
             border-radius: var(--r-card); border: 1px solid var(--border-color);
-            position: relative; overflow: hidden;
-            animation: slideUpFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            margin-bottom: 80px;
         }
         
-        /* الخط الملون أعلى البطاقة */
-        .content-card::before { 
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; 
-            background: linear-gradient(90deg, var(--ac-blue), var(--ac-pink)); 
-        }
-        
-        h1 { text-align: center; margin-bottom: 10px; font-size: 2.2rem; font-weight: 900; }
-        .date { text-align: center; color: var(--ac-blue-light); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 2.2rem; font-weight: 800; }
+        .date { text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; }
         
         h2 { color: var(--text-main); margin-top: 40px; margin-bottom: 15px; font-size: 1.4rem; }
-        html[dir="ltr"] h2 { border-left: 4px solid var(--ac-blue); padding-left: 15px; }
-        html[dir="rtl"] h2 { border-right: 4px solid var(--ac-blue); padding-right: 15px; }
+        html[dir="ltr"] h2 { border-left: 3px solid var(--ac-blue-light); padding-left: 15px; }
+        html[dir="rtl"] h2 { border-right: 3px solid var(--ac-blue-light); padding-right: 15px; }
         
         p, li { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 15px; line-height: 1.8; }
-        ul { margin-bottom: 20px; } 
-        html[dir="ltr"] ul { margin-left: 20px; }
-        html[dir="rtl"] ul { margin-right: 20px; }
-        li { margin-bottom: 10px; }
+        ul { margin-bottom: 20px; list-style-type: none; padding: 0; } 
+        li { margin-bottom: 15px; position: relative; }
+        html[dir="ltr"] li { padding-left: 20px; }
+        html[dir="rtl"] li { padding-right: 20px; }
+        
+        li::before {
+            content: ''; position: absolute; top: 10px; width: 6px; height: 6px; 
+            background: var(--text-muted); border-radius: 50%;
+        }
+        html[dir="ltr"] li::before { left: 0; }
+        html[dir="rtl"] li::before { right: 0; }
+
         strong { color: var(--text-main); font-weight: 700; }
         a { color: var(--ac-blue-light); text-decoration: none; transition: 0.2s; font-weight: 600; }
-        a:hover { color: var(--ac-pink); }
+        a:hover { color: #fff; }
         
-        @media (max-width: 768px) { .content-card { padding: 30px 20px; border-radius: 16px; margin: 0 15px 60px; } h1 { font-size: 1.8rem; } }
+        @media (max-width: 768px) { .doc-container { padding: 30px 20px; border-radius: 16px; margin: 0 15px 60px; } h1 { font-size: 1.8rem; } }
 
         /* --- Footer --- */
         footer { background: var(--dark-bg); padding: 50px 0; text-align: center; border-top: 1px solid var(--border-color); }
@@ -147,15 +144,18 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav id="navbar">
         <div class="container nav-wrap">
             <a href="index.html" class="brand">
                 <img src="logo.png" alt="AniCatch Logo" onerror="this.style.display='none'">
                 <span>AniCatch</span>
             </a>
+
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
             
-            <div class="nav-links">
+            <div class="nav-links" id="nav-links">
                 <a href="index.html">
                     <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
                 </a>
@@ -165,13 +165,9 @@
                 <a href="privacy.html">
                     <span class="en">Privacy</span><span class="ar">الخصوصية</span>
                 </a>
-                <!-- تم تفعيل كلاس active هنا -->
                 <a href="disclaimer.html" class="active">
                     <span class="en">Disclaimer</span><span class="ar">إخلاء المسؤولية</span>
                 </a>
-            </div>
-
-            <div class="header-actions">
                 <button class="lang-btn" onclick="toggleLanguage()">
                     <span class="en">العربية</span>
                     <span class="ar">English</span>
@@ -180,9 +176,8 @@
         </div>
     </nav>
 
-    <!-- CONTENT -->
     <div class="container">
-        <div class="content-card">
+        <div class="doc-container">
             <h1 class="en">Legal Disclaimer</h1>
             <h1 class="ar">إخلاء المسؤولية القانونية</h1>
             
@@ -228,42 +223,41 @@
 
             <!-- ARABIC CONTENT -->
             <div class="ar">
-                <h2>مقدمة:</h2>
+                <h2>مقدمة</h2>
                 <p>يهدف هذا المستند إلى توضيح حدود المسؤولية القانونية المتعلقة باستخدام تطبيق <strong>AniCatch</strong>. باستخدامك لهذا التطبيق، فإنك توافق بشكل كامل على الشروط والبنود المذكورة أدناه. إذا كنت لا توافق على أي جزء من هذا الإخلاء، يرجى التوقف عن استخدام التطبيق فوراً.</p>
 
-                <h2>1. طبيعة المحتوى وحقوق الملكية الفكرية:</h2>
+                <h2>1. طبيعة المحتوى وحقوق الملكية الفكرية</h2>
                 <ul>
                     <li><strong>تجميع المحتوى والترجمة:</strong> لا يقوم تطبيق <strong>AniCatch</strong> باستضافة، أو رفع، أو بث أي ملفات فيديو أو وسائط على خوادمه الخاصة. التطبيق يعمل فقط كواجهة برمجية للبحث والفهرسة. ملفات الترجمة (مثل تلك التي يتم جلبها عبر OpenSubtitles داخل مشغل ACN) يتم استدعاؤها من مصادر خارجية ولا نملك حقوقها.</li>
                     <li><strong>حقوق الطبع والنشر:</strong> نحن نحترم حقوق الملكية الفكرية للآخرين. لا يتحمل التطبيق أو مطوروه أي مسؤولية قانونية تجاه المحتوى الذي يتم عرضه عبر الروابط الخارجية. في حال وجود أي محتوى ينتهك حقوق الطبع والنشر، تقع مسؤولية إزالته على عاتق الخادم المضيف للمحتوى.</li>
                 </ul>
 
-                <h2>2. المحتوى الذي ينشئه المستخدمون وخدمات الأطراف الثالثة:</h2>
+                <h2>2. المحتوى الذي ينشئه المستخدمون وخدمات الأطراف الثالثة</h2>
                 <ul>
                     <li><strong>المسؤولية الشخصية:</strong> كافة التعليقات، الآراء، والتقييمات التي يتم نشرها داخل التطبيق تعبر حصراً عن رأي كاتبها.</li>
                     <li><strong>التكامل مع AniList:</strong> التفاعلات التي تتم في مجتمع AniList عبر تطبيقنا تخضع لشروط استخدام منصة AniList نفسها.</li>
                     <li><strong>الرقابة والحذف:</strong> لا يلتزم التطبيق بمراقبة كل تعليق، ولكنه يحتفظ بالحق الكامل في حذف أو تعديل أي تعليق يحتوي على إساءة، تشهير، أو حرق للأحداث.</li>
                 </ul>
 
-                <h2>3. الروابط والخدمات الخارجية:</h2>
+                <h2>3. الروابط والخدمات الخارجية</h2>
                 <p>قد يحتوي التطبيق على روابط تؤدي إلى مواقع أو تطبيقات أطراف ثالثة. نحن لا نتحكم في محتوى أو سياسات الخصوصية الخاصة بتلك المواقع، ولا نتحمل أي مسؤولية عن أي أضرار قد تنتج عن استخدامك لها.</p>
 
-                <h2>4. إخلاء المسؤولية التقنية (ضمان الخدمة):</h2>
+                <h2>4. إخلاء المسؤولية التقنية (ضمان الخدمة)</h2>
                 <ul>
                     <li>يتم تقديم التطبيق وخدماته على أساس "كما هو" (As Is) و"كما هو متوفر" (As Available)، دون أي ضمانات صريحة أو ضمنية بخلوه من الأخطاء البرمجية (Bugs).</li>
                     <li>لا يتحمل المطورون مسؤولية أي فقدان للبيانات، أو تلف يلحق بجهازك، أو أي أضرار تقنية تنتج عن استخدام التطبيق.</li>
                 </ul>
 
-                <h2>5. التعديل على إخلاء المسؤولية:</h2>
+                <h2>5. التعديل على إخلاء المسؤولية</h2>
                 <p>نحتفظ بالحق في تحديث أو تعديل نص إخلاء المسؤولية هذا في أي وقت دون إشعار مسبق. يُعتبر استمرارك في استخدام التطبيق بعد إجراء أي تعديلات بمثابة موافقة صريحة منك على النص الجديد.</p>
 
-                <h2>6. التواصل والإبلاغ:</h2>
+                <h2>6. التواصل والإبلاغ</h2>
                 <p>لأي استفسارات قانونية، أو للإبلاغ عن انتهاكات أو محتوى مسيء، يرجى التواصل معنا عبر البريد الإلكتروني:<br>
                 <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p class="en">&copy; 2026 AniCatch. All Rights Reserved.</p>
@@ -274,7 +268,13 @@
     </footer>
 
     <script>
-        // تغيير اللغة
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileBtn.classList.toggle('active');
+        });
+
         function toggleLanguage() {
             var current = document.documentElement.lang;
             var nextLang = current === 'en' ? 'ar' : 'en';
@@ -283,7 +283,6 @@
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
 
-        // تأثير نزول الشريط العلوي
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) navbar.classList.add('scrolled');
