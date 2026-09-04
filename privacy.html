@@ -18,7 +18,6 @@
         :root {
             --ac-blue: #1a73e8;
             --ac-blue-light: #4285f4;
-            --ac-pink: #e91e63;
             
             --dark-bg: #0a0a0e;
             --dark-sec: #121218;
@@ -29,7 +28,7 @@
             --border-color: rgba(255, 255, 255, 0.08);
             
             --r-pill: 999px;
-            --r-card: 20px;
+            --r-card: 16px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,26 +44,25 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-attachment: fixed;
             padding-top: 100px;
-            padding-bottom: 50px;
         }
 
-        /* --- Navbar --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* --- Navbar Responsive --- */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 20px 0; border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        #navbar.scrolled {
             padding: 12px 0; background: rgba(10, 10, 14, 0.95);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom-color: var(--border-color);
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+        .nav-wrap { display: flex; justify-content: space-between; align-items: center; position: relative; }
         
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; z-index: 1001; }
         .brand img { height: 38px; width: auto; border-radius: 8px; }
         .brand span { font-size: 1.4rem; font-weight: 900; color: var(--text-main); }
 
@@ -82,60 +80,82 @@
         }
         .lang-btn:hover { background: rgba(255, 255, 255, 0.15); }
 
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; background: transparent; border: none; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: var(--text-main); transition: 0.3s; border-radius: 2px; }
+
         @media (max-width: 900px) {
-            #navbar { padding: 15px 0; }
-            .nav-wrap { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            body { padding-top: 140px; }
+            #navbar { padding: 15px 0; background: rgba(10, 10, 14, 0.95); border-bottom-color: var(--border-color); }
+            body { padding-top: 130px; }
+            .menu-toggle { display: flex; }
+            .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .menu-toggle.active span:nth-child(2) { opacity: 0; }
+            .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+            
+            .nav-links {
+                position: absolute; top: 100%; left: 0; width: 100%;
+                background: var(--dark-sec); flex-direction: column; padding: 20px;
+                gap: 15px; border-bottom: 1px solid var(--border-color);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease;
+            }
+            .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            .nav-links a { width: 100%; text-align: center; padding: 12px; }
+            .lang-btn { width: 100%; margin: 10px 0 0 0; padding: 12px; }
         }
 
-        /* --- Content Block --- */
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .content-card { 
-            max-width: 850px; margin: 0 auto; padding: 50px; 
+        /* --- Classic Legal Document Style --- */
+        .doc-container { 
+            max-width: 850px; margin: 0 auto 80px; padding: 40px; 
             background: var(--dark-sec);
             border-radius: var(--r-card); border: 1px solid var(--border-color);
-            position: relative; overflow: hidden;
-            animation: slideUpFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-        .content-card::before { 
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; 
-            background: linear-gradient(90deg, var(--ac-blue), var(--ac-pink)); 
         }
         
-        h1 { text-align: center; margin-bottom: 10px; font-size: 2.2rem; font-weight: 900; }
-        .date { text-align: center; color: var(--ac-blue-light); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 2.2rem; font-weight: 800; }
+        .date { text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 0.95rem; font-weight: 600; }
         
         h2 { color: var(--text-main); margin-top: 40px; margin-bottom: 15px; font-size: 1.4rem; }
-        html[dir="ltr"] h2 { border-left: 4px solid var(--ac-blue); padding-left: 15px; }
-        html[dir="rtl"] h2 { border-right: 4px solid var(--ac-blue); padding-right: 15px; }
+        html[dir="ltr"] h2 { border-left: 3px solid var(--ac-blue-light); padding-left: 15px; }
+        html[dir="rtl"] h2 { border-right: 3px solid var(--ac-blue-light); padding-right: 15px; }
         
         p, li { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 15px; line-height: 1.8; }
-        ul { margin-bottom: 20px; } 
-        html[dir="ltr"] ul { margin-left: 20px; }
-        html[dir="rtl"] ul { margin-right: 20px; }
-        li { margin-bottom: 10px; }
-        strong { color: var(--text-main); font-weight: 700; }
-        a { color: var(--ac-blue-light); text-decoration: none; transition: 0.2s; }
-        a:hover { color: var(--ac-pink); }
+        ul { margin-bottom: 20px; list-style-type: none; padding: 0; } 
+        li { margin-bottom: 15px; position: relative; }
+        html[dir="ltr"] li { padding-left: 20px; }
+        html[dir="rtl"] li { padding-right: 20px; }
         
-        @media (max-width: 768px) { .content-card { padding: 30px 20px; border-radius: 16px; } h1 { font-size: 1.8rem; } }
+        li::before {
+            content: ''; position: absolute; top: 10px; width: 6px; height: 6px; 
+            background: var(--text-muted); border-radius: 50%;
+        }
+        html[dir="ltr"] li::before { left: 0; }
+        html[dir="rtl"] li::before { right: 0; }
+
+        strong { color: var(--text-main); font-weight: 700; }
+        a { color: var(--ac-blue-light); text-decoration: none; transition: 0.2s; font-weight: 600; }
+        a:hover { color: #fff; }
+        
+        @media (max-width: 768px) { .doc-container { padding: 30px 20px; border-radius: 16px; margin: 0 15px 60px; } h1 { font-size: 1.8rem; } }
+
+        /* --- Footer --- */
+        footer { background: var(--dark-bg); padding: 50px 0; text-align: center; border-top: 1px solid var(--border-color); }
+        footer p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px; }
+        footer a { color: var(--text-main); font-weight: 700; text-decoration: none; transition: 0.2s; }
+        footer a:hover { color: var(--ac-blue-light); }
     </style>
 </head>
 <body>
-    
+
     <nav id="navbar">
         <div class="container nav-wrap">
             <a href="index.html" class="brand">
                 <img src="logo.png" alt="AniCatch Logo" onerror="this.style.display='none'">
                 <span>AniCatch</span>
             </a>
+
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
             
-            <div class="nav-links">
+            <div class="nav-links" id="nav-links">
                 <a href="index.html">
                     <span class="en">AniCatch</span><span class="ar">أنمي كاتش</span>
                 </a>
@@ -157,7 +177,7 @@
     </nav>
 
     <div class="container">
-        <div class="content-card">
+        <div class="doc-container">
             <h1 class="en">Privacy Policy</h1>
             <h1 class="ar">سياسة الخصوصية</h1>
             
@@ -170,13 +190,13 @@
             <div class="en">
                 <p>We at <strong>AniCatch</strong> ("we", "the App", "Development Team") are fully committed to protecting your privacy and personal data. This privacy policy outlines how we collect, use, and protect your information when you use our application and services.</p>
 
-                <h2>1. Information We Collect:</h2>
+                <h2>1. Information We Collect</h2>
                 <p>To provide a seamless user experience, we may collect the following types of information:</p>
                 <ul>
-                    <li><strong>Registration Information (Personal Data):</strong> When creating an account, we ask for basic information such as (Name, Email, Password, and Date of Birth).</li>
-                    <li><strong>Profile Data:</strong> Additional information you voluntarily choose to add, such as (Nickname, Bio, Geolocation, and Favorite Anime).</li>
+                    <li><strong>Registration Information (Personal Data):</strong> When creating an account, we ask for basic information such as Name, Email, Password, and Date of Birth.</li>
+                    <li><strong>Profile Data:</strong> Additional information you voluntarily choose to add, such as Nickname, Bio, Geolocation, and Favorite Anime.</li>
                     <li><strong>User-Generated Content:</strong> Comments, replies, ratings, and likes you share within the app.</li>
-                    <li><strong>Usage and Device Data:</strong> Technical information may be collected automatically, such as (Device type, Operating System, and unique device identifiers) to improve app performance and resolve technical issues.</li>
+                    <li><strong>Usage and Device Data:</strong> Technical information may be collected automatically, such as Device type, Operating System, and unique device identifiers to improve app performance and resolve technical issues.</li>
                     <li><strong>AniList Data:</strong> Since we integrate with AniList, we may fetch public data or authorized private data based on the permissions you grant via AniList OAuth.</li>
                 </ul>
 
@@ -189,26 +209,26 @@
                     <li>Improving and developing the app's performance based on how users interact with it.</li>
                 </ul>
 
-                <h2>3. Sharing Data with Third-Party Services:</h2>
+                <h2>3. Sharing Data with Third-Party Services</h2>
                 <p>To ensure service stability, we rely on trusted cloud service providers with global security standards. These entities process data on our behalf under strict confidentiality terms and are not permitted to use your data for their own purposes.</p>
 
-                <h2>4. Data Security:</h2>
+                <h2>4. Data Security</h2>
                 <p>We implement advanced security and V12 encryption measures to protect your data from unauthorized access, modification, or disclosure. Passwords are completely hashed so that no one, including the development team, can view them.</p>
 
-                <h2>5. User Rights (Controlling Your Data):</h2>
+                <h2>5. User Rights (Controlling Your Data)</h2>
                 <p>You have full control over your data:</p>
                 <ul>
                     <li><strong>Access and Modification:</strong> You can edit your profile data at any time through the app settings.</li>
                     <li><strong>Data Deletion:</strong> You have the right to request the permanent deletion of your account and all associated data from our servers via the deletion option within the app.</li>
                 </ul>
 
-                <h2>6. Children's Privacy:</h2>
+                <h2>6. Children's Privacy</h2>
                 <p>Our application is not directed to children under the age of 13 (or the legal age in your country). We do not knowingly collect personal information from children. If we discover that we have collected a child's data without parental consent, we will delete this information immediately.</p>
 
-                <h2>7. Changes to the Privacy Policy:</h2>
+                <h2>7. Changes to the Privacy Policy</h2>
                 <p>We may update this policy from time to time to keep pace with technical or legal changes. We will notify you of any material changes via the app or email. Your continued use of the app after an update constitutes your agreement to the revised policy.</p>
 
-                <h2>8. Contact Us:</h2>
+                <h2>8. Contact Us</h2>
                 <p>If you have any questions, inquiries, or requests regarding the privacy policy and your data, please contact us via email:<br>
                 <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
             </div>
@@ -217,13 +237,13 @@
             <div class="ar">
                 <p>نحن في تطبيق <strong>AniCatch</strong> ("نحن"، "التطبيق"، "فريق التطوير") نلتزم التزاماً كاملاً بحماية خصوصيتك وبياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمعنا للمعلومات، واستخدامها، وحمايتها عند استخدامك لتطبيقنا وخدماتنا.</p>
 
-                <h2>1. المعلومات التي نجمعها:</h2>
+                <h2>1. المعلومات التي نجمعها</h2>
                 <p>لتقديم تجربة مستخدم متكاملة، قد نقوم بجمع الأنواع التالية من المعلومات:</p>
                 <ul>
-                    <li><strong>معلومات التسجيل (البيانات الشخصية):</strong> عند إنشاء حساب، نطلب معلومات أساسية مثل (الاسم، البريد الإلكتروني، كلمة المرور، وتاريخ الميلاد).</li>
-                    <li><strong>بيانات الملف الشخصي:</strong> المعلومات الإضافية التي تختار إضافتها طواعية، مثل (اللقب، النبذة الشخصية "Bio"، الموقع الجغرافي، والأنمي المفضل).</li>
+                    <li><strong>معلومات التسجيل (البيانات الشخصية):</strong> عند إنشاء حساب، نطلب معلومات أساسية مثل الاسم، البريد الإلكتروني، كلمة المرور، وتاريخ الميلاد.</li>
+                    <li><strong>بيانات الملف الشخصي:</strong> المعلومات الإضافية التي تختار إضافتها طواعية، مثل اللقب، النبذة الشخصية، الموقع الجغرافي، والأنمي المفضل.</li>
                     <li><strong>المحتوى الذي تنشئه:</strong> التعليقات، الردود، التقييمات، والإعجابات التي تقوم بمشاركتها داخل التطبيق.</li>
-                    <li><strong>بيانات الاستخدام والجهاز:</strong> قد يتم جمع معلومات تقنية تلقائياً مثل (نوع الجهاز، نظام التشغيل، ومعرّفات الأجهزة الفريدة) لتحسين أداء التطبيق وحل المشاكل التقنية.</li>
+                    <li><strong>بيانات الاستخدام والجهاز:</strong> قد يتم جمع معلومات تقنية تلقائياً مثل نوع الجهاز، نظام التشغيل، ومعرّفات الأجهزة الفريدة لتحسين أداء التطبيق وحل المشاكل التقنية.</li>
                     <li><strong>بيانات AniList:</strong> نظراً لارتباطنا بمنصة AniList، قد نقوم بجلب بياناتك العامة أو المصرح بها بناءً على الأذونات التي تمنحها عبر تسجيل الدخول.</li>
                 </ul>
 
@@ -236,33 +256,49 @@
                     <li>تحسين وتطوير أداء التطبيق بناءً على كيفية تفاعل المستخدمين معه.</li>
                 </ul>
 
-                <h2>3. مشاركة البيانات مع أطراف ثالثة:</h2>
+                <h2>3. مشاركة البيانات مع أطراف ثالثة</h2>
                 <p>لضمان استقرار الخدمة، نعتمد على مزودي خدمات سحابية موثوقين وذوي معايير أمنية عالمية. هذه الجهات تعالج البيانات بالنيابة عنا تحت شروط سرية صارمة، ولا يُسمح لها باستخدام بياناتك لأغراضها الخاصة.</p>
 
-                <h2>4. أمان البيانات:</h2>
+                <h2>4. أمان البيانات</h2>
                 <p>نتخذ إجراءات أمنية وتشفيرية متقدمة (V12) لحماية بياناتك من الوصول غير المصرح به، التعديل، أو الإفشاء. يتم تخزين كلمات المرور بشكل مشفر تماماً (Hashed) بحيث لا يمكن لأي شخص، بما في ذلك فريق التطوير، الاطلاع عليها.</p>
 
-                <h2>5. حقوق المستخدم (التحكم في بياناتك):</h2>
+                <h2>5. حقوق المستخدم (التحكم في بياناتك)</h2>
                 <p>أنت تمتلك السيطرة الكاملة على بياناتك:</p>
                 <ul>
                     <li><strong>الوصول والتعديل:</strong> يمكنك تعديل بيانات ملفك الشخصي في أي وقت من خلال إعدادات التطبيق.</li>
                     <li><strong>حذف الحساب:</strong> يحق لك طلب حذف حسابك وكافة بياناتك المرتبطة به بشكل نهائي من خوادمنا عبر خيار الحذف داخل التطبيق.</li>
                 </ul>
 
-                <h2>6. خصوصية الأطفال:</h2>
+                <h2>6. خصوصية الأطفال</h2>
                 <p>تطبيقنا غير موجه للأطفال دون سن الـ 13 عاماً (أو السن القانوني في بلدك). نحن لا نجمع عن قصد أي معلومات شخصية من الأطفال. إذا تبين لنا أننا جمعنا بيانات طفل دون موافقة الوالدين، سنقوم بحذف هذه المعلومات فوراً.</p>
 
-                <h2>7. التغييرات على سياسة الخصوصية:</h2>
+                <h2>7. التغييرات على سياسة الخصوصية</h2>
                 <p>قد نقوم بتحديث هذه السياسة من وقت لآخر لمواكبة التغييرات التقنية أو القانونية. سنقوم بإعلامك بأي تغييرات جوهرية عبر التطبيق أو البريد الإلكتروني. استمرارك في استخدام التطبيق بعد التحديث يعني موافقتك على السياسة المعدلة.</p>
 
-                <h2>8. اتصل بنا:</h2>
+                <h2>8. اتصل بنا</h2>
                 <p>إذا كان لديك أي أسئلة، استفسارات، أو طلبات تتعلق بسياسة الخصوصية وبياناتك، يرجى التواصل معنا عبر البريد الإلكتروني:<br>
                 <a href="mailto:anime4catch@gmail.com">anime4catch@gmail.com</a></p>
             </div>
         </div>
     </div>
 
+    <footer>
+        <div class="container">
+            <p class="en">&copy; 2026 AniCatch. All Rights Reserved.</p>
+            <p class="ar">&copy; 2026 تطبيق AniCatch. جميع الحقوق محفوظة.</p>
+            <p class="en">Metadata provided by <a href="https://anilist.co/" target="_blank">AniList</a></p>
+            <p class="ar">البيانات الوصفية مقدمة من <a href="https://anilist.co/" target="_blank">AniList</a></p>
+        </div>
+    </footer>
+
     <script>
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileBtn.classList.toggle('active');
+        });
+
         function toggleLanguage() {
             var current = document.documentElement.lang;
             var nextLang = current === 'en' ? 'ar' : 'en';
@@ -270,6 +306,12 @@
             document.documentElement.lang = nextLang;
             document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
         }
+
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
     </script>
 </body>
 </html>
