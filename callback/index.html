@@ -346,8 +346,20 @@
                 });
             });
 
-            // مزامنة تلقائية مع تطبيق الـ PC
+            // مزامنة تلقائية مع تطبيق الويب وتطبيق الـ PC
             if (paramValue) {
+                // 1. مزامنة الويب (Web App LocalStorage + Window Opener)
+                try {
+                    localStorage.setItem('animecatch_auth_' + paramKey, paramValue);
+                    localStorage.setItem('animecatch_auth_latest', JSON.stringify({ key: paramKey, value: paramValue, time: Date.now() }));
+                    if (window.opener) {
+                        window.opener.postMessage({ type: 'animecatch_auth', key: paramKey, value: paramValue }, '*');
+                    }
+                } catch (e) {
+                    console.error('LocalStorage sync error:', e);
+                }
+
+                // 2. مزامنة تطبيق الـ PC المحلي (Desktop Server)
                 loadingState.style.display = 'block';
                 const localUrl = "http://127.0.0.1:57342/auth?" + paramKey + "=" + encodeURIComponent(paramValue);
                 
@@ -356,11 +368,13 @@
                         loadingState.style.display = 'none';
                         statusMessage.style.display = 'block';
                         statusMessage.className = 'status-success';
-                        statusMessage.innerText = "✓ تم تسجيل الدخول في تطبيق الـ PC بنجاح!";
+                        statusMessage.innerText = "✓ تم استلام بيانات التوثيق بنجاح! يمكنك الآن العودة للتطبيق.";
                     })
                     .catch((err) => {
                         loadingState.style.display = 'none';
-                        window.location.href = deepLinkBtn.href;
+                        if (deepLinkBtn && deepLinkBtn.href && deepLinkBtn.href.startsWith('animecatch://')) {
+                            window.location.href = deepLinkBtn.href;
+                        }
                     });
             }
         });
