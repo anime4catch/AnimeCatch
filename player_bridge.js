@@ -1,7 +1,7 @@
 /**
  * Anime Catch - Web Video Bridge & Native HTML5/Iframe Player
- * Handles StreamTape, PixelDrain, MediaFire, HLS (m3u8), and MP4
- * seamlessly on Flutter Web without CORS restrictions.
+ * Handles StreamTape, PixelDrain, MediaFire, KrakenFiles, SendVid,
+ * HLS (m3u8), and MP4 seamlessly on Flutter Web without CORS restrictions.
  */
 
 (function () {
@@ -150,8 +150,61 @@
     overlay.style.display = 'none';
   }
 
-  function openWebVideoPlayer(rawUrl, title, serverName) {
+  function showLoading(container, text) {
+    container.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; gap: 16px;">
+        <div style="width: 44px; height: 44px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #1e90ff; border-radius: 50%; animation: animeSpin 0.9s linear infinite;"></div>
+        <div style="font-size: 14px; font-weight: 600; color: #e0e0e0;">${text}</div>
+      </div>
+      <style>
+        @keyframes animeSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    `;
+  }
+
+  async function resolveMediaFireUrl(url) {
+    if (url.includes('download') && url.includes('mediafire.com')) {
+      return url;
+    }
+
+    const encoded = encodeURIComponent(url);
+    const proxies = [
+      `https://api.allorigins.win/raw?url=${encoded}`,
+      `https://api.codetabs.com/v1/proxy?quest=${encoded}`,
+      `https://corsproxy.org/?url=${encoded}`,
+    ];
+
+    for (const p of proxies) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4500);
+        const res = await fetch(p, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const text = await res.text();
+          // Regex for direct download URL
+          const mDirect = text.match(/https?:\/\/download[0-9]*\.mediafire\.com\/[^\s"'<>]+/i);
+          if (mDirect) return mDirect[0];
+
+          const mLabel = text.match(/aria-label=["']Download file["'][\s\S]*?href=["'](https?:\/\/[^"']+)["']/i);
+          if (mLabel) return mLabel[1];
+
+          const mBtn = text.match(/id=["']downloadButton["'][\s\S]*?href=["'](https?:\/\/[^"']+)["']/i);
+          if (mBtn) return mBtn[1];
+        }
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  async function openWebVideoPlayer(rawUrl, title, serverName) {
     if (!rawUrl || typeof rawUrl !== 'string') return;
+
+    console.log('[AnimeCatch Web Player] Launching:', { rawUrl, title, serverName });
 
     const overlay = createPlayerOverlay();
     const titleEl = document.getElementById('player-video-title');
@@ -173,26 +226,7 @@
     const srvLower = (serverName || '').toLowerCase();
 
     // ==========================================
-    // 1. StreamTape (ST) - Embed IFrame
-    // ==========================================
-    if (urlLower.includes('streamtape.com') || srvLower.includes('streamtape') || srvLower.includes('st')) {
-      let embedUrl = rawUrl;
-      const match = rawUrl.match(/streamtape\.com\/(?:v|e)\/([a-zA-Z0-9]+)/);
-      if (match && match[1]) {
-        embedUrl = `https://streamtape.com/e/${match[1]}/`;
-      }
-
-      const iframe = document.createElement('iframe');
-      iframe.src = embedUrl;
-      iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
-      iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
-      iframe.setAttribute('allowfullscreen', 'true');
-      container.appendChild(iframe);
-      return;
-    }
-
-    // ==========================================
-    // 2. PixelDrain (PD) - Direct HTML5 Video
+    // 1. PixelDrain (PD) - Direct HTML5 Video
     // ==========================================
     if (urlLower.includes('pixeldrain.com') || srvLower.includes('pixeldrain') || srvLower.includes('pd')) {
       let fileId = '';
@@ -213,9 +247,82 @@
     }
 
     // ==========================================
-    // 3. MediaFire (MF) - Download / Stream Card
+    // 2. StreamTape (ST) - Embed IFrame
+    // ==========================================
+    if (urlLower.includes('streamtape.com') || srvLower.includes('streamtape') || srvLower.includes('st')) {
+      let embedUrl = rawUrl;
+      const match = rawUrl.match(/streamtape\.com\/(?:v|e)\/([a-zA-Z0-9]+)/);
+      if (match && match[1]) {
+        embedUrl = `https://streamtape.com/e/${match[1]}/`;
+      }
+
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
+      iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+      iframe.setAttribute('allowfullscreen', 'true');
+      container.appendChild(iframe);
+      return;
+    }
+
+    // ==========================================
+    // 3. KrakenFiles (KF) - Embed IFrame
+    // ==========================================
+    if (urlLower.includes('krakenfiles.com') || srvLower.includes('kraken') || srvLower.includes('kf')) {
+      let fileId = '';
+      const match = rawUrl.match(/krakenfiles\.com\/(?:view|embed-video)\/([a-zA-Z0-9]+)/);
+      if (match && match[1]) fileId = match[1];
+
+      const embedUrl = fileId ? `https://krakenfiles.com/embed-video/${fileId}` : rawUrl;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
+      iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+      iframe.setAttribute('allowfullscreen', 'true');
+      container.appendChild(iframe);
+      return;
+    }
+
+    // ==========================================
+    // 4. SendVid (SF) - Embed IFrame
+    // ==========================================
+    if (urlLower.includes('sendvid.com') || srvLower.includes('sendvid')) {
+      let videoId = '';
+      const match = rawUrl.match(/sendvid\.com\/(?:embed\/)?([a-zA-Z0-9]+)/);
+      if (match && match[1]) videoId = match[1];
+
+      const embedUrl = videoId ? `https://sendvid.com/embed/${videoId}` : rawUrl;
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
+      iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+      iframe.setAttribute('allowfullscreen', 'true');
+      container.appendChild(iframe);
+      return;
+    }
+
+    // ==========================================
+    // 5. MediaFire (MF) - Live Resolve & Video Mount
     // ==========================================
     if (urlLower.includes('mediafire.com') || srvLower.includes('mf')) {
+      showLoading(container, 'جاري فحص وتجهيز سيرفر MediaFire للمشاهدة المباشرة...');
+
+      const direct = await resolveMediaFireUrl(rawUrl);
+      if (direct) {
+        container.innerHTML = '';
+        const video = document.createElement('video');
+        video.src = direct;
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.style.cssText = 'width: 100%; height: 100%; max-height: 100%; object-fit: contain; background: #000;';
+        container.appendChild(video);
+        return;
+      }
+
+      // If scraping failed or timed out, display high-end fallback card + embed
+      container.innerHTML = '';
       const card = document.createElement('div');
       card.style.cssText = `
         background: #14141e;
@@ -244,7 +351,7 @@
             font-size: 14px;
             font-weight: bold;
             display: inline-block;
-          ">▶ فتح في MediaFire</a>
+          ">▶ فتح ومشاهدة في MediaFire</a>
         </div>
       `;
       container.appendChild(card);
@@ -252,7 +359,7 @@
     }
 
     // ==========================================
-    // 4. HLS Stream (.m3u8) via Hls.js
+    // 6. HLS Stream (.m3u8) via Hls.js
     // ==========================================
     if (urlLower.includes('.m3u8')) {
       const video = document.createElement('video');
@@ -282,7 +389,7 @@
     }
 
     // ==========================================
-    // 5. Standard MP4 Video
+    // 7. Standard MP4 Video
     // ==========================================
     if (urlLower.includes('.mp4') || urlLower.includes('.webm')) {
       const video = document.createElement('video');
@@ -296,7 +403,7 @@
     }
 
     // ==========================================
-    // 6. Generic Embed IFrame fallback
+    // 8. Generic Embed IFrame fallback
     // ==========================================
     const iframe = document.createElement('iframe');
     iframe.src = rawUrl;
