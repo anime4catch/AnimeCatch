@@ -3,18 +3,41 @@
  * Complete Netflix / Crunchyroll-style player for Flutter Web.
  * 
  * Features:
- *   - Quality & Server live switcher (1080p FHD, 720p HD, 480p SD, MF, ST, PD, KF, AR)
+ *   - Quality & Server live switcher (1080p FHD, 720p HD, 480p SD, MF, ST, PD, KF, BK, SA)
  *   - In-player Episode Drawer & quick Next/Previous episode navigation
+ *   - High-precision SVG vector icons (Zero childish emojis)
+ *   - Strictly oriented seek controls: Left = Rewind -10s, Right = Forward +10s
+ *   - Zeroed-out initial time indicator (00:00 / 00:00) during loading and buffering
+ *   - High-grade error modal dialog on link failure or server disconnection
+ *   - Full Android & Mobile responsiveness with prominent fullscreen controls
  *   - Cloudflare Worker link resolution with zero CORS restrictions
- *   - Interactive scrubbing timeline with hover preview and buffer indicator
- *   - Double-tap/double-click seek gestures (10s back / forward)
- *   - Playback speed switcher (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x)
- *   - Auto-play next episode countdown on completion
+ *   - Interactive scrubbing timeline with buffer indicator
  *   - Full keyboard shortcuts (Space, F, M, Arrows, N, P, Esc)
  */
 
 (function () {
   'use strict';
+
+  // Crisp, professional SVG Vector Icons
+  const ICONS = {
+    play: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>',
+    rewind10: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12.5 4a8.5 8.5 0 1 0 8.5 8.5" stroke-linecap="round"/><path d="M12.5 1.5l-3 2.5 3 2.5v-5z" fill="currentColor"/><text x="12" y="16.2" font-size="7.5" font-weight="900" fill="currentColor" text-anchor="middle" stroke="none">10</text></svg>',
+    forward10: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11.5 4a8.5 8.5 0 1 1-8.5 8.5" stroke-linecap="round"/><path d="M11.5 1.5l3 2.5-3 2.5v-5z" fill="currentColor"/><text x="12" y="16.2" font-size="7.5" font-weight="900" fill="currentColor" text-anchor="middle" stroke="none">10</text></svg>',
+    prevEp: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 6h2.5v12H6zm3 6l9 6V6z"/></svg>',
+    nextEp: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 18l9-6-9-6v12zm9.5-12v12H18V6z"/></svg>',
+    volumeUp: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',
+    volumeMute: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>',
+    fullscreen: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>',
+    fullscreenExit: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-14v3h3v2h-5V5h2z"/></svg>',
+    settings: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
+    episodes: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg>',
+    back: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+    close: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+    external: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>',
+    check: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+    error: '<svg viewBox="0 0 24 24" width="34" height="34" fill="#ff5252"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
+  };
 
   let currentHls = null;
   let controlsHideTimeout = null;
@@ -32,6 +55,7 @@
     isDrawerOpen: false,
     isQualityMenuOpen: false,
     isSpeedMenuOpen: false,
+    isLoading: false,
   };
 
   function createPlayerDOM() {
@@ -86,7 +110,7 @@
         left: 0;
         right: 0;
         height: 120px;
-        background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+        background: linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0) 100%);
       }
       .ac-bottom-gradient {
         position: absolute;
@@ -121,7 +145,7 @@
       .ac-header-left {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
         overflow: hidden;
       }
       .ac-btn-icon {
@@ -135,8 +159,9 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(10px);
         transition: all 0.2s ease;
+        flex-shrink: 0;
       }
       .ac-btn-icon:hover {
         background: rgba(30, 144, 255, 0.85);
@@ -155,13 +180,14 @@
         align-items: center;
         gap: 8px;
         cursor: pointer;
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(10px);
         transition: all 0.2s ease;
+        white-space: nowrap;
       }
       .ac-btn-pill:hover, .ac-btn-pill.active {
         background: #1e90ff;
         border-color: #1e90ff;
-        box-shadow: 0 0 15px rgba(30, 144, 255, 0.5);
+        box-shadow: 0 0 16px rgba(30, 144, 255, 0.5);
       }
       .ac-title-group {
         display: flex;
@@ -200,34 +226,38 @@
         color: #00e676;
         border: 1px solid rgba(0, 200, 83, 0.35);
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
       .ac-center-controls {
         align-self: center;
         display: flex;
         align-items: center;
-        gap: 28px;
+        gap: 24px;
+        direction: ltr; /* Strict left-to-right geometry for control positioning */
       }
       .ac-btn-big-play {
-        width: 68px;
-        height: 68px;
+        width: 66px;
+        height: 66px;
         border-radius: 50%;
-        background: rgba(30, 144, 255, 0.9);
+        background: #1e90ff;
         color: #fff;
-        border: 2px solid rgba(255, 255, 255, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 0 30px rgba(30, 144, 255, 0.5);
+        box-shadow: 0 0 30px rgba(30, 144, 255, 0.6);
         transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
       .ac-btn-big-play:hover {
         transform: scale(1.12);
-        background: #1e90ff;
+        background: #0077ea;
       }
       .ac-btn-secondary {
-        width: 48px;
-        height: 48px;
+        width: 46px;
+        height: 46px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.14);
         color: #fff;
@@ -249,7 +279,7 @@
       }
       .ac-seek-bar-container {
         width: 100%;
-        height: 20px;
+        height: 22px;
         display: flex;
         align-items: center;
         cursor: pointer;
@@ -290,11 +320,12 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 12px;
       }
       .ac-controls-group {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
       }
       .ac-time-display {
         color: #ffffff;
@@ -308,11 +339,11 @@
         top: 0;
         bottom: 0;
         right: -360px;
-        width: 340px;
-        background: rgba(14, 15, 26, 0.96);
-        backdrop-filter: blur(20px);
+        width: 330px;
+        background: rgba(14, 15, 26, 0.98);
+        backdrop-filter: blur(24px);
         border-left: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+        box-shadow: -10px 0 40px rgba(0,0,0,0.85);
         display: flex;
         flex-direction: column;
         z-index: 50;
@@ -322,7 +353,7 @@
         right: 0;
       }
       .ac-drawer-header {
-        padding: 20px 18px 14px 18px;
+        padding: 18px 18px 14px 18px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
         align-items: center;
@@ -360,8 +391,8 @@
       }
       .ac-menu-popup {
         position: absolute;
-        bottom: 72px;
-        background: rgba(18, 19, 32, 0.95);
+        bottom: 74px;
+        background: rgba(18, 19, 32, 0.96);
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 16px;
@@ -369,9 +400,11 @@
         display: none;
         flex-direction: column;
         gap: 4px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.85);
         z-index: 40;
-        min-width: 180px;
+        min-width: 190px;
+        max-height: 280px;
+        overflow-y: auto;
       }
       .ac-menu-popup.open {
         display: flex;
@@ -396,8 +429,8 @@
         background: rgba(30, 144, 255, 0.15);
       }
       .ac-spinner {
-        width: 46px;
-        height: 46px;
+        width: 50px;
+        height: 50px;
         border: 4px solid rgba(255,255,255,0.15);
         border-top-color: #1e90ff;
         border-radius: 50%;
@@ -410,23 +443,138 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        padding: 16px 26px;
+        padding: 14px 24px;
         border-radius: 40px;
         background: rgba(0,0,0,0.85);
         border: 1px solid rgba(255,255,255,0.3);
         color: #fff;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.2s ease;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         z-index: 25;
       }
       .ac-seek-alert.show {
         opacity: 1;
+      }
+
+      /* Professional Error Modal */
+      .ac-error-modal {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(12px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 60;
+        padding: 16px;
+      }
+      .ac-error-modal.show {
+        display: flex;
+      }
+      .ac-error-card {
+        background: #151622;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 20px;
+        padding: 28px 24px;
+        max-width: 420px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+      }
+      .ac-error-title {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 12px;
+      }
+      .ac-error-msg {
+        color: rgba(255,255,255,0.7);
+        font-size: 13.5px;
+        line-height: 1.5;
+        margin-top: 8px;
+        margin-bottom: 22px;
+      }
+      .ac-error-actions {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+      }
+      .ac-btn-modal {
+        flex: 1;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+      }
+      .ac-btn-modal.primary {
+        background: #1e90ff;
+        color: #ffffff;
+      }
+      .ac-btn-modal.primary:hover {
+        background: #0077ea;
+      }
+      .ac-btn-modal.secondary {
+        background: rgba(255,255,255,0.12);
+        color: #ffffff;
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      .ac-btn-modal.secondary:hover {
+        background: rgba(255,255,255,0.22);
+      }
+
+      /* Mobile & Android Responsiveness */
+      @media (max-width: 650px) {
+        .ac-controls-layer {
+          padding: 12px 14px;
+        }
+        .ac-header-left {
+          gap: 8px;
+        }
+        .ac-anime-title {
+          max-width: 130px;
+          font-size: 13.5px;
+        }
+        .ac-btn-pill {
+          padding: 5px 10px;
+          font-size: 11px;
+          gap: 5px;
+        }
+        .ac-btn-icon {
+          width: 36px;
+          height: 36px;
+        }
+        .ac-center-controls {
+          gap: 16px;
+        }
+        .ac-btn-big-play {
+          width: 54px;
+          height: 54px;
+        }
+        .ac-btn-secondary {
+          width: 40px;
+          height: 40px;
+        }
+        .ac-drawer {
+          width: 82vw;
+        }
+        .ac-btn-fullscreen-prominent {
+          width: 40px !important;
+          height: 40px !important;
+          background: #1e90ff !important;
+          border-color: #fff !important;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -439,9 +587,15 @@
         <div class="ac-bottom-gradient"></div>
       </div>
 
-      <!-- Left / Right Double-tap Seek Indicators -->
-      <div id="ac-seek-left" class="ac-seek-alert" style="left: 10%;">⏪ -10s</div>
-      <div id="ac-seek-right" class="ac-seek-alert" style="right: 10%;">+10s ⏩</div>
+      <!-- Strict Seek Feedback Indicators: Left = Rewind -10s, Right = Forward +10s -->
+      <div id="ac-seek-left" class="ac-seek-alert" style="left: 10%;">
+        ${ICONS.rewind10}
+        <span>10s-</span>
+      </div>
+      <div id="ac-seek-right" class="ac-seek-alert" style="right: 10%;">
+        <span>10s+</span>
+        ${ICONS.forward10}
+      </div>
 
       <!-- Controls Overlay -->
       <div class="ac-controls-layer" id="ac-controls-layer">
@@ -449,39 +603,42 @@
         <div class="ac-header">
           <div class="ac-header-left">
             <button class="ac-btn-pill" id="ac-btn-back">
-              <span>&#8592;</span>
+              ${ICONS.back}
               <span>رجوع</span>
             </button>
             <div class="ac-title-group">
               <span class="ac-anime-title" id="ac-anime-title">Anime Catch</span>
               <div class="ac-badges-row">
                 <span class="ac-badge ac-badge-ep" id="ac-badge-ep">الحلقة 1</span>
-                <span class="ac-badge ac-badge-server" id="ac-badge-server">سيرفر المشاهدة ⚙️</span>
+                <span class="ac-badge ac-badge-server" id="ac-badge-server">
+                  ${ICONS.settings}
+                  <span id="ac-badge-server-text">سيرفر المشاهدة</span>
+                </span>
               </div>
             </div>
           </div>
 
           <div class="ac-controls-group">
             <button class="ac-btn-pill" id="ac-btn-quality">
-              <span>⚙️</span>
-              <span id="ac-quality-label">الجودة والسيرفر</span>
+              ${ICONS.settings}
+              <span id="ac-quality-label">السيرفر والجودة</span>
             </button>
             <button class="ac-btn-pill" id="ac-btn-episodes">
-              <span>☰</span>
+              ${ICONS.episodes}
               <span>الحلقات</span>
             </button>
-            <button class="ac-btn-icon" id="ac-btn-ext" title="فتح خارجي">&#x2197;</button>
-            <button class="ac-btn-icon" id="ac-btn-close" title="إغلاق">&#x2715;</button>
+            <button class="ac-btn-icon" id="ac-btn-ext" title="فتح خارجي">${ICONS.external}</button>
+            <button class="ac-btn-icon" id="ac-btn-close" title="إغلاق">${ICONS.close}</button>
           </div>
         </div>
 
-        <!-- Center Controls -->
+        <!-- Center Controls: Strictly [Previous] [Rewind -10s] [PLAY] [Forward +10s] [Next] -->
         <div class="ac-center-controls">
-          <button class="ac-btn-secondary" id="ac-btn-prev-ep" title="الحلقة السابقة">⏮</button>
-          <button class="ac-btn-secondary" id="ac-btn-rwd10" title="تأخير 10 ثوانٍ">↺ 10</button>
-          <button class="ac-btn-big-play" id="ac-btn-play-center">▶</button>
-          <button class="ac-btn-secondary" id="ac-btn-fwd10" title="تقديم 10 ثوانٍ">10 ↻</button>
-          <button class="ac-btn-secondary" id="ac-btn-next-ep" title="الحلقة التالية">⏭</button>
+          <button class="ac-btn-secondary" id="ac-btn-prev-ep" title="الحلقة السابقة">${ICONS.prevEp}</button>
+          <button class="ac-btn-secondary" id="ac-btn-rwd10" title="تأخير 10 ثوانٍ (Rewind -10s)">${ICONS.rewind10}</button>
+          <button class="ac-btn-big-play" id="ac-btn-play-center" title="تشغيل / إيقاف">${ICONS.play}</button>
+          <button class="ac-btn-secondary" id="ac-btn-fwd10" title="تقديم 10 ثوانٍ (Forward +10s)">${ICONS.forward10}</button>
+          <button class="ac-btn-secondary" id="ac-btn-next-ep" title="الحلقة التالية">${ICONS.nextEp}</button>
         </div>
 
         <!-- Bottom Controls -->
@@ -495,14 +652,14 @@
 
           <div class="ac-bottom-controls">
             <div class="ac-controls-group">
-              <button class="ac-btn-icon" id="ac-btn-play-small" style="width:36px;height:36px;">▶</button>
-              <button class="ac-btn-icon" id="ac-btn-mute" style="width:36px;height:36px;">🔊</button>
+              <button class="ac-btn-icon" id="ac-btn-play-small" style="width:38px;height:38px;" title="تشغيل / إيقاف">${ICONS.play}</button>
+              <button class="ac-btn-icon" id="ac-btn-mute" style="width:38px;height:38px;" title="كتم / تفعيل الصوت">${ICONS.volumeUp}</button>
               <span class="ac-time-display" id="ac-time-display">00:00 / 00:00</span>
             </div>
 
             <div class="ac-controls-group">
-              <button class="ac-btn-pill" id="ac-btn-speed" style="padding:4px 12px;font-size:12px;">1.0x</button>
-              <button class="ac-btn-icon" id="ac-btn-fullscreen" style="width:36px;height:36px;" title="ملء الشاشة">⛶</button>
+              <button class="ac-btn-pill" id="ac-btn-speed" style="padding:4px 12px;font-size:12px;" title="سرعة التشغيل">1.0x</button>
+              <button class="ac-btn-icon ac-btn-fullscreen-prominent" id="ac-btn-fullscreen" style="width:38px;height:38px;" title="ملء الشاشة">${ICONS.fullscreen}</button>
             </div>
           </div>
         </div>
@@ -510,7 +667,7 @@
 
       <!-- Popups -->
       <div class="ac-menu-popup" id="ac-quality-popup" style="right: 120px;"></div>
-      <div class="ac-menu-popup" id="ac-speed-popup" style="right: 80px;">
+      <div class="ac-menu-popup" id="ac-speed-popup" style="right: 60px;">
         <div class="ac-menu-item" data-speed="0.5">0.5x بطيء</div>
         <div class="ac-menu-item" data-speed="0.75">0.75x</div>
         <div class="ac-menu-item active" data-speed="1.0">1.0x عادي</div>
@@ -523,12 +680,26 @@
       <div class="ac-drawer" id="ac-episodes-drawer">
         <div class="ac-drawer-header">
           <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:18px;">🎬</span>
+            ${ICONS.episodes}
             <span style="font-weight:bold;font-size:15px;">قائمة الحلقات</span>
           </div>
-          <button class="ac-btn-icon" id="ac-btn-drawer-close" style="width:32px;height:32px;">✕</button>
+          <button class="ac-btn-icon" id="ac-btn-drawer-close" style="width:32px;height:32px;">${ICONS.close}</button>
         </div>
         <div class="ac-drawer-content" id="ac-episodes-list"></div>
+      </div>
+
+      <!-- Error Modal Dialog -->
+      <div class="ac-error-modal" id="ac-error-modal">
+        <div class="ac-error-card">
+          ${ICONS.error}
+          <div class="ac-error-title">تعذر تشغيل هذا السيرفر</div>
+          <div class="ac-error-msg" id="ac-error-msg">السيرفر الحالي لا يستجيب أو الرابط غير صالح حالياً.</div>
+          <div class="ac-error-actions">
+            <button class="ac-btn-modal primary" id="ac-btn-err-next">تجربة سيرفر آخر</button>
+            <button class="ac-btn-modal secondary" id="ac-btn-err-retry">إعادة المحاولة</button>
+            <button class="ac-btn-modal secondary" id="ac-btn-err-close">إغلاق</button>
+          </div>
+        </div>
       </div>
     `;
 
@@ -573,9 +744,9 @@
         const rect = container.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         if (clickX < rect.width * 0.4) {
-          seekRelative(-10);
+          seekRelative(-10); // Strictly Rewind on left
         } else if (clickX > rect.width * 0.6) {
-          seekRelative(10);
+          seekRelative(10); // Strictly Forward on right
         } else {
           togglePlay();
         }
@@ -596,7 +767,7 @@
     document.getElementById('ac-btn-play-center').onclick = togglePlay;
     document.getElementById('ac-btn-play-small').onclick = togglePlay;
 
-    // Seek buttons
+    // Strictly: Left = Rewind -10, Right = Forward +10
     document.getElementById('ac-btn-rwd10').onclick = () => seekRelative(-10);
     document.getElementById('ac-btn-fwd10').onclick = () => seekRelative(10);
 
@@ -626,7 +797,7 @@
     // Mute toggle
     document.getElementById('ac-btn-mute').onclick = toggleMute;
 
-    // Fullscreen toggle
+    // Fullscreen toggle (Android and Desktop compatible)
     document.getElementById('ac-btn-fullscreen').onclick = toggleFullscreen;
 
     // Seekbar scrubbing
@@ -637,6 +808,20 @@
       const rect = seekBar.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       video.currentTime = pos * video.duration;
+    };
+
+    // Error Dialog Buttons
+    document.getElementById('ac-btn-err-next').onclick = () => {
+      hideErrorDialog();
+      playNextServer();
+    };
+    document.getElementById('ac-btn-err-retry').onclick = () => {
+      hideErrorDialog();
+      switchServer(state.currentServerIndex);
+    };
+    document.getElementById('ac-btn-err-close').onclick = () => {
+      hideErrorDialog();
+      closeCinemaPlayer();
     };
 
     // Keyboard shortcuts
@@ -656,10 +841,10 @@
       togglePlay();
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      seekRelative(-10);
+      seekRelative(-10); // Strictly Rewind
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
-      seekRelative(10);
+      seekRelative(10); // Strictly Forward
     } else if (e.key === 'f' || e.key === 'F') {
       toggleFullscreen();
     } else if (e.key === 'm' || e.key === 'M') {
@@ -702,9 +887,9 @@
   function updatePlayIcons(isPaused) {
     const btnCenter = document.getElementById('ac-btn-play-center');
     const btnSmall = document.getElementById('ac-btn-play-small');
-    const symbol = isPaused ? '▶' : '❚❚';
-    if (btnCenter) btnCenter.textContent = symbol;
-    if (btnSmall) btnSmall.textContent = symbol;
+    const symbol = isPaused ? ICONS.play : ICONS.pause;
+    if (btnCenter) btnCenter.innerHTML = symbol;
+    if (btnSmall) btnSmall.innerHTML = symbol;
   }
 
   function toggleMute() {
@@ -714,7 +899,7 @@
 
     video.muted = !video.muted;
     const btnMute = document.getElementById('ac-btn-mute');
-    if (btnMute) btnMute.textContent = video.muted ? '🔇' : '🔊';
+    if (btnMute) btnMute.innerHTML = video.muted ? ICONS.volumeMute : ICONS.volumeUp;
   }
 
   function setPlaybackSpeed(speed) {
@@ -736,10 +921,30 @@
 
   function toggleFullscreen() {
     const overlay = document.getElementById('anime-cinema-player');
-    if (!document.fullscreenElement) {
-      overlay.requestFullscreen().catch(() => {});
+    const video = overlay.querySelector('video');
+
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+    if (!isFs) {
+      if (overlay.requestFullscreen) {
+        overlay.requestFullscreen().catch(() => {
+          if (video && video.webkitEnterFullscreen) {
+            video.webkitEnterFullscreen();
+          }
+        });
+      } else if (overlay.webkitRequestFullscreen) {
+        overlay.webkitRequestFullscreen();
+      } else if (video && video.webkitEnterFullscreen) {
+        video.webkitEnterFullscreen();
+      }
+      document.getElementById('ac-btn-fullscreen').innerHTML = ICONS.fullscreenExit;
     } else {
-      document.exitFullscreen().catch(() => {});
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      document.getElementById('ac-btn-fullscreen').innerHTML = ICONS.fullscreen;
     }
   }
 
@@ -769,7 +974,7 @@
           <span style="font-weight:bold;font-size:14px;">الحلقة ${i}</span>
           ${epData && epData.title ? `<span style="font-size:12px;opacity:0.8;">${epData.title}</span>` : ''}
         </div>
-        <span style="font-size:12px;">${isCurrent ? '▶ تشاهد الآن' : 'تشغيل'}</span>
+        <span style="font-size:12px;">${isCurrent ? 'تشاهد الآن' : 'تشغيل'}</span>
       `;
 
       item.onclick = () => {
@@ -826,7 +1031,7 @@
           <span>${srv.serverName || 'سيرفر'}</span>
           <span style="font-size:11px;background:rgba(255,255,255,0.15);padding:1px 6px;border-radius:4px;">${srv.quality || 'Auto'}</span>
         </div>
-        <span>${isActive ? '✓ يعمل' : ''}</span>
+        <span>${isActive ? ICONS.check : ''}</span>
       `;
 
       item.onclick = () => {
@@ -852,6 +1057,15 @@
     }
   }
 
+  function playNextServer() {
+    if (state.servers.length > 1) {
+      const nextIdx = (state.currentServerIndex + 1) % state.servers.length;
+      switchServer(nextIdx);
+    } else {
+      switchServer(state.currentServerIndex);
+    }
+  }
+
   async function switchEpisode(epNum) {
     console.log('[AnimeCatch Cinema Player] Switching to episode:', epNum);
     state.episodeNumber = epNum;
@@ -862,30 +1076,30 @@
 
     showCenterSpinner(`جاري تحضير الحلقة ${epNum}...`);
 
-    // Fetch servers for new episode using worker or API proxy
-    try {
-      const searchUrl = `https://corsproxy.org/?url=${encodeURIComponent(`https://animeslayer.net/api?ep=${epNum}&title=${encodeURIComponent(state.animeTitle)}`)}`;
-      // If we already have server list, we switch to it
-      if (state.servers.length > 0) {
-        await switchServer(0);
-      }
-    } catch (_) {
-      if (state.servers.length > 0) switchServer(0);
+    // Reset progress and zero out time
+    resetTimeDisplay();
+
+    // Notify Flutter Web parent if registered
+    if (window.flutterOnEpisodeChange) {
+      try {
+        window.flutterOnEpisodeChange(epNum);
+      } catch (_) {}
     }
   }
 
   async function switchServer(serverIdx) {
-    if (!state.servers[serverIdx]) return;
+    if (!state.servers || !state.servers[serverIdx]) return;
     state.currentServerIndex = serverIdx;
     const targetServer = state.servers[serverIdx];
 
     // Update server badge
-    const badgeServer = document.getElementById('ac-badge-server');
+    const badgeText = document.getElementById('ac-badge-server-text');
     const qualityLabel = document.getElementById('ac-quality-label');
     const labelText = `${targetServer.serverName} • ${targetServer.quality || 'Auto'}`;
-    if (badgeServer) badgeServer.textContent = `${labelText} ⚙️`;
+    if (badgeText) badgeText.textContent = labelText;
     if (qualityLabel) qualityLabel.textContent = labelText;
 
+    resetTimeDisplay();
     showCenterSpinner(`جاري التبديل إلى ${targetServer.serverName}...`);
 
     const direct = await resolveStreamLink(targetServer.link, targetServer.serverName);
@@ -893,6 +1107,7 @@
   }
 
   function showCenterSpinner(text) {
+    state.isLoading = true;
     const container = document.getElementById('ac-video-container');
     container.innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;gap:16px;color:#ffffff;">
@@ -902,16 +1117,44 @@
     `;
   }
 
+  function resetTimeDisplay() {
+    const timeDisplay = document.getElementById('ac-time-display');
+    if (timeDisplay) timeDisplay.textContent = '00:00 / 00:00';
+    const progress = document.getElementById('ac-seek-progress');
+    if (progress) progress.style.width = '0%';
+    const buffer = document.getElementById('ac-seek-buffer');
+    if (buffer) buffer.style.width = '0%';
+  }
+
+  function showErrorDialog(serverName, customMsg) {
+    const modal = document.getElementById('ac-error-modal');
+    const msgEl = document.getElementById('ac-error-msg');
+    if (msgEl) {
+      msgEl.innerHTML = customMsg || `تعذر تشغيل سيرفر المشاهدة (<b>${serverName}</b>). يمكنك الانتقال لسيرفر آخر أو إعادة المحاولة.`;
+    }
+    if (modal) modal.classList.add('show');
+  }
+
+  function hideErrorDialog() {
+    const modal = document.getElementById('ac-error-modal');
+    if (modal) modal.classList.remove('show');
+  }
+
   async function resolveStreamLink(rawUrl, serverName) {
+    if (!rawUrl) return '';
     const urlLower = rawUrl.toLowerCase();
 
-    // 1. PixelDrain Direct
+    // 1. PixelDrain Direct Conversion
     if (urlLower.includes('pixeldrain.com')) {
       const m = rawUrl.match(/pixeldrain\.com\/(?:u|api\/file|file|d|l)\/([a-zA-Z0-9_-]+)/);
       if (m) return `https://pixeldrain.com/api/file/${m[1]}?download`;
+      if (rawUrl.includes('id=')) {
+        const id = rawUrl.split('id=')[1].split('&')[0];
+        if (id) return `https://pixeldrain.com/api/file/${id}?download`;
+      }
     }
 
-    // 2. Query Cloudflare Worker for Instant Extraction (MF, ST, KF, etc.)
+    // 2. Query Cloudflare Worker for Instant Link Resolution (MF, ST, KF, BK, etc.)
     if (state.workerUrl) {
       try {
         const queryUri = `${state.workerUrl}${state.workerUrl.includes('?') ? '&' : '?'}url=${encodeURIComponent(rawUrl)}&server=${encodeURIComponent(serverName)}&format=json`;
@@ -922,13 +1165,16 @@
             return data.direct_link;
           }
         }
-      } catch (_) {}
+      } catch (err) {
+        console.warn('[Cinema Player] Worker resolution error:', err);
+      }
     }
 
     return rawUrl;
   }
 
   function mountVideoSource(streamUrl, serverName) {
+    hideErrorDialog();
     state.currentUrl = streamUrl;
     const container = document.getElementById('ac-video-container');
     container.innerHTML = '';
@@ -940,7 +1186,12 @@
 
     const urlLower = streamUrl.toLowerCase();
     const isHls = urlLower.includes('.m3u8');
-    const isDirectVideo = urlLower.includes('.mp4') || urlLower.includes('.webm') || urlLower.includes('pixeldrain.com') || urlLower.includes('download');
+    const isDirectVideo = urlLower.includes('.mp4') || 
+                          urlLower.includes('.webm') || 
+                          urlLower.includes('pixeldrain.com') || 
+                          urlLower.includes('tapecontent.net') ||
+                          urlLower.includes('bkvideo') ||
+                          urlLower.includes('download');
 
     if (isHls || isDirectVideo) {
       const video = document.createElement('video');
@@ -949,9 +1200,20 @@
       video.playsInline = true;
       video.style.cssText = 'width: 100%; height: 100%; object-fit: contain; background: #000;';
 
+      // Always reset time while loading
+      resetTimeDisplay();
+
+      video.onloadedmetadata = () => {
+        state.isLoading = false;
+        if (video.duration && !isNaN(video.duration)) {
+          const total = formatSeconds(video.duration);
+          document.getElementById('ac-time-display').textContent = `00:00 / ${total}`;
+        }
+      };
+
       // Attach timeline listeners
       video.ontimeupdate = () => {
-        if (!video.duration) return;
+        if (!video.duration || isNaN(video.duration)) return;
         const current = formatSeconds(video.currentTime);
         const total = formatSeconds(video.duration);
         document.getElementById('ac-time-display').textContent = `${current} / ${total}`;
@@ -970,21 +1232,33 @@
       video.onpause = () => updatePlayIcons(true);
       video.onended = onVideoEnded;
 
+      video.onerror = (e) => {
+        console.error('[Cinema Player] Video playback error:', e);
+        showErrorDialog(serverName);
+      };
+
       if (isHls && window.Hls && window.Hls.isSupported()) {
         const hls = new window.Hls();
         currentHls = hls;
         hls.loadSource(streamUrl);
         hls.attachMedia(video);
         hls.on(window.Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+        hls.on(window.Hls.Events.ERROR, (event, data) => {
+          if (data.fatal) {
+            showErrorDialog(serverName);
+          }
+        });
       } else {
         video.src = streamUrl;
+        video.load();
+        video.play().catch(() => {});
       }
 
       container.appendChild(video);
       return;
     }
 
-    // Embed IFrame Fallback (for complex protected servers)
+    // Embed IFrame Fallback (for complex protected web embeds)
     let embedUrl = streamUrl;
     if (urlLower.includes('streamtape.com')) {
       const m = streamUrl.match(/streamtape\.com\/(?:v|e)\/([a-zA-Z0-9]+)/);
@@ -1085,6 +1359,7 @@
 
     clearInterval(autoPlayCountdownTimer);
     clearTimeout(controlsHideTimeout);
+    hideErrorDialog();
 
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
@@ -1094,7 +1369,7 @@
   }
 
   // ============================================================
-  // Global Entrypoint called by Flutter WebPlayerBridge
+  // Global Entrypoints called by Flutter WebPlayerBridge
   // ============================================================
   async function openWebVideoPlayer(rawConfig, oldTitle, oldServerName) {
     let cfg = {};
@@ -1114,10 +1389,22 @@
     state.episodeNumber = cfg.episodeNumber || 1;
     state.totalEpisodes = cfg.totalEpisodes || (cfg.episodes ? cfg.episodes.length : 1) || 1;
     state.animeId = cfg.animeId || 0;
-    state.servers = cfg.servers || [{ serverName: cfg.serverName || 'سيرفر تلقائي', quality: 'HD', link: cfg.url }];
+    state.servers = (cfg.servers && cfg.servers.length > 0)
+        ? cfg.servers
+        : [{ serverName: cfg.serverName || 'سيرفر تلقائي', quality: 'HD', link: cfg.url }];
     state.episodes = cfg.episodes || [];
     state.workerUrl = cfg.workerUrl || 'https://dark-rain-5caa.ali-allden078.workers.dev/';
-    state.currentServerIndex = 0;
+
+    // Match exact clicked server index
+    let activeIdx = 0;
+    if (cfg.serverName || cfg.url) {
+      const found = state.servers.findIndex(s =>
+        (cfg.url && s.link === cfg.url) ||
+        (cfg.serverName && s.serverName && s.serverName.toLowerCase() === cfg.serverName.toLowerCase())
+      );
+      if (found !== -1) activeIdx = found;
+    }
+    state.currentServerIndex = activeIdx;
 
     const overlay = createPlayerDOM();
     overlay.style.display = 'flex';
@@ -1126,18 +1413,38 @@
     document.getElementById('ac-anime-title').textContent = state.animeTitle;
     document.getElementById('ac-badge-ep').textContent = `الحلقة ${state.episodeNumber}`;
 
-    const activeServer = state.servers[0];
+    const activeServer = state.servers[activeIdx] || state.servers[0];
     const initialLabel = `${activeServer.serverName} • ${activeServer.quality || 'Auto'}`;
-    document.getElementById('ac-badge-server').textContent = `${initialLabel} ⚙️`;
-    document.getElementById('ac-quality-label').textContent = initialLabel;
+    const badgeText = document.getElementById('ac-badge-server-text');
+    if (badgeText) badgeText.textContent = initialLabel;
+    const qualityLabel = document.getElementById('ac-quality-label');
+    if (qualityLabel) qualityLabel.textContent = initialLabel;
 
+    resetTimeDisplay();
     showCenterSpinner('جاري تجهيز سيرفر المشاهدة بأعلى جودة...');
 
     const resolved = await resolveStreamLink(cfg.url || activeServer.link, activeServer.serverName);
     mountVideoSource(resolved || cfg.url || activeServer.link, activeServer.serverName);
   }
 
+  // Dynamic server update from Flutter when episode changes
+  function updateWebPlayerServers(rawServers, epNum) {
+    let servers = [];
+    if (typeof rawServers === 'string') {
+      try { servers = JSON.parse(rawServers); } catch (_) {}
+    } else if (Array.isArray(rawServers)) {
+      servers = rawServers;
+    }
+
+    if (servers && servers.length > 0) {
+      state.servers = servers;
+      if (epNum) state.episodeNumber = epNum;
+      switchServer(0);
+    }
+  }
+
   // Export to window
   window.openWebVideoPlayer = openWebVideoPlayer;
   window.closeWebVideoPlayer = closeCinemaPlayer;
+  window.updateWebPlayerServers = updateWebPlayerServers;
 })();
