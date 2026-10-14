@@ -537,26 +537,47 @@
       /* Mobile & Android Responsiveness */
       @media (max-width: 650px) {
         .ac-controls-layer {
-          padding: 12px 14px;
+          padding: 10px 12px;
+          padding-top: max(12px, env(safe-area-inset-top, 12px));
+          padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+        }
+        .ac-header {
+          gap: 6px;
         }
         .ac-header-left {
-          gap: 8px;
+          gap: 6px;
+          flex: 1;
+          min-width: 0;
+        }
+        .ac-title-group {
+          flex: 1;
+          min-width: 0;
         }
         .ac-anime-title {
           max-width: 130px;
-          font-size: 13.5px;
+          font-size: 13px;
+        }
+        .ac-badges-row {
+          gap: 4px;
+        }
+        .ac-badge {
+          font-size: 10px;
+          padding: 1px 6px;
+        }
+        .ac-controls-group {
+          gap: 6px;
         }
         .ac-btn-pill {
-          padding: 5px 10px;
+          padding: 5px 8px;
           font-size: 11px;
-          gap: 5px;
+          gap: 4px;
         }
         .ac-btn-icon {
           width: 36px;
           height: 36px;
         }
         .ac-center-controls {
-          gap: 16px;
+          gap: 14px;
         }
         .ac-btn-big-play {
           width: 54px;
@@ -569,11 +590,19 @@
         .ac-drawer {
           width: 82vw;
         }
+        #ac-btn-ext {
+          display: none;
+        }
         .ac-btn-fullscreen-prominent {
-          width: 40px !important;
-          height: 40px !important;
+          width: 42px !important;
+          height: 42px !important;
           background: #1e90ff !important;
-          border-color: #fff !important;
+          color: #ffffff !important;
+          border: 1.5px solid #ffffff !important;
+          box-shadow: 0 0 16px rgba(30, 144, 255, 0.9) !important;
+          display: flex !important;
+          visibility: visible !important;
+          opacity: 1 !important;
         }
       }
     `;
@@ -921,30 +950,50 @@
 
   function toggleFullscreen() {
     const overlay = document.getElementById('anime-cinema-player');
-    const video = overlay.querySelector('video');
+    const video = overlay ? overlay.querySelector('video') : null;
 
-    const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    const isFs = document.fullscreenElement || 
+                 document.webkitFullscreenElement || 
+                 document.mozFullScreenElement || 
+                 document.msFullscreenElement ||
+                 (video && video.webkitDisplayingFullscreen);
+
+    const btnFs = document.getElementById('ac-btn-fullscreen');
 
     if (!isFs) {
-      if (overlay.requestFullscreen) {
-        overlay.requestFullscreen().catch(() => {
+      const reqFs = (overlay && (overlay.requestFullscreen || overlay.webkitRequestFullscreen || overlay.mozRequestFullScreen || overlay.msRequestFullscreen)) ||
+                    (document.documentElement && (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen));
+
+      if (reqFs) {
+        reqFs.call(overlay || document.documentElement).then(() => {
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(() => {});
+          }
+        }).catch(() => {
           if (video && video.webkitEnterFullscreen) {
             video.webkitEnterFullscreen();
           }
         });
-      } else if (overlay.webkitRequestFullscreen) {
-        overlay.webkitRequestFullscreen();
       } else if (video && video.webkitEnterFullscreen) {
         video.webkitEnterFullscreen();
       }
-      document.getElementById('ac-btn-fullscreen').innerHTML = ICONS.fullscreenExit;
+
+      if (btnFs) btnFs.innerHTML = ICONS.fullscreenExit;
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
+      const exitFs = document.exitFullscreen || 
+                     document.webkitExitFullscreen || 
+                     document.mozCancelFullScreen || 
+                     document.msExitFullscreen;
+      if (exitFs) {
+        exitFs.call(document).catch(() => {});
       }
-      document.getElementById('ac-btn-fullscreen').innerHTML = ICONS.fullscreen;
+      if (video && video.webkitExitFullscreen) {
+        video.webkitExitFullscreen();
+      }
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+      if (btnFs) btnFs.innerHTML = ICONS.fullscreen;
     }
   }
 
@@ -1144,13 +1193,16 @@
     if (!rawUrl) return '';
     const urlLower = rawUrl.toLowerCase();
 
-    // 1. PixelDrain Direct Conversion
+    // 1. PixelDrain Direct Conversion (Use INLINE stream, NOT ?download to allow HTML5 <video> streaming)
     if (urlLower.includes('pixeldrain.com')) {
-      const m = rawUrl.match(/pixeldrain\.com\/(?:u|api\/file|file|d|l)\/([a-zA-Z0-9_-]+)/);
-      if (m) return `https://pixeldrain.com/api/file/${m[1]}?download`;
-      if (rawUrl.includes('id=')) {
-        const id = rawUrl.split('id=')[1].split('&')[0];
-        if (id) return `https://pixeldrain.com/api/file/${id}?download`;
+      const cleanUrl = rawUrl.replace('?download', '').replace('&download', '');
+      const m = cleanUrl.match(/pixeldrain\.com\/(?:u|api\/file|file|d|l)\/([a-zA-Z0-9_-]+)/);
+      let fileId = m ? m[1] : '';
+      if (!fileId && cleanUrl.includes('id=')) {
+        fileId = cleanUrl.split('id=')[1].split('&')[0];
+      }
+      if (fileId) {
+        return `https://pixeldrain.com/api/file/${fileId}`;
       }
     }
 
@@ -1233,7 +1285,19 @@
       video.onended = onVideoEnded;
 
       video.onerror = (e) => {
-        console.error('[Cinema Player] Video playback error:', e);
+        console.warn('[Cinema Player] Video direct playback error:', e);
+        // Automatic Fallback: If direct stream fails (e.g. ISP block or CORS), retry through worker proxy!
+        if (state.workerUrl && !streamUrl.startsWith(state.workerUrl)) {
+          console.log('[Cinema Player] Retrying video via Cloudflare Worker proxy stream...');
+          const proxiedUrl = `${state.workerUrl}${state.workerUrl.includes('?') ? '&' : '?'}url=${encodeURIComponent(streamUrl)}`;
+          video.onerror = () => {
+            showErrorDialog(serverName);
+          };
+          video.src = proxiedUrl;
+          video.load();
+          video.play().catch(() => {});
+          return;
+        }
         showErrorDialog(serverName);
       };
 
