@@ -72,9 +72,14 @@
     style.textContent = `
       .ac-player-root {
         position: fixed;
-        inset: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         width: 100vw;
+        width: 100dvw;
         height: 100vh;
+        height: 100dvh;
         background: #000000;
         z-index: 99999999;
         display: none;
@@ -534,12 +539,40 @@
         background: rgba(255,255,255,0.22);
       }
 
+      .ac-btn-fullscreen-top {
+        background: rgba(30, 144, 255, 0.3) !important;
+        border: 1.5px solid #1e90ff !important;
+        color: #ffffff !important;
+      }
+      .ac-btn-fullscreen-floating {
+        display: none;
+        position: absolute;
+        bottom: 86px;
+        right: 18px;
+        background: #1e90ff;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+        border-radius: 28px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        box-shadow: 0 4px 22px rgba(30, 144, 255, 0.85), 0 2px 8px rgba(0,0,0,0.8);
+        z-index: 35;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .ac-btn-fullscreen-floating:hover {
+        transform: scale(1.08);
+      }
+
       /* Mobile & Android Responsiveness */
       @media (max-width: 650px) {
         .ac-controls-layer {
-          padding: 10px 12px;
-          padding-top: max(12px, env(safe-area-inset-top, 12px));
-          padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+          padding: 10px 12px 34px 12px !important;
+          padding-top: max(12px, env(safe-area-inset-top, 12px)) !important;
+          padding-bottom: max(36px, env(safe-area-inset-bottom, 36px)) !important;
         }
         .ac-header {
           gap: 6px;
@@ -554,8 +587,8 @@
           min-width: 0;
         }
         .ac-anime-title {
-          max-width: 130px;
-          font-size: 13px;
+          max-width: 120px;
+          font-size: 12.5px;
         }
         .ac-badges-row {
           gap: 4px;
@@ -593,12 +626,29 @@
         #ac-btn-ext {
           display: none;
         }
+        .ac-btn-fullscreen-floating {
+          display: flex !important;
+          bottom: 84px !important;
+          right: 14px !important;
+        }
+        .ac-bottom-bar {
+          margin-bottom: max(18px, env(safe-area-inset-bottom, 18px)) !important;
+          gap: 10px !important;
+        }
+        .ac-bottom-controls {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          min-height: 46px !important;
+        }
         .ac-btn-fullscreen-prominent {
-          width: 42px !important;
-          height: 42px !important;
+          width: 44px !important;
+          height: 44px !important;
           background: #1e90ff !important;
           color: #ffffff !important;
-          border: 1.5px solid #ffffff !important;
+          border: 2px solid #ffffff !important;
           box-shadow: 0 0 16px rgba(30, 144, 255, 0.9) !important;
           display: flex !important;
           visibility: visible !important;
@@ -656,6 +706,7 @@
               ${ICONS.episodes}
               <span>الحلقات</span>
             </button>
+            <button class="ac-btn-icon ac-btn-fullscreen-top" id="ac-btn-fullscreen-top" title="ملء الشاشة">${ICONS.fullscreen}</button>
             <button class="ac-btn-icon" id="ac-btn-ext" title="فتح خارجي">${ICONS.external}</button>
             <button class="ac-btn-icon" id="ac-btn-close" title="إغلاق">${ICONS.close}</button>
           </div>
@@ -669,6 +720,12 @@
           <button class="ac-btn-secondary" id="ac-btn-fwd10" title="تقديم 10 ثوانٍ (Forward +10s)">${ICONS.forward10}</button>
           <button class="ac-btn-secondary" id="ac-btn-next-ep" title="الحلقة التالية">${ICONS.nextEp}</button>
         </div>
+
+        <!-- Floating Fullscreen Button: Always visible above the line on all phone screens -->
+        <button class="ac-btn-fullscreen-floating" id="ac-btn-fullscreen-float" title="ملء الشاشة">
+          ${ICONS.fullscreen}
+          <span id="ac-fullscreen-float-text">تكبير الشاشة</span>
+        </button>
 
         <!-- Bottom Controls -->
         <div class="ac-bottom-bar">
@@ -826,8 +883,12 @@
     // Mute toggle
     document.getElementById('ac-btn-mute').onclick = toggleMute;
 
-    // Fullscreen toggle (Android and Desktop compatible)
+    // Fullscreen toggle (Android, Mobile & Desktop compatible)
     document.getElementById('ac-btn-fullscreen').onclick = toggleFullscreen;
+    const btnFsTop = document.getElementById('ac-btn-fullscreen-top');
+    if (btnFsTop) btnFsTop.onclick = toggleFullscreen;
+    const btnFsFloat = document.getElementById('ac-btn-fullscreen-float');
+    if (btnFsFloat) btnFsFloat.onclick = toggleFullscreen;
 
     // Seekbar scrubbing
     const seekBar = document.getElementById('ac-seek-bar-container');
@@ -979,6 +1040,12 @@
       }
 
       if (btnFs) btnFs.innerHTML = ICONS.fullscreenExit;
+      const btnFsTop = document.getElementById('ac-btn-fullscreen-top');
+      if (btnFsTop) btnFsTop.innerHTML = ICONS.fullscreenExit;
+      const btnFsFloat = document.getElementById('ac-btn-fullscreen-float');
+      if (btnFsFloat) {
+        btnFsFloat.innerHTML = `${ICONS.fullscreenExit}<span>تصغير</span>`;
+      }
     } else {
       const exitFs = document.exitFullscreen || 
                      document.webkitExitFullscreen || 
@@ -994,6 +1061,12 @@
         screen.orientation.unlock();
       }
       if (btnFs) btnFs.innerHTML = ICONS.fullscreen;
+      const btnFsTop = document.getElementById('ac-btn-fullscreen-top');
+      if (btnFsTop) btnFsTop.innerHTML = ICONS.fullscreen;
+      const btnFsFloat = document.getElementById('ac-btn-fullscreen-float');
+      if (btnFsFloat) {
+        btnFsFloat.innerHTML = `${ICONS.fullscreen}<span>تكبير الشاشة</span>`;
+      }
     }
   }
 
